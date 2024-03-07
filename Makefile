@@ -10,7 +10,7 @@ PATH_LIBFT = ./libft/
 LIBFT = $(addprefix $(PATH_LIBFT), libft.a)
 
 # push_swap
-SRC = ./src/main.c \
+SRC = 	./src/main.c \
 		./src/main_utils.c \
 		./src/linked_list.c \
 		./src/push_swap.c \
