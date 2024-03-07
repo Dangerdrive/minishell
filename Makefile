@@ -3,23 +3,24 @@ NAME = minishell
 
 # Compilation flags
 CFLAGS = -Wall -Wextra -Werror
-INCLUDES = -I ./includes
+INCLUDES = -I ./includes/ -I $(LIBFT_PATH)/ -I $(FTPRINTF_PATH)/
 
 # Libft
-PATH_LIBFT = ./libft/
-LIBFT = $(addprefix $(PATH_LIBFT), libft.a)
+LIBFT_PATH	=	./libs/libft
+LIBFT		=	$(LIBFT_PATH)/libft.a
+
+# Libftprintf
+FTPRINTF_PATH	= ./libs/ft_printf
+FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
 # push_swap
-SRC = 	./src/main.c \
-		./src/main_utils.c \
-		./src/linked_list.c \
-		./src/push_swap.c \
-		./src/sort_utils.c \
-		./src/costs.c \
-		./src/push.c \
-		./src/swap.c \
-		./src/rotate.c \
-		./src/rev_rotate.c
+SRC = 	./src/main.c
+#		./src/lexer/.c \
+#		./src/parser/.c \
+#		./src/executor/.c \
+#		./src/utils/.c \
+
+
 
 # Objects
 OBJ_PATH = ./build/
@@ -37,16 +38,18 @@ END = \033[0m
 all: $(NAME)
 
 # Target to build the mandatory part
-$(NAME): $(LIBFT) $(OBJ)
-	@cp $(LIBFT) $(NAME)
-	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
+# $(NAME): $(LIBFT) $(OBJ)
+# 	@cp $(LIBFT) $(NAME)
+# 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 	@echo "$(GREEN)The [$(CYAN)PUSH_SWAP$(GREEN)] has been compiled! 🤠$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 
 # Builds dependencies
 $(LIBFT):
-	@make -C $(PATH_LIBFT)
+	@make -C $(LIBFT_PATH)
+$(FTPRINTF):
+	@make -C $(FTPRINTF_PATH)
 
 # Builds mandatory object files
 $(OBJ_PATH)%.o: src/%.c
@@ -57,7 +60,8 @@ $(OBJ_PATH)%.o: src/%.c
 clean:
 	@rm -f $(OBJ)
 	@rm -rf $(OBJ_PATH)
-	@make clean -C $(PATH_LIBFT)
+	@make -C $(LIBFT_PATH) clean
+	@make -C $(FTPRINTF_PATH) clean
 	@echo "$(WHITE)-----------------------------------$(END)"
 	@echo "$(WHITE)    Object files were cleaned!$(END)"
 	@echo "$(WHITE)-----------------------------------$(END)"
@@ -69,7 +73,8 @@ fclean: clean
 	@echo "$(WHITE)-----------------------------------$(END)"
 	@rm -f $(NAME)
 	@rm -f $(HD)*.gch
-	@make fclean -C $(PATH_LIBFT)
+	@make -C $(LIBFT_PATH) fclean
+	@make -C $(FTPRINTF_PATH) fclean
 	@echo "$(WHITE)-----------------------------------$(END)"
 	@echo "$(WHITE)    ✨ Cleaning complete! ✨$(END)"
 	@echo "$(WHITE)-----------------------------------$(END)"
