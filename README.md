@@ -6,3 +6,7 @@ pdf recomendado no acelera
 https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
 
 
+https://www.gnu.org/software/bash/manual/bash.html
+
+
+https://harm-smits.github.io/42docs/projects/minishell
