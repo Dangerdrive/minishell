@@ -6,19 +6,31 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:54:13 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/08 13:24:01 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/08 18:15:19 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define TABLE_SIZE 10
+
 //for readline
-# include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+//
+# include <stdio.h>
 # include <unistd.h>
-# include <unistd.h>
+# include <stdlib.h>
+# include <stdbool.h>
+# include <fcntl.h>
+# include <dirent.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 //my libs
 # include "../libs/libft/libft.h"
@@ -34,9 +46,20 @@
 # define WHITE    		"\033[1;37m"
 # define END   			"\033[0m"
 
+typedef struct s_hash
+{
+	char	*content;
+	char	*type;
+	//t_hash	*next;
+}	t_hash;
+
 typedef struct s_global
 {
-	char	*usr_input;
-	int		exit;
+	char		**env;
+	t_hash		*hashtable[TABLE_SIZE];
+	char		*usr_input;
+	char		*cur_cwd_path;
+	int			exit;
+	//t_global	*next;
 }	t_global;
 #endif

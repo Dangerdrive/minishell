@@ -6,23 +6,75 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/08 13:23:06 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/08 18:39:59 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_global	g_data;
+int	*g_signal;
+
+t_global	*init_data(void)
+{
+	t_global	*data;
+
+	data = ft_calloc(1, sizeof(t_global));
+	if (!data)
+		return (NULL);
+	data->env = __environ;
+	data->cur_cwd_path = getcwd(NULL, 0);
+	printf("\n\n%s\n", data->cur_cwd_path);
+	return (data);
+}
+
+void	handle_signal(void)
+{}
+
+void	handle_input(t_global **data)
+{
+	int		i;
+	int		j;
+	char	*token;
+
+	(*data)->usr_input = readline((*data)->usr_input);
+	if (ft_strncmp((*data)->usr_input, "exit", 5) == 0)
+	{
+		free((*data)->usr_input);
+		return ;
+	}
+	i = 0;
+	while ((*data)->usr_input[i] != '\0')
+	{
+		j = 0;
+		while ((*data)->usr_input[i] == ' ')
+			i++;
+		while ((*data)->usr_input[j] != ' ')
+			j++;
+		token = ft_calloc(j + 1, sizeof(char));
+		token[j] = '\0';
+		while (i <= j)
+		{
+			token[j - i] = (*data)->usr_input[i];
+			i++;
+		}
+		printf("%s\n", token);
+		//(*data)->hashtable[0]->content = token; // needs to init first
+		i++;
+	}
+}
 
 int	main(void)
 {
-	char	*str;
+	static t_global	*data;
 
-	while (*__environ)
+	data = init_data();
+	data->usr_input = NULL;
+	while (1)
 	{
-		printf("%s\n", *__environ);
-		__environ++;
+		handle_signal();
+		handle_input(&data);
+		printf("%s%s%s\n", BLUE, data->usr_input, END);
+		free(data->usr_input);
 	}
-	str = readline("hello");
-	printf("%s", str);
+	return (0);
 }
