@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/08 18:39:59 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/08 20:42:27 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_global	*init_data(void)
 		return (NULL);
 	data->env = __environ;
 	data->cur_cwd_path = getcwd(NULL, 0);
-	printf("\n\n%s\n", data->cur_cwd_path);
+	//printf("\n\n%s\n", data->cur_cwd_path);
 	return (data);
 }
 
@@ -62,12 +62,20 @@ void	handle_input(t_global **data)
 		i++;
 	}
 }
+void	free_stuff(t_global *data)
+{
+	free(data->cur_cwd_path);
+	free_env(&data);
+	free(data);
+}
 
 int	main(void)
 {
 	static t_global	*data;
 
 	data = init_data();
+	if (copy_env(&data) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	data->usr_input = NULL;
 	while (1)
 	{
@@ -76,5 +84,6 @@ int	main(void)
 		printf("%s%s%s\n", BLUE, data->usr_input, END);
 		free(data->usr_input);
 	}
+	free_stuff(data);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:54:13 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/08 18:15:19 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/08 20:34:11 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,3 +63,10 @@ typedef struct s_global
 	//t_global	*next;
 }	t_global;
 #endif
+
+
+t_global	*init_data(void);
+
+/*---------------env----------------*/
+int			copy_env(t_global **data);
+void		free_env(t_global **data);

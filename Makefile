@@ -2,7 +2,7 @@
 NAME = minishell
 
 # Compilation flags
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 INCLUDES = -I ./includes/ -I $(LIBFT_PATH)/ -I $(FTPRINTF_PATH)/
 
 # Libft
@@ -14,7 +14,8 @@ FTPRINTF_PATH	= ./libs/ft_printf
 FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
 # push_swap
-SRC = 	./src/main.c
+SRC = 	./src/main.c \
+		./src/env.c
 #		./src/lexer/.c \
 #		./src/parser/.c \
 #		./src/executor/.c \
@@ -32,9 +33,6 @@ WHITE = \033[1;37m
 CYAN= \033[0;36m
 END = \033[0m
 
-run: all
-	./minishell
-
 # Default target to compile the mandatory part
 all: $(NAME)
 
@@ -46,6 +44,10 @@ $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
+
+run: all
+	@echo "Running the program..."
+	./minishell
 
 # Builds dependencies
 $(LIBFT):
@@ -84,4 +86,4 @@ fclean: clean
 re: fclean all
 
 # Phony targets
-.PHONY: all bonus clean fclean re
+.PHONY: all bonus clean fclean re run

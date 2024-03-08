@@ -1,21 +1,48 @@
 #include "../includes/minishell.h"
 
-// int	copy_env(t_global	*data)
+// void	print_our_env(t_global **data)
 // {
 // 	int	i;
 
 // 	i = 0;
-// 	data.env = malloc(sizeof(char **));
-// 	if (!data.env)
-// 		return (EXIT_FAILURE);
-// 	while (__environ)
+// 	while ((*data)->env[i])
 // 	{
-// 		data.env[i] = ft_strdup(__environ[i]);
-// 		i+
-
+// 		printf("%s\n", (*data)->env[i]);
+// 		free((*data)->env[i]);
+// 		i++;
+// 	}
+// 	free((*data)->env[i]);
+// 	free((*data)->env);
 // }
 
-int	copy_env(t_global *data)
+void	print_our_env(t_global **data)
+{
+	int	i;
+
+	i = 0;
+	while ((*data)->env[i])
+	{
+		printf("%s\n", (*data)->env[i]);
+		i++;
+	}
+	free_env(data);
+}
+
+void	free_env(t_global **data)
+{
+	int	i;
+
+	i = 0;
+	while ((*data)->env[i])
+	{
+		free((*data)->env[i]);
+		i++;
+	}
+	free((*data)->env[i]);
+	free((*data)->env);
+}
+
+int	copy_env(t_global **data)
 {
 	int	i;
 	int	env_size;
@@ -23,25 +50,36 @@ int	copy_env(t_global *data)
 	env_size = 0;
 	while (__environ[env_size])
 		env_size++;
-	data->env = malloc((env_size + 1) * sizeof(char *));
-	if (!data->env)
+	(*data)->env = malloc((env_size + 1) * sizeof(char *));
+	if (!(*data)->env)
 		return (EXIT_FAILURE);
 	i = 0;
 	while (i < env_size)
 	{
-		data->env[i] = ft_strdup(__environ[i]);
-		if (!data->env[i])
+		(*data)->env[i] = ft_strdup(__environ[i]);
+		if (!(*data)->env[i])
 		{
 			while (i > 0)
 			{
 				i--;
-				free(data->env[i]);
+				free((*data)->env[i]);
 			}
-			free(data->env);
+			free((*data)->env);
 			return (EXIT_FAILURE);
 		}
 		i++;
 	}
-	data->env[env_size] = NULL;
+	(*data)->env[env_size] = NULL;
+	//print_our_env(data); // for testing
 	return (EXIT_SUCCESS);
 }
+
+// int	main(void)
+// {
+// 	static t_global	*data;
+
+// 	data = init_data();
+// 	copy_env(&data);
+// 	free(data);
+// 	free(data->cur_cwd_path);
+// }
