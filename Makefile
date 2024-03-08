@@ -23,7 +23,7 @@ SRC = 	./src/main.c
 
 
 # Objects
-OBJ_PATH = ./build/
+OBJ_PATH = src/build/
 OBJ = $(addprefix $(OBJ_PATH), $(notdir $(SRC:.c=.o)))
 # OBJ_PATH_BONUS = ./build_bonus/
 # OBJ_BONUS = $(addprefix $(OBJ_PATH_BONUS), $(notdir $(SRC_BONUS:.c=.o)))
@@ -38,11 +38,12 @@ END = \033[0m
 all: $(NAME)
 
 # Target to build the mandatory part
-# $(NAME): $(LIBFT) $(OBJ)
+# $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF):
 # 	@cp $(LIBFT) $(NAME)
 # 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
 	@echo "$(GREEN)--------------------------------------------------$(END)"
-	@echo "$(GREEN)The [$(CYAN)PUSH_SWAP$(GREEN)] has been compiled! 🤠$(END)"
+	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 
 # Builds dependencies
@@ -72,7 +73,6 @@ fclean: clean
 	@echo "$(WHITE)        Cleaning all... 🧹$(END)"
 	@echo "$(WHITE)-----------------------------------$(END)"
 	@rm -f $(NAME)
-	@rm -f $(HD)*.gch
 	@make -C $(LIBFT_PATH) fclean
 	@make -C $(FTPRINTF_PATH) fclean
 	@echo "$(WHITE)-----------------------------------$(END)"
