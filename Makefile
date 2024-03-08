@@ -38,7 +38,7 @@ END = \033[0m
 all: $(NAME)
 
 # Target to build the mandatory part
-# $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF):
+$(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
 # 	@cp $(LIBFT) $(NAME)
 # 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
 	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
