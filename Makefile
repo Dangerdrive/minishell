@@ -15,7 +15,8 @@ FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
 # push_swap
 SRC = 	./src/main.c \
-		./src/env.c
+		./src/env.c \
+		./src/token.c
 #		./src/lexer/.c \
 #		./src/parser/.c \
 #		./src/executor/.c \
@@ -40,7 +41,8 @@ all: $(NAME)
 $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
 # 	@cp $(LIBFT) $(NAME)
 # 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
-	@$(CC) $(CFLAGS) -lreadline $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
+	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline
+#	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"

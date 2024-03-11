@@ -22,7 +22,7 @@ void	print_our_env(t_global **data)
 	i = 0;
 	while ((*data)->env[i])
 	{
-		printf("%s\n", (*data)->env[i]);
+		//printf("%s\n", (*data)->env[i]);
 		i++;
 	}
 	free_env(data);

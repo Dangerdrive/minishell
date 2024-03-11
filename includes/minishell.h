@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:54:13 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/08 20:34:11 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/11 18:53:54 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define TABLE_SIZE 10
+# define TABLE_SIZE 50
 
 //for readline
 # include <readline/readline.h>
@@ -70,3 +70,6 @@ t_global	*init_data(void);
 /*---------------env----------------*/
 int			copy_env(t_global **data);
 void		free_env(t_global **data);
+
+/*--------------token--------------*/
+void		handle_input(t_global **data);
