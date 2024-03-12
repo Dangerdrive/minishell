@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:49:46 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 16:49:52 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/12 18:50:36 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,22 @@ t_global	*init_data(void)
 void	handle_signal(void)
 {}
 
+void	free_hashtable(t_global **data)
+{
+	int	i;
+
+	i = 0;
+	while (i < TABLE_SIZE)
+	{
+		ft_memdel((*data)->hashtable[i]);
+		i++;
+	}
+}
+
 void	free_stuff(t_global *data)
 {
 	free(data->cur_cwd_path);
 	free_env(&data);
+	free_hashtable(&data);
 	free(data);
 }

@@ -35,11 +35,11 @@ void	free_env(t_global **data)
 	i = 0;
 	while ((*data)->env[i])
 	{
-		free((*data)->env[i]);
+		ft_memdel((*data)->env[i]);
 		i++;
 	}
-	free((*data)->env[i]);
-	free((*data)->env);
+	ft_memdel((*data)->env[i]);
+	ft_memdel((*data)->env);
 }
 
 int	copy_env(t_global **data)

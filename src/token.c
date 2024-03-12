@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:54:13 by root              #+#    #+#             */
-/*   Updated: 2024/03/12 18:20:28 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/12 19:07:58 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	handle_input(t_global **data)
 	(*data)->usr_input = readline((*data)->usr_input);
 	if (ft_strncmp((*data)->usr_input, "exit", 5) == 0)
 	{
+		(*data)->exit = true;
 		free((*data)->usr_input);
 		return ;
 	}
