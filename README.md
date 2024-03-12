@@ -10,3 +10,17 @@ https://www.gnu.org/software/bash/manual/bash.html
 
 
 https://harm-smits.github.io/42docs/projects/minishell
+
+
+# Git
+
+Switch to an existing branch
+```bash
+git switch <branch_name>
+```
+
+Create a new branch and switch to it
+```bash
+git switch -c <branch_name>
+```
+
