@@ -24,7 +24,27 @@ void tearDown(void) {
     free(data);
     data = NULL;
 }
+bool are_envs_equal(char **env1, char **env2) {
+    int i = 0;
 
+    // Loop through each string in the first environment array
+    for (; env1[i] != NULL; i++) {
+        // Check if the corresponding string in the second array matches
+        // If it doesn't match, or if we've reached the end of env2 before env1, return false
+        if (env2[i] == NULL || strcmp(env1[i], env2[i]) != 0) {
+            return false;
+        }
+    }
+
+    // Finally, ensure that both arrays are of the same length.
+    // If env2 has more variables than env1, they are not equal.
+    if (env2[i] != NULL) {
+        return false;
+    }
+
+    // If we reach here, all strings matched and both arrays are of the same length
+    return true;
+}
 
 void test_copy_env_SuccessfullyCopiesEnvironmentVariables(void) {
     copy_env(&data);
