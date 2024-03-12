@@ -3,8 +3,8 @@ NAME = minitests
 
 # Compilation flags
 CFLAGS = -Wall -Wextra -Werror -g
-INCLUDES = -I ../includes/ -I . -I $(LIBFT_PATH)/ -I $(FTPRINTF_PATH)/ -I $(UNITY_PATH)/
-
+INCLUDES = -I ../includes/ -I . -I $(LIBFT_PATH)/ -I $(FTPRINTF_PATH)/ -I $(UNITY_PATH)/ 
+LINKING = -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline -L$(UNITY_PATH) -lunity
 
 UNITY_PATH = ./unity
 # Libft
@@ -15,7 +15,11 @@ FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
 # push_swap
 SRC_PATH = ../src/
-SRC = 	$(SRC_PATH)env.c
+SRC = 	$(SRC_PATH)env.c \
+		$(SRC_PATH)main_utils.c
+
+#		$(SRC_PATH)token.c \
+#		$(SRC_PATH)main.c
 #		./src/token.c
 #		./src/lexer/.c \
 #		./src/parser/.c \
@@ -45,10 +49,10 @@ all: $(NAME)
 $(NAME): $(TESTS_OBJ) $(OBJ) $(LIBFT) $(FTPRINTF)
 # 	@cp $(LIBFT) $(NAME)
 # 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
-	@$(CC) $(CFLAGS) $(OBJ) $(TESTS_OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline
+	@$(CC) $(CFLAGS) $(OBJ) $(TESTS_OBJ) -o $@ $(LINKING) 
 #	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
 	@echo "$(GREEN)--------------------------------------------------$(END)"
-	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
+	@echo "$(GREEN)[$(CYAN)Tests$(GREEN)] compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 
 run: all

@@ -48,6 +48,7 @@ bool are_envs_equal(char **env1, char **env2) {
 
 void test_copy_env_SuccessfullyCopiesEnvironmentVariables(void) {
     copy_env(&data);
+    TEST_ASSERT_TRUE(are_envs_equal(__environ, data->env));
 }
 
 int main(void) {
