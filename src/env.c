@@ -32,6 +32,8 @@ void	free_env(t_global **data)
 {
 	int	i;
 
+	if (!(*data)->env)
+		return ;
 	i = 0;
 	while ((*data)->env[i])
 	{
