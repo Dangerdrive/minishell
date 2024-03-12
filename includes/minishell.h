@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:54:13 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/11 18:53:54 by root             ###   ########.fr       */
+/*   Updated: 2024/03/12 16:51:48 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,27 @@
 # define WHITE    		"\033[1;37m"
 # define END   			"\033[0m"
 
-typedef struct s_hash
+typedef struct s_tkn
 {
-	char	*content;
-	char	*type;
-	//t_hash	*next;
-}	t_hash;
+	char			*content;
+	char			*type;
+	struct s_tkn	*prev;
+	struct s_tkn	*next;
+}	t_tkn;
 
 typedef struct s_global
 {
-	char		**env;
-	t_hash		*hashtable[TABLE_SIZE];
-	char		*usr_input;
-	char		*cur_cwd_path;
-	int			exit;
-	//t_global	*next;
+	char			**env;
+	t_tkn			*hashtable[TABLE_SIZE];
+	char			*usr_input;
+	char			*cur_cwd_path;
+	int				exit;
+	struct s_global	*next;
 }	t_global;
-#endif
-
 
 t_global	*init_data(void);
+void		handle_signal(void);
+void		free_stuff(t_global *data);
 
 /*---------------env----------------*/
 int			copy_env(t_global **data);
@@ -73,3 +74,5 @@ void		free_env(t_global **data);
 
 /*--------------token--------------*/
 void		handle_input(t_global **data);
+
+#endif

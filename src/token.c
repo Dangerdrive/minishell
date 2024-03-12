@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:54:13 by root              #+#    #+#             */
-/*   Updated: 2024/03/11 18:56:47 by root             ###   ########.fr       */
+/*   Updated: 2024/03/12 16:46:32 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// void	populate_hashtable(t_hash **hash_node, char *token)
-// {
-// 	t_hash	*new_node;
-
-// 	new_node = ft_calloc(1, sizeof(t_hash));
-// 	if (!new_node)
-// 		return ;
-// 	new_node->content = token;
-// 	new_node->next = NULL;
-// 	if (!(*hash_node))
-// 		*hash_node = new_node;
-// 	else
-// 		(*hash_node)->next = new_node;
-// }
 
 void	handle_input(t_global **data)
 {
@@ -55,7 +40,7 @@ void	handle_input(t_global **data)
 		while (--j >= 0)
 			token[j] = (*data)->usr_input[i + j];
 		printf("%s%s%s\n", BLUE, token, END);
-		//populate_hashtable(&(*data)->hashtable[0], token);
+		//populate_hashtable(&(*data)->hashtable, token);
 		free(token);
 		i += len;
 	}
