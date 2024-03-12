@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:54:13 by root              #+#    #+#             */
-/*   Updated: 2024/03/12 17:43:04 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/12 18:20:28 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	add_node(t_tkn **tkn_node, char *token)
 	t_tkn	*new_node;
 	t_tkn	*temp;
 
-	temp = *tkn_node;
 	new_node = ft_calloc(1, sizeof(t_tkn));
+	temp = NULL;
 	if (!new_node)
 		return ;
 	new_node->content = token;
@@ -40,17 +40,18 @@ void	add_node(t_tkn **tkn_node, char *token)
 		*tkn_node = new_node;
 	else
 	{
+		temp = *tkn_node;
 		while ((*tkn_node)->next != NULL)
 			(*tkn_node) = (*tkn_node)->next;
 		(*tkn_node)->next = new_node;
+		*tkn_node = temp;
 	}
-	printf("%s%s%s\n", YELLOW, (*tkn_node)->content, END);
-	*tkn_node = temp;
 }
 
 void	populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token)
 {
 	add_node(&(*hashtable)[0], token);
+	printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
 }
 
 void	handle_input(t_global **data)
@@ -82,7 +83,6 @@ void	handle_input(t_global **data)
 			token[j] = (*data)->usr_input[i + j];
 		init_hashtable(&(*data)->hashtable);
 		populate_hashtable(&(*data)->hashtable, token);
-		printf("datahash: %s\n", (*data)->((*hashtable)[0])->content);
 		free(token);
 		i += len;
 	}
