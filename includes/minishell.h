@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:54:13 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 16:51:48 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:46:37 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,8 @@ void		free_env(t_global **data);
 
 /*--------------token--------------*/
 void		handle_input(t_global **data);
+void		populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token);
+void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
+void		add_node(t_tkn **tkn_node, char *token);
 
 #endif

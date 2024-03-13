@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 15:41:59 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/01/11 17:12:38 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:44:21 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_strdup(const char *src)
 	size_t	len;
 
 	len = ft_strlen(src);
-	dest = malloc((len + 1) * sizeof(char));
+	dest = ft_calloc(len + 1, sizeof(char));
 	if (dest == NULL)
 		return (NULL);
 	temp = dest;

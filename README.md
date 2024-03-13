@@ -24,3 +24,7 @@ Create a new branch and switch to it
 git switch -c <branch_name>
 ```
 
+Checking the changes in a file
+```bash
+git show -- <file_name>
+```
