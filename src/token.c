@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:54:13 by root              #+#    #+#             */
-/*   Updated: 2024/03/12 18:20:28 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:28:18 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,16 @@ void	populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token)
 	printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
 }
 
+int	check_exit_input(char **input)
+{
+	if (ft_strncmp(*input, "exit", 5) == 0)
+	{
+		free(*input);
+		return (1);
+	}
+	return (0);
+}
+
 void	handle_input(t_global **data)
 {
 	int		i;
@@ -62,11 +72,8 @@ void	handle_input(t_global **data)
 	char	*token;
 
 	(*data)->usr_input = readline((*data)->usr_input);
-	if (ft_strncmp((*data)->usr_input, "exit", 5) == 0)
-	{
-		free((*data)->usr_input);
+	if (check_exit_input(&(*data)->usr_input))
 		return ;
-	}
 	i = 0;
 	while ((*data)->usr_input[i])
 	{
