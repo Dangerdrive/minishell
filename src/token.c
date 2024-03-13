@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/11 15:54:13 by root              #+#    #+#             */
-/*   Updated: 2024/03/13 11:28:18 by gde-souz         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
 void	init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
@@ -51,7 +39,7 @@ void	add_node(t_tkn **tkn_node, char *token)
 void	populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token)
 {
 	add_node(&(*hashtable)[0], token);
-	printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
+	//printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
 }
 
 int	check_exit_input(char **input)
@@ -71,6 +59,9 @@ void	handle_input(t_global **data)
 	int		len;
 	char	*token;
 
+	// if ((*data)->usr_input != NULL)
+	// 	ft_memdel((*data)->usr_input);
+	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
 	if (check_exit_input(&(*data)->usr_input))
 		return ;

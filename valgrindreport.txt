@@ -1,0 +1,4 @@
+Running the program with valgrind...
+valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
+exasdaseeasdexit
+oakok^C

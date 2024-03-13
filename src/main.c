@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 17:34:38 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/12 21:03:51 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ int	main(void)
 		temp = data->hashtable[0];
 		while (temp != NULL)
 			temp = temp->next;
-		free(data->usr_input);
+		ft_memdel(data->usr_input);
+		if (data->exit == true)
+			break ;
 	}
 	free_stuff(data);
 	return (0);
