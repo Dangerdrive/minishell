@@ -26,4 +26,4 @@ git switch -c <branch_name>
 
 # Allowed Functions
 
-
+https://github.com/Dangerdrive/minishell/blob/cd5ab5b7953dac047e5b79c01969361e46b9f6e8/allowed_functions.txt
