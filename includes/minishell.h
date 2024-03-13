@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:54:13 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 16:51:48 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:50:48 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_global
 }	t_global;
 
 t_global	*init_data(void);
+void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
 void		handle_signal(void);
 void		free_stuff(t_global *data);
 

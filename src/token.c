@@ -39,7 +39,7 @@ void	add_node(t_tkn **tkn_node, char *token)
 void	populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token)
 {
 	add_node(&(*hashtable)[0], token);
-	//printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
+	printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
 }
 
 int	check_exit_input(char **input)
@@ -65,7 +65,7 @@ char	*save_token(char *input, int i, int len)
 
 int	check_quotes(char *input, int i)
 {
-	int len;
+	int		len;
 
 	if (input[i] == 34)
 	{
@@ -78,6 +78,7 @@ int	check_quotes(char *input, int i)
 			i++;
 			len++;
 		}
+		return (-1);
 	}
 	return (0);
 }
@@ -111,11 +112,13 @@ void	handle_input(t_global **data)
 			i++;
 		len = check_quotes((*data)->usr_input, i);
 		if (len == -1)
+		{
+			//free_stuff();
 			return ;
+		}
 		else if (len == 0)
 			len = get_token_len((*data)->usr_input, i);
 		token = save_token((*data)->usr_input, i, len);
-		init_hashtable(&(*data)->hashtable);
 		populate_hashtable(&(*data)->hashtable, token);
 		free(token);
 		i += len;

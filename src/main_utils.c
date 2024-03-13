@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:49:46 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 21:35:00 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:52:55 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_global	*init_data(void)
 		return (NULL);
 	data->env = __environ;
 	data->cur_cwd_path = getcwd(NULL, 0);
-	//data->hashtable = NULL;
+	init_hashtable(&data->hashtable);
 	//printf("\n\n%s\n", data->cur_cwd_path);
 	return (data);
 }
