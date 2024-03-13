@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:54:13 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/13 12:50:48 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 13:17:26 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ int			copy_env(t_global **data);
 void		free_env(t_global **data);
 
 /*--------------token--------------*/
-void		handle_input(t_global **data);
+int			handle_input(t_global **data);
 
 #endif

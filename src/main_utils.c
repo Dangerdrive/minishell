@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:49:46 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/13 12:52:55 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 13:47:25 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,20 @@ void	handle_signal(void)
 
 void	free_hashtable(t_global **data)
 {
-	int	i;
+	int		i;
+	t_tkn	*temp;
 
 	i = 0;
 	//while (i < TABLE_SIZE)
 	while ((*data)->hashtable[i])
 	{
-		ft_memdel((*data)->hashtable[i]);
+		while ((*data)->hashtable[i])
+		{
+			temp = (*data)->hashtable[i]->next;
+			free((*data)->hashtable[i]->content);
+			free((*data)->hashtable[i]);
+		}
+		//ft_memdel((*data)->hashtable[i]);
 		i++;
 	}
 	ft_memdel((*data)->hashtable);

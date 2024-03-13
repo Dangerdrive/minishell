@@ -70,11 +70,11 @@ int	check_quotes(char *input, int i)
 	if (input[i] == 34)
 	{
 		i++;
-		len = 0;
+		len = 1;
 		while (input[i])
 		{
 			if (input[i] == 34)
-				return (len);
+				return (len + 1);
 			i++;
 			len++;
 		}
@@ -85,15 +85,16 @@ int	check_quotes(char *input, int i)
 
 int	get_token_len(char *input, int i)
 {
-	int len;
+	int	len;
 
 	len = 0;
-	while (input[i + len] != ' ' && input[i + len] != '\0')
+	while (input[i + len] != ' ' && input[i + len] != '\0'
+		&& input[i + len] != 34)
 		len++;
 	return (len);
 }
 
-void	handle_input(t_global **data)
+int	handle_input(t_global **data)
 {
 	int		i;
 	int		len;
@@ -103,8 +104,9 @@ void	handle_input(t_global **data)
 	// 	ft_memdel((*data)->usr_input);
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
+	add_history((*data)->usr_input);
 	if (check_exit_input(&(*data)->usr_input))
-		return ;
+		return (0);
 	i = 0;
 	while ((*data)->usr_input[i])
 	{
@@ -112,10 +114,7 @@ void	handle_input(t_global **data)
 			i++;
 		len = check_quotes((*data)->usr_input, i);
 		if (len == -1)
-		{
-			//free_stuff();
-			return ;
-		}
+			return (0);
 		else if (len == 0)
 			len = get_token_len((*data)->usr_input, i);
 		token = save_token((*data)->usr_input, i, len);
@@ -123,4 +122,5 @@ void	handle_input(t_global **data)
 		free(token);
 		i += len;
 	}
+	return (1);
 }

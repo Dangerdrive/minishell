@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 21:03:51 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/13 13:47:33 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	main(void)
 {
 	static t_global	*data;
-	t_tkn			*temp;
 
 	data = init_data();
 	if (copy_env(&data) == EXIT_FAILURE)
@@ -24,10 +23,11 @@ int	main(void)
 	while (1)
 	{
 		handle_signal();
-		handle_input(&data);
-		temp = data->hashtable[0];
-		while (temp != NULL)
-			temp = temp->next;
+		if (handle_input(&data) == 0)
+		{
+			free_stuff(data);
+			break ;
+		}
 		ft_memdel(data->usr_input);
 		if (data->exit == true)
 			break ;

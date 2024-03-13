@@ -24,3 +24,6 @@ Create a new branch and switch to it
 git switch -c <branch_name>
 ```
 
+# Allowed Functions
+
+
