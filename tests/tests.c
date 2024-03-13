@@ -51,8 +51,49 @@ void test_copy_env_SuccessfullyCopiesEnvironmentVariables(void) {
     TEST_ASSERT_TRUE(are_envs_equal(__environ, data->env));
 }
 
+void test_add_node_SuccessfullyAddsNodeToLinkedList(void) {
+    t_tkn *head = NULL;
+    add_node(&head, "first");
+    add_node(&head, "second");
+    add_node(&head, "third");
+    TEST_ASSERT_EQUAL_STRING("first", head->content);
+    TEST_ASSERT_EQUAL_STRING("second", head->next->content);
+    TEST_ASSERT_EQUAL_STRING("third", head->next->next->content);
+    TEST_ASSERT_NULL(head->next->next->next);
+}
+
+void test_populate_hashtable_SuccessfullyAddsTokenToHashtable(void) {
+    t_tkn *hashtable[TABLE_SIZE];
+    init_hashtable(&hashtable);
+    populate_hashtable(&hashtable, "first");
+    populate_hashtable(&hashtable, "second");
+    populate_hashtable(&hashtable, "third");
+    TEST_ASSERT_EQUAL_STRING("first", hashtable[0]->content);
+    TEST_ASSERT_EQUAL_STRING("second", hashtable[0]->next->content);
+    TEST_ASSERT_EQUAL_STRING("third", hashtable[0]->next->next->content);
+    TEST_ASSERT_NULL(hashtable[0]->next->next->next);
+}
+
+void test_handle_input_SuccessfullyHandlesInputWithQuotes(void) {
+    data->usr_input = strdup("\"ls -l\"");
+    handle_input(&data);
+    TEST_ASSERT_EQUAL_STRING("ls -l", data->hashtable[0]->content);
+    ft_memdel(data->usr_input);
+}
+
+void test_handle_input_SuccessfullyHandlesSimpleInput(void) {
+    data->usr_input = strdup("cnp joto");
+    handle_input(&data);
+    TEST_ASSERT_EQUAL_STRING("cnp", data->hashtable[0]->content);
+    ft_memdel(data->usr_input);
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_copy_env_SuccessfullyCopiesEnvironmentVariables);
+    RUN_TEST(test_add_node_SuccessfullyAddsNodeToLinkedList);
+    RUN_TEST(test_populate_hashtable_SuccessfullyAddsTokenToHashtable);
+    RUN_TEST(test_handle_input_SuccessfullyHandlesSimpleInput);
+    RUN_TEST(test_handle_input_SuccessfullyHandlesInputWithQuotes);
     return UNITY_END();
 }

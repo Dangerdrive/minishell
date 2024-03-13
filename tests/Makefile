@@ -16,9 +16,10 @@ FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 # push_swap
 SRC_PATH = ../src/
 SRC = 	$(SRC_PATH)env.c \
+		$(SRC_PATH)token.c \
 		$(SRC_PATH)main_utils.c
 
-#		$(SRC_PATH)token.c \
+#		
 #		$(SRC_PATH)main.c
 #		./src/token.c
 #		./src/lexer/.c \
