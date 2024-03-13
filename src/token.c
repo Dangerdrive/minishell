@@ -52,10 +52,49 @@ int	check_exit_input(char **input)
 	return (0);
 }
 
+char	*save_token(char *input, int i, int len)
+{
+	char	*token;
+
+	token = ft_calloc(len + 1, sizeof(char));
+	token[len] = '\0';
+	while (--len >= 0)
+		token[len] = input[i + len];
+	return (token);
+}
+
+int	check_quotes(char *input, int i)
+{
+	int len;
+
+	if (input[i] == 34)
+	{
+		i++;
+		len = 0;
+		while (input[i])
+		{
+			if (input[i] == 34)
+				return (len);
+			i++;
+			len++;
+		}
+	}
+	return (0);
+}
+
+int	get_token_len(char *input, int i)
+{
+	int len;
+
+	len = 0;
+	while (input[i + len] != ' ' && input[i + len] != '\0')
+		len++;
+	return (len);
+}
+
 void	handle_input(t_global **data)
 {
 	int		i;
-	int		j;
 	int		len;
 	char	*token;
 
@@ -68,17 +107,14 @@ void	handle_input(t_global **data)
 	i = 0;
 	while ((*data)->usr_input[i])
 	{
-		j = 0;
 		while ((*data)->usr_input[i] == ' ')
 			i++;
-		while ((*data)->usr_input[i + j] != ' '
-			&& (*data)->usr_input[i + j] != '\0')
-			j++;
-		len = j;
-		token = ft_calloc(len + 1, sizeof(char));
-		token[j] = '\0';
-		while (--j >= 0)
-			token[j] = (*data)->usr_input[i + j];
+		len = check_quotes((*data)->usr_input, i);
+		if (len == -1)
+			return ;
+		else if (len == 0)
+			len = get_token_len((*data)->usr_input, i);
+		token = save_token((*data)->usr_input, i, len);
 		init_hashtable(&(*data)->hashtable);
 		populate_hashtable(&(*data)->hashtable, token);
 		free(token);
