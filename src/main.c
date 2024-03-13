@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/13 13:47:33 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:20:23 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ int	main(void)
 			break ;
 		}
 		ft_memdel(data->usr_input);
-		if (data->exit == true)
-			break ;
+		// if (data->exit == true)
+		// 	break ;
 	}
 	free_stuff(data);
 	return (0);

@@ -23,6 +23,7 @@ void	add_node(t_tkn **tkn_node, char *token)
 	if (!new_node)
 		return ;
 	new_node->content = token;
+	ft_printf("token: %s\n", new_node->content);
 	new_node->next = NULL;
 	if (!(*tkn_node))
 		*tkn_node = new_node;
@@ -38,15 +39,23 @@ void	add_node(t_tkn **tkn_node, char *token)
 
 void	populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token)
 {
+	t_tkn	*temp;
+
 	add_node(&(*hashtable)[0], token);
-	printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
+	temp = (*hashtable)[0];
+	// while ((*hashtable)[0])
+	// {
+	// 	printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
+	// 	((*hashtable)[0]) = ((*hashtable)[0])->next;
+	// }
+	// ((*hashtable)[0]) = temp;
 }
 
-int	check_exit_input(char **input)
+int	check_exit_input(char **input, int *exit)
 {
 	if (ft_strncmp(*input, "exit", 5) == 0)
 	{
-		free(*input);
+		*exit = 1;
 		return (1);
 	}
 	return (0);
@@ -105,7 +114,7 @@ int	handle_input(t_global **data)
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
 	add_history((*data)->usr_input);
-	if (check_exit_input(&(*data)->usr_input))
+	if (check_exit_input(&(*data)->usr_input, &(*data)->exit))
 		return (0);
 	i = 0;
 	while ((*data)->usr_input[i])

@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:49:46 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/13 13:47:25 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:09:28 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_global	*init_data(void)
 		return (NULL);
 	data->env = __environ;
 	data->cur_cwd_path = getcwd(NULL, 0);
+	data->exit = false;
 	init_hashtable(&data->hashtable);
 	//printf("\n\n%s\n", data->cur_cwd_path);
 	return (data);
