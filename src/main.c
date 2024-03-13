@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/13 16:20:23 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:44:38 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	main(void)
 		handle_signal();
 		if (handle_input(&data) == 0)
 		{
-			free_stuff(data);
 			break ;
 		}
 		ft_memdel(data->usr_input);

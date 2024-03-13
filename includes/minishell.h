@@ -3,6 +3,7 @@
 # define MINISHELL_H
 
 # define TABLE_SIZE 50
+# define SPECIAL_CHAR 	"\!\?\*\&\$\#\|\<\>\~\(\)\[\]\{\}\;\/\\"
 
 //for readline
 # include <readline/readline.h>
@@ -63,7 +64,7 @@ int			copy_env(t_global **data);
 void		free_env(t_global **data);
 
 /*--------------token--------------*/
-void		handle_input(t_global **data);
+int			handle_input(t_global **data);
 void		populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
 void		add_node(t_tkn **tkn_node, char *token);

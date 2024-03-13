@@ -23,7 +23,6 @@ void	add_node(t_tkn **tkn_node, char *token)
 	if (!new_node)
 		return ;
 	new_node->content = token;
-	ft_printf("token: %s\n", new_node->content);
 	new_node->next = NULL;
 	if (!(*tkn_node))
 		*tkn_node = new_node;
@@ -33,22 +32,15 @@ void	add_node(t_tkn **tkn_node, char *token)
 		while ((*tkn_node)->next != NULL)
 			(*tkn_node) = (*tkn_node)->next;
 		(*tkn_node)->next = new_node;
+		printf("hash: %s%s%s\n", YELLOW, (*tkn_node)->next->content, END);
 		*tkn_node = temp;
 	}
 }
 
 void	populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token)
 {
-	t_tkn	*temp;
-
 	add_node(&(*hashtable)[0], token);
-	temp = (*hashtable)[0];
-	// while ((*hashtable)[0])
-	// {
-	// 	printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
-	// 	((*hashtable)[0]) = ((*hashtable)[0])->next;
-	// }
-	// ((*hashtable)[0]) = temp;
+	//printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
 }
 
 int	check_exit_input(char **input, int *exit)
@@ -92,6 +84,14 @@ int	check_quotes(char *input, int i)
 	return (0);
 }
 
+// int	is_reserved_char(char *input, int i)
+// {
+// 	if (ft_strchr(input))
+// 	{
+
+// 	}
+// }
+
 int	get_token_len(char *input, int i)
 {
 	int	len;
@@ -99,7 +99,11 @@ int	get_token_len(char *input, int i)
 	len = 0;
 	while (input[i + len] != ' ' && input[i + len] != '\0'
 		&& input[i + len] != 34)
+	{
 		len++;
+		// if (is_reserved_char(input, i))
+		// 	break ;
+	}
 	return (len);
 }
 
