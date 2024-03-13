@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:54:13 by root              #+#    #+#             */
-/*   Updated: 2024/03/12 19:07:58 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/12 21:32:18 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	add_node(t_tkn **tkn_node, char *token)
 void	populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token)
 {
 	add_node(&(*hashtable)[0], token);
-	printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
+	//printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
 }
 
 void	handle_input(t_global **data)
@@ -61,11 +61,13 @@ void	handle_input(t_global **data)
 	int		len;
 	char	*token;
 
+	// if ((*data)->usr_input != NULL)
+	// 	ft_memdel((*data)->usr_input);
+	(*data)->usr_input = NULL; 
 	(*data)->usr_input = readline((*data)->usr_input);
 	if (ft_strncmp((*data)->usr_input, "exit", 5) == 0)
 	{
 		(*data)->exit = true;
-		free((*data)->usr_input);
 		return ;
 	}
 	i = 0;

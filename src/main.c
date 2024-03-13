@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 19:03:45 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/12 21:03:51 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(void)
 		temp = data->hashtable[0];
 		while (temp != NULL)
 			temp = temp->next;
-		free(data->usr_input);
+		ft_memdel(data->usr_input);
 		if (data->exit == true)
 			break ;
 	}
