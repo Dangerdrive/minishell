@@ -48,6 +48,10 @@ $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
 	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 
+valgrind: all
+	@echo "Running the program with valgrind..."
+	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
+
 run: all
 	@echo "Running the program..."
 	./minishell
@@ -89,4 +93,4 @@ fclean: clean
 re: fclean all
 
 # Phony targets
-.PHONY: all bonus clean fclean re run
+.PHONY: all bonus clean fclean re run valgrind
