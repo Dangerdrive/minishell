@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/13 18:44:38 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/13 19:23:39 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,11 @@ int	main(void)
 	{
 		handle_signal();
 		if (handle_input(&data) == 0)
-		{
 			break ;
-		}
 		ft_memdel(data->usr_input);
 		// if (data->exit == true)
 		// 	break ;
 	}
-	free_stuff(data);
+	free_stuff(&data);
 	return (0);
 }

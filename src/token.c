@@ -132,7 +132,7 @@ int	handle_input(t_global **data)
 			len = get_token_len((*data)->usr_input, i);
 		token = save_token((*data)->usr_input, i, len);
 		populate_hashtable(&(*data)->hashtable, token);
-		free(token);
+		//free(token); //o pontero do token é atribuido ao hashtable. Então a gente não vai dar free aqui
 		i += len;
 	}
 	return (1);

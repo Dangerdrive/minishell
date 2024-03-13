@@ -57,7 +57,8 @@ typedef struct s_global
 t_global	*init_data(void);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
 void		handle_signal(void);
-void		free_stuff(t_global *data);
+// void		free_stuff(t_global *data);
+void free_stuff(t_global **data);
 
 /*---------------env----------------*/
 int			copy_env(t_global **data);
