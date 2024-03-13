@@ -11,6 +11,10 @@ https://www.gnu.org/software/bash/manual/bash.html
 
 https://harm-smits.github.io/42docs/projects/minishell
 
+# Unit tests
+https://www.throwtheswitch.org/unity
+https://github.com/ThrowTheSwitch/Unity
+
 
 # Git
 
