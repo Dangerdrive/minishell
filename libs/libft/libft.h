@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 13:20:58 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/12 18:41:00 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/13 13:04:15 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ size_t				ft_strlcpy(char *dest, const char *src, size_t destsize);
 size_t				ft_strlen(const char *str);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
+char				*ft_strndup(const char *src, size_t n);
 char				*ft_strnstr(const char *big,
 						const char *little, size_t len);
 char				*ft_strrchr(const char *s, int c);
