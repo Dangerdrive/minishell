@@ -83,5 +83,5 @@ int	copy_env(t_global **data)
 // 	data = init_data();
 // 	copy_env(&data);
 // 	free(data);
-// 	free(data->cur_cwd_path);
+// 	free(data->cur_path);
 // }

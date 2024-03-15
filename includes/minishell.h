@@ -1,9 +1,10 @@
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # define TABLE_SIZE 50
-# define SPECIAL_CHAR 	"\!\?\*\&\$\#\|\<\>\~\(\)\[\]\{\}\;\/\\"
+# define SIMPLE_QUOTE 39
+# define DOUBLE_QUOTE 34
+# define SPECIAL_CHAR 	"|/!?*&$#<>-~()[]{}"
 
 //for readline
 # include <readline/readline.h>
@@ -49,16 +50,14 @@ typedef struct s_global
 	char			**env;
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
-	char			*cur_cwd_path;
+	char			*cur_path;
 	int				exit;
 	struct s_global	*next;
 }	t_global;
 
 t_global	*init_data(void);
-void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
 void		handle_signal(void);
-// void		free_stuff(t_global *data);
-void free_stuff(t_global **data);
+void		clean_stuff(t_global **data);
 
 /*---------------env----------------*/
 int			copy_env(t_global **data);
@@ -66,8 +65,9 @@ void		free_env(t_global **data);
 
 /*--------------token--------------*/
 int			handle_input(t_global **data);
-void		populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token);
+void		populate_hashtable(t_global ***data, int i, int len);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
-void		add_node(t_tkn **tkn_node, char *token);
+void		add_node(t_tkn **tkn_node, char *input, int i, int len);
+int			check_exit_input(char **input, int *exit);
 
 #endif

@@ -1,80 +1,21 @@
 #include "../includes/minishell.h"
 
-void	init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
-{
-	int	i;
-
-	i = 0;
-	while (i < TABLE_SIZE)
-	{
-		(*hashtable)[i] = NULL;
-		i++;
-	}
-	return ;
-}
-
-void	add_node(t_tkn **tkn_node, char *token)
-{
-	t_tkn	*new_node;
-	t_tkn	*temp;
-
-	new_node = ft_calloc(1, sizeof(t_tkn));
-	temp = NULL;
-	if (!new_node)
-		return ;
-	new_node->content = token;
-	new_node->next = NULL;
-	if (!(*tkn_node))
-		*tkn_node = new_node;
-	else
-	{
-		temp = *tkn_node;
-		while ((*tkn_node)->next != NULL)
-			(*tkn_node) = (*tkn_node)->next;
-		(*tkn_node)->next = new_node;
-		printf("hash: %s%s%s\n", YELLOW, (*tkn_node)->next->content, END);
-		*tkn_node = temp;
-	}
-}
-
-void	populate_hashtable(t_tkn *(*hashtable)[TABLE_SIZE], char *token)
-{
-	add_node(&(*hashtable)[0], token);
-	//printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
-}
-
-int	check_exit_input(char **input, int *exit)
-{
-	if (ft_strncmp(*input, "exit", 5) == 0)
-	{
-		*exit = 1;
-		return (1);
-	}
-	return (0);
-}
-
-char	*save_token(char *input, int i, int len)
-{
-	char	*token;
-
-	token = ft_calloc(len + 1, sizeof(char));
-	token[len] = '\0';
-	while (--len >= 0)
-		token[len] = input[i + len];
-	return (token);
-}
-
-int	check_quotes(char *input, int i)
+int	check_quotes(char *input, int i) //TRATAR ASPAS NO FINAL DO INPUT
 {
 	int		len;
+	int		is_simple;
 
-	if (input[i] == 34)
+	is_simple = 0;
+	if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
 	{
+		if (input[i] == SIMPLE_QUOTE)
+			is_simple = 1;
 		i++;
 		len = 1;
 		while (input[i])
 		{
-			if (input[i] == 34)
+			if ((is_simple == 1 && input[i] == SIMPLE_QUOTE)
+				|| (is_simple == 0 && input[i] == DOUBLE_QUOTE))
 				return (len + 1);
 			i++;
 			len++;
@@ -97,12 +38,9 @@ int	get_token_len(char *input, int i)
 	int	len;
 
 	len = 0;
-	while (input[i + len] != ' ' && input[i + len] != '\0'
-		&& input[i + len] != 34)
+	while (input[i + len] != ' ' && input[i + len] != '\0')
 	{
 		len++;
-		// if (is_reserved_char(input, i))
-		// 	break ;
 	}
 	return (len);
 }
@@ -111,15 +49,12 @@ int	handle_input(t_global **data)
 {
 	int		i;
 	int		len;
-	char	*token;
 
-	// if ((*data)->usr_input != NULL)
-	// 	ft_memdel((*data)->usr_input);
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
 	add_history((*data)->usr_input);
 	if (check_exit_input(&(*data)->usr_input, &(*data)->exit))
-		return (0);
+		return (-1);
 	i = 0;
 	while ((*data)->usr_input[i])
 	{
@@ -127,13 +62,15 @@ int	handle_input(t_global **data)
 			i++;
 		len = check_quotes((*data)->usr_input, i);
 		if (len == -1)
+		{
+			printf("Error: open quote.\n");
 			return (0);
+		}
 		else if (len == 0)
 			len = get_token_len((*data)->usr_input, i);
-		token = save_token((*data)->usr_input, i, len);
-		populate_hashtable(&(*data)->hashtable, token);
-		//free(token); //o pontero do token é atribuido ao hashtable. Então a gente não vai dar free aqui
+		populate_hashtable(&data, i, len);
 		i += len;
 	}
+	printf("\n");
 	return (1);
 }
