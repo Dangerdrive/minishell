@@ -29,14 +29,14 @@ int	get_token_len(char *input, int i)
 	int	len;
 
 	len = 0;
-	if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
-	{
+	if (input[i] == PIPE)
+		len++;
+	else if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
 		len = check_quotes(input, i);
-	}
 	else
 	{
-		while (input[i + len] != ' ' && input[i + len] != SIMPLE_QUOTE
-			&& input[i + len] != DOUBLE_QUOTE && input[i + len] != '\0')
+		while (input[i + len] && input[i + len] != ' '
+			&& input[i + len] != SIMPLE_QUOTE && input[i + len] != DOUBLE_QUOTE)
 		{
 			len++;
 		}

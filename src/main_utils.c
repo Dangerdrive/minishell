@@ -6,13 +6,13 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:49:46 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/15 17:29:53 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/18 18:47:14 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	*g_signal;
+int	g_signal = 1;
 
 t_global	*init_data(void)
 {
@@ -24,13 +24,32 @@ t_global	*init_data(void)
 	data->usr_input = NULL;
 	data->env = __environ;
 	data->cur_path = getcwd(NULL, 0);
-	data->exit = false;
+	data->exit = 0;
 	init_hashtable(&data->hashtable);
 	return (data);
 }
 
-void	handle_signal(void)
-{}
+void	sig_handler(int signo)
+{
+	if (signo == SIGINT)
+	{
+		printf("\n");
+		g_signal = 0;
+	}
+}
+
+void	handle_signal(t_global **data)
+{
+	struct sigaction	act;
+
+	act.sa_handler = sig_handler;
+	sigaction(SIGINT, &act, NULL);
+	if (g_signal == 0)
+	{
+		(*data)->exit = 1;
+		//printf("\exit %d\n", (*data)->exit);
+	}
+}
 
 void	free_hashtable(t_global **data)
 {

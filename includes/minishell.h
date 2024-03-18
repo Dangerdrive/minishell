@@ -4,7 +4,8 @@
 # define TABLE_SIZE 50
 # define SIMPLE_QUOTE 39
 # define DOUBLE_QUOTE 34
-# define SPECIAL_CHAR 	"|/!?*&$#<>-~()[]{}"
+# define PIPE 124
+# define SPECIAL_CHAR 	"/!?*&$#<>-~()[]{}"
 
 //for readline
 # include <readline/readline.h>
@@ -56,7 +57,7 @@ typedef struct s_global
 }	t_global;
 
 t_global	*init_data(void);
-void		handle_signal(void);
+void		handle_signal(t_global **data);
 void		clean_stuff(t_global **data);
 
 /*---------------env----------------*/
