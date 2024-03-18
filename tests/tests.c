@@ -76,17 +76,17 @@ void test_populate_hashtable_SuccessfullyAddsTokenToHashtable(void) {
 }
 
 void test_handle_input_SuccessfullyHandlesSimpleInput(void) {
-    // data->usr_input = strdup("cnp joto");
-    // handle_input(&data);
-    // TEST_ASSERT_EQUAL_STRING("cnp", data->hashtable[0]->content);
-    // ft_memdel(data->usr_input);
+    data->usr_input = strdup("cnp joto");
+    handle_input(&data);
+    TEST_ASSERT_EQUAL_STRING("cnp", data->hashtable[0]->content);
+    ft_memdel(data->usr_input);
 }
 
 void test_handle_input_SuccessfullyHandlesInputWithQuotes(void) {
-    // data->usr_input = strdup("\"ls -l\"");
-    // handle_input(&data);
-    // TEST_ASSERT_EQUAL_STRING("ls -l", data->hashtable[0]->content);
-    // ft_memdel(data->usr_input);
+    data->usr_input = strdup("\"ls -l\"");
+    handle_input(&data);
+    TEST_ASSERT_EQUAL_STRING("ls -l", data->hashtable[0]->content);
+    ft_memdel(data->usr_input);
 }
 
 int main(void) {
