@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/15 16:24:34 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/18 19:14:32 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(void)
 	{
 		printf("%s ", data->cur_path);
 		handle_signal();
-		if (handle_input(&data) == -1)
+		if (readline_and_handle_input(&data) == -1)
 			break ;
 		ft_memdel(data->usr_input);
 		// if (data->exit == true)

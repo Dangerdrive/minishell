@@ -64,8 +64,9 @@ int			copy_env(t_global **data);
 void		free_env(t_global **data);
 
 /*--------------token--------------*/
+int			readline_and_handle_input(t_global **data);
 int			handle_input(t_global **data);
-void		populate_hashtable(t_global ***data, int i, int len);
+void		populate_hashtable(t_global **data, int i, int len);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
 void		add_node(t_tkn **tkn_node, char *input, int i, int len);
 int			check_exit_input(char **input, int *exit);

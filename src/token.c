@@ -44,13 +44,49 @@ int	get_token_len(char *input, int i)
 	return (len);
 }
 
+// int	handle_input(t_global **data)
+// {
+// 	int		i;
+// 	int		len;
+
+// 	(*data)->usr_input = NULL;
+// 	(*data)->usr_input = readline((*data)->usr_input);
+// 	add_history((*data)->usr_input);
+// 	if (check_exit_input(&(*data)->usr_input, &(*data)->exit))
+// 		return (-1);
+// 	i = 0;
+// 	while ((*data)->usr_input[i])
+// 	{
+// 		while ((*data)->usr_input[i] == ' ')
+// 			i++;
+// 		len = get_token_len((*data)->usr_input, i);
+// 		if (len == -1)
+// 		{
+// 			printf("Error: open quote.\n");
+// 			return (0);
+// 		}
+// 		populate_hashtable(data, i, len);
+// 		i += len;
+// 	}
+// 	printf("\n");
+// 	return (1);
+// }
+
+int	readline_and_handle_input(t_global **data)
+{
+	(*data)->usr_input = NULL;
+	(*data)->usr_input = readline((*data)->usr_input);
+	if (handle_input(data) == -1)
+		return (-1);
+	return (1);
+}
+
+
 int	handle_input(t_global **data)
 {
 	int		i;
 	int		len;
 
-	(*data)->usr_input = NULL;
-	(*data)->usr_input = readline((*data)->usr_input);
 	add_history((*data)->usr_input);
 	if (check_exit_input(&(*data)->usr_input, &(*data)->exit))
 		return (-1);
@@ -65,7 +101,7 @@ int	handle_input(t_global **data)
 			printf("Error: open quote.\n");
 			return (0);
 		}
-		populate_hashtable(&data, i, len);
+		populate_hashtable(data, i, len);
 		i += len;
 	}
 	printf("\n");

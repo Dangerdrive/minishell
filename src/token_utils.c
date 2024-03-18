@@ -48,9 +48,9 @@ void	add_node(t_tkn **tkn_node, char *input, int i, int len)
 	}
 }
 
-void	populate_hashtable(t_global ***data, int i, int len)
+void	populate_hashtable(t_global **data, int i, int len)
 {
-	add_node(&(**data)->hashtable[0], (**data)->usr_input, i, len);
+	add_node(&(**data).hashtable[0], (**data).usr_input, i, len);
 	//printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
 }
 
