@@ -1,29 +1,64 @@
 #include "../includes/minishell.h"
 
-int	check_quotes(char *input, int i) //TRATAR ASPAS NO FINAL DO INPUT
+int	check_quotes(char *input, int i) //TRATAR ASPAS TBM ENTRE LETRAS (ALÉM DE ESPAÇOS)
 {
 	int		len;
-	int		is_simple;
+	char	start;
 
-	is_simple = 0;
-	if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
+	len = 0;
+	start = 0;
+	if (input[i] == SIMPLE_QUOTE)
+		start = SIMPLE_QUOTE;
+	if (input[i] == DOUBLE_QUOTE)
+		start = DOUBLE_QUOTE;
+	while ((start == 0 && input[i] && input[i] != ' ')
+		|| (start != 0 && start != input[i]))
 	{
-		if (input[i] == SIMPLE_QUOTE)
-			is_simple = 1;
+		len++;
+		if (start == 0 && (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE))
+			return (-1);
 		i++;
-		len = 1;
-		while (input[i])
-		{
-			if ((is_simple == 1 && input[i] == SIMPLE_QUOTE)
-				|| (is_simple == 0 && input[i] == DOUBLE_QUOTE))
-				return (len + 1);
-			i++;
-			len++;
-		}
-		return (-1);
 	}
+	if (input[i] == start)
+		return (len);
 	return (0);
 }
+
+// int	check_quotes(char *input, int i) //TRATAR ASPAS NO FINAL DO INPUT
+// {
+// 	int		len;
+// 	int		is_simple;
+// 	int		is_double;
+
+// 	if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
+// 	{
+// 		if (input[i] == SIMPLE_QUOTE)
+// 			is_simple = 1;
+// 		else
+// 			is_double = 1;
+// 		i++;
+// 		len = 1;
+// 		while (input[i])
+// 		{
+// 			len++;
+// 			if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
+// 			{
+// 				if (is_simple == 1 && input[i] == SIMPLE_QUOTE)
+// 					is_simple++;
+// 				if (is_double == 1 && input[i] == DOUBLE_QUOTE)
+// 					is_double++;
+// 				break ;
+// 			}
+// 			i++;
+// 		}
+// 		//printf("is_simple = %d\n", is_simple);
+// 		if (is_simple == 2 || is_double == 2)
+// 			return (len);
+// 		else
+// 			return (-1);
+// 	}
+// 	return (0);
+// }
 
 // int	is_reserved_char(char *input, int i)
 // {
