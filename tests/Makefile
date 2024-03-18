@@ -17,6 +17,7 @@ FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 SRC_PATH = ../src/
 SRC = 	$(SRC_PATH)env.c \
 		$(SRC_PATH)token.c \
+		$(SRC_PATH)token_utils.c \
 		$(SRC_PATH)main_utils.c
 
 #		
