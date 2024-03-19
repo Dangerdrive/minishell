@@ -1,19 +1,11 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 11:54:13 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 16:51:48 by gde-souz         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # define TABLE_SIZE 50
+# define SIMPLE_QUOTE 39
+# define DOUBLE_QUOTE 34
+# define PIPE 124
+# define SPECIAL_CHAR 	"/!?*&$#<>-~()[]{}"
 
 //for readline
 # include <readline/readline.h>
@@ -59,20 +51,25 @@ typedef struct s_global
 	char			**env;
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
-	char			*cur_cwd_path;
+	char			*cur_path;
 	int				exit;
 	struct s_global	*next;
 }	t_global;
 
 t_global	*init_data(void);
-void		handle_signal(void);
-void		free_stuff(t_global *data);
+void		handle_signal(t_global **data);
+void		clean_stuff(t_global **data);
 
 /*---------------env----------------*/
 int			copy_env(t_global **data);
 void		free_env(t_global **data);
 
 /*--------------token--------------*/
-void		handle_input(t_global **data);
+int			readline_and_handle_input(t_global **data);
+int			handle_input(t_global **data);
+void		populate_hashtable(t_global **data, int i, int len);
+void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
+void		add_node(t_tkn **tkn_node, char *input, int i, int len);
+int			check_exit_input(char **input, int *exit);
 
 #endif
