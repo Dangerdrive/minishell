@@ -61,6 +61,8 @@ $(FTPRINTF):
 # Builds mandatory object files
 $(OBJ_PATH)%.o: %.c
 	@mkdir -p $(OBJ_PATH)
+	@mkdir -p $(OBJ_PATH)src	
+	@mkdir -p $(OBJ_PATH)src/built-ins
 	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
 
 # Cleans object files and dependencies
