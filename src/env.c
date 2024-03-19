@@ -22,10 +22,10 @@ void	print_our_env(t_global **data)
 	i = 0;
 	while ((*data)->env[i])
 	{
-		//printf("%s\n", (*data)->env[i]);
+		printf("%s\n", (*data)->env[i]);
 		i++;
 	}
-	free_env(data);
+//	free_env(data);
 }
 
 void	free_env(t_global **data)
@@ -49,9 +49,7 @@ int	copy_env(t_global **data)
 	int	i;
 	int	env_size;
 
-	env_size = 0;
-	while (__environ[env_size])
-		env_size++;
+	env_size = ft_strarray_len(__environ);
 	(*data)->env = malloc((env_size + 1) * sizeof(char *));
 	if (!(*data)->env)
 		return (EXIT_FAILURE);
@@ -72,17 +70,21 @@ int	copy_env(t_global **data)
 		i++;
 	}
 	(*data)->env[env_size] = NULL;
-	//print_our_env(data); // for testing
+	print_our_env(data);
 	return (EXIT_SUCCESS);
 }
 
-void		sort_env(char **tab, int env_len)
+void		sort_env(t_global **data)
 {
 	int		ordered;
 	int		i;
+	int		env_len;
 	char	*tmp;
 
+	env_len = ft_strarray_len(data->env);
 	ordered = 0;
+	data->sorted_env = (char **)ft_calloc(env_len + 1, sizeof(char *));
+	//retomar daqui
 	while (tab && ordered == 0)
 	{
 		ordered = 1;
@@ -101,6 +103,29 @@ void		sort_env(char **tab, int env_len)
 		env_len--;
 	}
 }
+
+//    data->sorted_env = (char **)malloc(sizeof(char *) * (env_len + 1));
+//     for (i = 0; i < env_len; i++) {
+//         data->sorted_env[i] = data->env[i];
+//     }
+//     data->sorted_env[env_len] = NULL; // Null-terminate the array
+
+//     // Now sort data->sorted_env
+//     ordered = 0;
+//     while (!ordered) {
+//         ordered = 1;
+//         for (i = 0; i < env_len - 1; i++) {
+//             if (strcmp(data->sorted_env[i], data->sorted_env[i + 1]) > 0) {
+//                 tmp = data->sorted_env[i];
+//                 data->sorted_env[i] = data->sorted_env[i + 1];
+//                 data->sorted_env[i + 1] = tmp;
+//                 ordered = 0;
+//             }
+//         }
+//         env_len--;
+//     }
+// }
+
 // int	main(void)
 // {
 // 	static t_global	*data;
