@@ -46,16 +46,11 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 
 	i = 0;
 	temp = NULL;
-	if (!(*hashtable)[i])
-		printf("HELLO\n");
-	else
-		printf("%s\n", (*hashtable)[i]->content);
 	while ((*hashtable)[i] != NULL)
 	{
 		while ((*hashtable)[i] != NULL)
 		{
 			temp = (*hashtable)[i]->next;
-			printf("free: %s\n", (*hashtable)[i]->content);
 			free((*hashtable)[i]->content);
 			free((*hashtable)[i]);
 			(*hashtable)[i] = temp;
@@ -79,4 +74,10 @@ void	clean_stuff(t_global **data)
 	ft_memdel((*data)->usr_input);
 	ft_memdel(*data);
 	*data = NULL;
+}
+
+void	clean_input_and_hashtable(t_global **data)
+{
+	ft_memdel((*data)->usr_input);
+	free_hashtable(&(*data)->hashtable);
 }

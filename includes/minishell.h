@@ -16,8 +16,8 @@
 # define COMMAND "command"
 # define FLAG "flag"
 # define SPECIAL_CHAR "special char"
-# define STRING_STRONG "simple quote"
-# define STRING_STD "double quote"
+# define STRING_STRONG "string strong"
+# define STRING_STD "double standard"
 
 //colors
 # define RED     		"\033[1;31m"
@@ -71,6 +71,7 @@ typedef struct s_global
 t_global	*init_data(void);
 void		handle_signal(t_global **data);
 void		clean_stuff(t_global **data);
+void		clean_input_and_hashtable(t_global **data);
 
 /*---------------env----------------*/
 int			copy_env(t_global **data);

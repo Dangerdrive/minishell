@@ -2,16 +2,19 @@
 
 void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
 {
-	int	i;
+	int		i;
+	t_tkn *temp;
 
 	i = 0;
 	while (hashtable[i])
 	{
+		temp = hashtable[i];
 		while (hashtable[i])
 		{
-			printf("%s%s%s ", YELLOW, hashtable[i]->content, END);
+			printf("%s%s%s	-	type: %s\n", YELLOW, hashtable[i]->content, END, hashtable[i]->type);
 			hashtable[i] = hashtable[i]->next;
 		}
+		hashtable[i] = temp;
 		i++;
 	}
 	printf("\n");
@@ -97,8 +100,8 @@ int	readline_and_handle_input(t_global **data)
 		return (-1);
 	if (input == 1)
 	{
-		prt_hashtable((*data)->hashtable);
 		parse(&(*data)->hashtable);
+		prt_hashtable((*data)->hashtable);
 	}
 	return (1);
 }

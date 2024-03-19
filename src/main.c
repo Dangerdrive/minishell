@@ -14,14 +14,8 @@ int	main(void)
 		//handle_signal(&data);
 		if (readline_and_handle_input(&data) == -1)
 			break ;
-		ft_memdel(data->usr_input);
-		// if (data->exit == true)
-		// 	break ;
+		clean_input_and_hashtable(&data);
 	}
-	if (!data->hashtable[0])
-		printf("HELLO111\n");
-	else
-		printf("%s\n", data->hashtable[0]->content);
 	clean_stuff(&data);
 	return (0);
 }
