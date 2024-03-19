@@ -40,12 +40,15 @@ void	parse(t_tkn *(*hashtable)[TABLE_SIZE])
 	t_tkn	*temp;
 
 	i = 0;
-	while ((*hashtable)[0])
+	while ((*hashtable)[i])
 	{
-		while ((*hashtable)[0])
+		temp = (*hashtable)[i];
+		while ((*hashtable)[i])
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]->content);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
+		(*hashtable)[i] = temp;
+		i++;
 	}
 }

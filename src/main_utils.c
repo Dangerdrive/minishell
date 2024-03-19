@@ -39,32 +39,30 @@ void	handle_signal(t_global **data)
 	}
 }
 
-void	free_hashtable(t_global **data)
+void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 {
 	int		i;
 	t_tkn	*temp;
 
 	i = 0;
 	temp = NULL;
-	while ((*data)->hashtable[i] != NULL)
+	if (!(*hashtable)[i])
+		printf("HELLO\n");
+	else
+		printf("%s\n", (*hashtable)[i]->content);
+	while ((*hashtable)[i] != NULL)
 	{
-		temp = (*data)->hashtable[i]->next;
-		free((*data)->hashtable[i]->content);
-		free((*data)->hashtable[i]);
-		(*data)->hashtable[i] = temp;
+		while ((*hashtable)[i] != NULL)
+		{
+			temp = (*hashtable)[i]->next;
+			printf("free: %s\n", (*hashtable)[i]->content);
+			free((*hashtable)[i]->content);
+			free((*hashtable)[i]);
+			(*hashtable)[i] = temp;
+		}
+		i++;
 	}
 }
-
-// void	free_stuff(t_global *data)
-// {
-// 	free(data->cur_path);
-// 	free_env(&data);
-// 	//ft_memdel(data->usr_input);
-// 	free_hashtable(&data);
-// 	//free(data);
-// 	rl_clear_history();
-// 	free(&data);
-// }
 
 void	clean_stuff(t_global **data)
 {
@@ -76,7 +74,7 @@ void	clean_stuff(t_global **data)
 		(*data)->cur_path = NULL;
 	}
 	free_env(data);
-	free_hashtable(data);
+	free_hashtable(&(*data)->hashtable);
 	rl_clear_history();
 	ft_memdel((*data)->usr_input);
 	ft_memdel(*data);
