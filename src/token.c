@@ -1,47 +1,109 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/11 15:54:13 by root              #+#    #+#             */
-/*   Updated: 2024/03/12 16:46:32 by gde-souz         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
-void	handle_input(t_global **data)
+int	check_quotes(char *input, int i)
+{
+	int		len;
+	char	start;
+
+	len = 0;
+	if (input[i] == SIMPLE_QUOTE)
+		start = SIMPLE_QUOTE;
+	if (input[i] == DOUBLE_QUOTE)
+		start = DOUBLE_QUOTE;
+	i++;
+	len++;
+	while (input[i] && start != input[i])
+	{
+		len++;
+		i++;
+	}
+	if (!input[i])
+		return (-1);
+	if (input[i] == start)
+		return (len + 1);
+	return (0);
+}
+
+int	get_token_len(char *input, int i)
+{
+	int	len;
+
+	len = 0;
+	if (input[i] == PIPE)
+		len++;
+	else if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
+		len = check_quotes(input, i);
+	else
+	{
+		while (input[i + len] && input[i + len] != ' '
+			&& input[i + len] != SIMPLE_QUOTE && input[i + len] != DOUBLE_QUOTE)
+		{
+			len++;
+		}
+	}
+	return (len);
+}
+
+// int	handle_input(t_global **data)
+// {
+// 	int		i;
+// 	int		len;
+
+// 	(*data)->usr_input = NULL;
+// 	(*data)->usr_input = readline((*data)->usr_input);
+// 	add_history((*data)->usr_input);
+// 	if (check_exit_input(&(*data)->usr_input, &(*data)->exit))
+// 		return (-1);
+// 	i = 0;
+// 	while ((*data)->usr_input[i])
+// 	{
+// 		while ((*data)->usr_input[i] == ' ')
+// 			i++;
+// 		len = get_token_len((*data)->usr_input, i);
+// 		if (len == -1)
+// 		{
+// 			printf("Error: open quote.\n");
+// 			return (0);
+// 		}
+// 		populate_hashtable(data, i, len);
+// 		i += len;
+// 	}
+// 	printf("\n");
+// 	return (1);
+// }
+
+int	readline_and_handle_input(t_global **data)
+{
+	(*data)->usr_input = NULL;
+	(*data)->usr_input = readline((*data)->usr_input);
+	if (handle_input(data) == -1)
+		return (-1);
+	return (1);
+}
+
+
+int	handle_input(t_global **data)
 {
 	int		i;
-	int		j;
 	int		len;
-	char	*token;
 
-	(*data)->usr_input = readline((*data)->usr_input);
-	if (ft_strncmp((*data)->usr_input, "exit", 5) == 0)
-	{
-		free((*data)->usr_input);
-		return ;
-	}
+	add_history((*data)->usr_input);
+	if (check_exit_input(&(*data)->usr_input, &(*data)->exit))
+		return (-1);
 	i = 0;
 	while ((*data)->usr_input[i])
 	{
-		j = 0;
 		while ((*data)->usr_input[i] == ' ')
 			i++;
-		while ((*data)->usr_input[i + j] != ' '
-			&& (*data)->usr_input[i + j] != '\0')
-			j++;
-		len = j;
-		token = ft_calloc(len + 1, sizeof(char));
-		token[j] = '\0';
-		while (--j >= 0)
-			token[j] = (*data)->usr_input[i + j];
-		printf("%s%s%s\n", BLUE, token, END);
-		//populate_hashtable(&(*data)->hashtable, token);
-		free(token);
+		len = get_token_len((*data)->usr_input, i);
+		if (len == -1)
+		{
+			printf("Error: open quote.\n");
+			return (0);
+		}
+		populate_hashtable(data, i, len);
 		i += len;
 	}
+	printf("\n");
+	return (1);
 }
