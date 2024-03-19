@@ -76,6 +76,31 @@ int	copy_env(t_global **data)
 	return (EXIT_SUCCESS);
 }
 
+void		sort_env(char **tab, int env_len)
+{
+	int		ordered;
+	int		i;
+	char	*tmp;
+
+	ordered = 0;
+	while (tab && ordered == 0)
+	{
+		ordered = 1;
+		i = 0;
+		while (i < env_len - 1)
+		{
+			if (ft_strcmp(tab[i], tab[i + 1]) > 0)
+			{
+				tmp = tab[i];
+				tab[i] = tab[i + 1];
+				tab[i + 1] = tmp;
+				ordered = 0;
+			}
+			i++;
+		}
+		env_len--;
+	}
+}
 // int	main(void)
 // {
 // 	static t_global	*data;
