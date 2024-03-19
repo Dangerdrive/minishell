@@ -24,3 +24,7 @@ Create a new branch and switch to it
 git switch -c <branch_name>
 ```
 
+Get a specific file/folder from another branch
+```bash
+git checkout <origin_branch> <path/to/folder>
+```

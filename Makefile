@@ -17,7 +17,9 @@ FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 SRC = 	./src/main.c \
 		./src/main_utils.c \
 		./src/env.c \
-		./src/token.c
+		./src/token.c \
+		./src/token_utils.c \
+		./src/built-ins/pwd.c
 #		./src/lexer/.c \
 #		./src/parser/.c \
 #		./src/executor/.c \
@@ -47,6 +49,10 @@ $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
+
+valgrind: all
+	@echo "Running the program with valgrind..."
+	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
 
 run: all
 	@echo "Running the program..."
@@ -89,4 +95,4 @@ fclean: clean
 re: fclean all
 
 # Phony targets
-.PHONY: all bonus clean fclean re run
+.PHONY: all bonus clean fclean re run valgrind
