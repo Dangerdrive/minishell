@@ -2,10 +2,32 @@
 # define MINISHELL_H
 
 # define TABLE_SIZE 50
+
 # define SIMPLE_QUOTE 39
 # define DOUBLE_QUOTE 34
-# define PIPE 124
-# define SPECIAL_CHAR 	"/!?*&$#<>-~()[]{}"
+# define PIPE "|"
+# define LOGIC_OR "||"
+# define LOGIC_AND "&&"
+# define AMPERSAND "&"
+# define LESS_THAN "<"
+# define GREATER_THAN ">"
+# define DOUBLE_LESS_THAN "<<"
+# define DOUBLE_GREATER_THAN ">>"
+# define COMMAND "command"
+# define FLAG "flag"
+# define SPECIAL_CHAR "special char"
+# define STRING_STRONG "simple quote"
+# define STRING_STD "double quote"
+
+//colors
+# define RED     		"\033[1;31m"
+# define GREEN   		"\033[1;32m"
+# define YELLOW 		"\033[1;33m"
+# define BLUE   	 	"\033[1;34m"
+# define MAGENTA    	"\033[1;35m"
+# define CYAN    		"\033[1;36m"
+# define WHITE    		"\033[1;37m"
+# define END   			"\033[0m"
 
 //for readline
 # include <readline/readline.h>
@@ -27,16 +49,6 @@
 //my libs
 # include "../libs/libft/libft.h"
 # include "../libs/ft_printf/ft_printf.h"
-
-//colors
-# define RED     		"\033[1;31m"
-# define GREEN   		"\033[1;32m"
-# define YELLOW 		"\033[1;33m"
-# define BLUE   	 	"\033[1;34m"
-# define MAGENTA    	"\033[1;35m"
-# define CYAN    		"\033[1;36m"
-# define WHITE    		"\033[1;37m"
-# define END   			"\033[0m"
 
 typedef struct s_tkn
 {
@@ -71,5 +83,8 @@ void		populate_hashtable(t_global **data, int i, int len);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
 void		add_node(t_tkn **tkn_node, char *input, int i, int len);
 int			check_exit_input(char **input, int *exit);
+
+/*--------------parse--------------*/
+void		parse(t_tkn *(*hashtable)[TABLE_SIZE]);
 
 #endif

@@ -43,7 +43,6 @@ void	add_node(t_tkn **tkn_node, char *input, int i, int len)
 		while ((*tkn_node)->next != NULL)
 			(*tkn_node) = (*tkn_node)->next;
 		(*tkn_node)->next = new_node;
-		printf("%s%s%s ", YELLOW, (*tkn_node)->next->content, END);
 		*tkn_node = temp;
 	}
 }
