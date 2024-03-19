@@ -13,6 +13,8 @@ https://harm-smits.github.io/42docs/projects/minishell
 
 
 # Git
+https://www.alura.com.br/artigos/git-flow-o-que-e-como-quando-utilizar
+https://danielkummer.github.io/git-flow-cheatsheet/
 
 Switch to an existing branch
 ```bash

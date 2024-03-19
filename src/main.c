@@ -3,33 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:57:43 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/03/12 16:49:38 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/03/19 13:43:58 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	main(void)
-{
-	static t_global	*data;
-	t_tkn			*temp;
+// int	main(void)
+// {
+// 	static t_global	*data;
+// 	t_tkn			*temp;
 
-	data = init_data();
-	if (copy_env(&data) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	data->usr_input = NULL;
-	while (1)
-	{
-		handle_signal();
-		handle_input(&data);
-		temp = data->hashtable[0];
-		while (temp != NULL)
-			temp = temp->next;
-		free(data->usr_input);
-	}
-	free_stuff(data);
-	return (0);
-}
+// 	data = init_data();
+// 	if (copy_env(&data) == EXIT_FAILURE)
+// 		return (EXIT_FAILURE);
+// 	data->usr_input = NULL;
+// 	while (1)
+// 	{
+// 		handle_signal();
+// 		handle_input(&data);
+// 		temp = data->hashtable[0];
+// 		while (temp != NULL)
+// 			temp = temp->next;
+// 		free(data->usr_input);
+// 	}
+// 	free_stuff(data);
+// 	return (0);
+// }

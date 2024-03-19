@@ -13,23 +13,20 @@ LIBFT		=	$(LIBFT_PATH)/libft.a
 FTPRINTF_PATH	= ./libs/ft_printf
 FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
-# push_swap
-SRC = 	./src/main.c \
-		./src/main_utils.c \
-		./src/env.c \
-		./src/token.c \
-		./src/token_utils.c \
-		./src/built-ins/pwd.c
-#		./src/lexer/.c \
-#		./src/parser/.c \
-#		./src/executor/.c \
-#		./src/utils/.c \
+# src
+SRC_PATH = src/
+SRCS = 	main.c \
+		main_utils.c \
+		env.c \
+		token.c \
+		token_utils.c \
+		built-ins/pwd.c
+
+SRC	=	$(addprefix $(SRC_PATH), $(SRCS))
 
 # Objects
-OBJ_PATH = src/build/
-OBJ = $(addprefix $(OBJ_PATH), $(notdir $(SRC:.c=.o)))
-# OBJ_PATH_BONUS = ./build_bonus/
-# OBJ_BONUS = $(addprefix $(OBJ_PATH_BONUS), $(notdir $(SRC_BONUS:.c=.o)))
+OBJ_PATH = .build/
+OBJ = $(addprefix $(OBJ_PATH), $(SRC:.c=.o))
 
 # Color codes of output on terminal
 GREEN = \e[1;32m
@@ -42,10 +39,7 @@ all: $(NAME)
 
 # Target to build the mandatory part
 $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
-# 	@cp $(LIBFT) $(NAME)
-# 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
 	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline
-#	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
@@ -65,7 +59,7 @@ $(FTPRINTF):
 	@make -C $(FTPRINTF_PATH)
 
 # Builds mandatory object files
-$(OBJ_PATH)%.o: src/%.c
+$(OBJ_PATH)%.o: %.c
 	@mkdir -p $(OBJ_PATH)
 	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
 
