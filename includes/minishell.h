@@ -80,12 +80,16 @@ void		free_env(t_global **data);
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);
 int			handle_input(t_global **data);
-void		populate_hashtable(t_global **data, int i, int len);
+void		populate_hashtable(t_global **data, int idx, int len);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
-void		add_node(t_tkn **tkn_node, char *input, int i, int len);
+void		add_node(t_tkn **tkn_node, char **content);
 int			check_exit_input(char **input, int *exit);
 
 /*--------------parse--------------*/
-void		parse(t_tkn *(*hashtable)[TABLE_SIZE]);
+int			parse(t_tkn *(*hashtable)[TABLE_SIZE]);
+bool		is_pipe(char *token);
+bool		is_and_or(char *token);
+bool		is_pipe_and_or(char *token);
+bool		is_special_token(char *token);
 
 #endif

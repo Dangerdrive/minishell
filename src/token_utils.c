@@ -24,7 +24,7 @@ char	*get_token(char *input, int i, int len)
 	return (token);
 }
 
-void	add_node(t_tkn **tkn_node, char *input, int i, int len)
+void	add_node(t_tkn **tkn_node, char **content)
 {
 	t_tkn	*new_node;
 	t_tkn	*temp;
@@ -33,7 +33,7 @@ void	add_node(t_tkn **tkn_node, char *input, int i, int len)
 	temp = NULL;
 	if (!new_node)
 		return ;
-	new_node->content = get_token(input, i, len);
+	new_node->content = *content;
 	new_node->next = NULL;
 	if (!(*tkn_node))
 		(*tkn_node) = new_node;
@@ -47,10 +47,24 @@ void	add_node(t_tkn **tkn_node, char *input, int i, int len)
 	}
 }
 
-void	populate_hashtable(t_global **data, int i, int len)
+void	populate_hashtable(t_global **data, int idx, int len)
 {
-	add_node(&(**data).hashtable[0], (*data)->usr_input, i, len);
-	//printf("hash: %s%s%s\n", YELLOW, ((*hashtable)[0])->content, END);
+	char	*token;
+	int		i;
+
+	token = get_token((*data)->usr_input, idx, len);
+	i = 0;
+	if (ft_strncmp(token, PIPE, 1) == 0)
+	{
+		while ((*data)->hashtable[i])
+			i++;
+	}
+	else
+	{
+		while ((*data)->hashtable[i + 1] != NULL)
+			i++;
+	}
+	add_node(&(**data).hashtable[i], &token);
 }
 
 int	check_exit_input(char **input, int *exit)

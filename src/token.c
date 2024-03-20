@@ -17,7 +17,6 @@ void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
 		hashtable[i] = temp;
 		i++;
 	}
-	printf("\n");
 }
 
 int	check_quotes(char *input, int i)
@@ -50,11 +49,15 @@ int	get_token_len(char *input, int i)
 
 	len = 0;
 	if (input[i] == '|')
+	{
 		len++;
+		if (input[i + 1] == '|')
+			len++;
+	}
 	else if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
 		len = check_quotes(input, i);
 	else
-	{
+	{ // NEEDS TO APPART SPECIAL TOKENS TYPED WITHOUT SPACE - EX: "&&||"
 		while (input[i + len] && input[i + len] != ' '
 			&& input[i + len] != SIMPLE_QUOTE && input[i + len] != DOUBLE_QUOTE)
 		{
@@ -100,8 +103,9 @@ int	readline_and_handle_input(t_global **data)
 		return (-1);
 	if (input == 1)
 	{
-		parse(&(*data)->hashtable);
-		prt_hashtable((*data)->hashtable);
+		input = parse(&(*data)->hashtable);
+		if (input == 1)
+			prt_hashtable((*data)->hashtable);
 	}
 	return (1);
 }

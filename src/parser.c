@@ -1,19 +1,30 @@
 #include "../includes/minishell.h"
 
-int	is_special_token(char *token)
+int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 {
-	if (token
-		&& ((ft_strncmp(token, PIPE, 1) == 0)
-			|| (ft_strncmp(token, AMPERSAND, 1) == 0)
-			|| (ft_strncmp(token, GREATER_THAN, 1) == 0)
-			|| (ft_strncmp(token, LESS_THAN, 1) == 0)
-			|| (ft_strncmp(token, LOGIC_OR, 2) == 0)
-			|| (ft_strncmp(token, LOGIC_AND, 2) == 0)
-			|| (ft_strncmp(token, DOUBLE_GREATER_THAN, 2) == 0)
-			|| (ft_strncmp(token, DOUBLE_LESS_THAN, 2) == 0)))
-		return (1);
-	else
-		return (0);
+	int 	i;
+	t_tkn *temp;
+
+	i = 0;
+	while ((*hashtable)[i])
+	{
+		temp = (*hashtable)[i];
+		while ((*hashtable)[i])
+		{
+			if ((is_pipe_and_or((*hashtable)[i]->content) && !(*hashtable)[i]->next)
+			|| ((*hashtable)[i] && (*hashtable)[i]->next && is_pipe_and_or((*hashtable)[i]->content)
+				&& is_special_token((*hashtable)[i]->next->content)))
+			{
+				printf("Syntax error.\n");
+				(*hashtable)[i] = temp;
+				return (0);
+			}
+			(*hashtable)[i] = (*hashtable)[i]->next;
+		}
+		(*hashtable)[i] = temp;
+		i++;
+	}
+	return (1);
 }
 
 char	*get_tkn_type(char *token)
@@ -34,9 +45,10 @@ char	*get_tkn_type(char *token)
 
 }
 
-void	parse(t_tkn *(*hashtable)[TABLE_SIZE])
+int	parse(t_tkn *(*hashtable)[TABLE_SIZE])
 {
-	int	i;
+	int		i;
+	int		syntax;
 	t_tkn	*temp;
 
 	i = 0;
@@ -51,4 +63,6 @@ void	parse(t_tkn *(*hashtable)[TABLE_SIZE])
 		(*hashtable)[i] = temp;
 		i++;
 	}
+	syntax = check_syntax(hashtable);
+	return (syntax);
 }
