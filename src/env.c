@@ -15,60 +15,120 @@
 // 	free((*data)->env);
 // }
 
-void	print_env(char **env)
-{
-	int	i;
 
-	i = 0;
-	while (env[i])
+void free_env(t_env **env)
+{
+    t_env *current;
+    t_env *next;
+
+    if (!env || !(*env))
+        return;
+    current = *env;
+    while (current != NULL)
 	{
-		printf("%s\n", env[i]);
-		i++;
+        next = current->next;
+        if (current->key)
+            ft_memdel((void **)&(current->key));
+        if (current->value)
+            ft_memdel((void **)&(current->value));
+        ft_memdel((void **)&current);
+        current = next;
+    }
+    *env = NULL;
+}
+
+
+
+// int	copy_env(t_global **data)
+// {
+// 	int	i;
+// 	int	env_size;
+
+// 	env_size = ft_strarray_len(__environ);
+// 	(*data)->env = malloc((env_size + 1) * sizeof(char *));
+// 	if (!(*data)->env)
+// 		return (EXIT_FAILURE);
+// 	i = 0;
+// 	while (i < env_size)
+// 	{
+// 		(*data)->env[i] = ft_strdup(__environ[i]);
+// 		if (!(*data)->env[i])
+// 		{
+// 			while (i > 0)
+// 			{
+// 				i--;
+// 				free((*data)->env[i]);
+// 			}
+// 			free((*data)->env);
+// 			return (EXIT_FAILURE);
+// 		}
+// 		i++;
+// 	}
+// 	(*data)->env[env_size] = NULL;
+// 	return (EXIT_SUCCESS);
+// }
+
+t_env *new_env_node(const char *key, const char *value)
+{
+	t_env *node = malloc(sizeof(t_env));
+	if (!node) return NULL;
+
+	node->key = strdup(key);
+	if (!node->key)
+	{
+		free(node);
+		return NULL;
+	}
+	node->value = strdup(value);
+	if (!node->value)
+	{
+		free(node->key);
+		free(node);
+		return NULL;
+	}
+	node->next = NULL;
+	return node;
+}
+
+void append_env_node(t_env **env, t_env *new_node)
+{
+	if (!(*env)) {
+		*env = new_node;
+	} else {
+		t_env *temp = *env;
+		while (temp->next) {
+			temp = temp->next;
+		}
+		temp->next = new_node;
 	}
 }
 
-void	free_env(t_global **data)
+int copy_env(t_global **data)
 {
-	int	i;
+	int		i;
+	char	*delim_pos;
+	t_env 	*new_node;
 
-	if (!(*data)->env)
-		return ;
 	i = 0;
-	while ((*data)->env[i])
+	while (__environ[i])
 	{
-		ft_memdel((*data)->env[i]);
-		i++;
-	}
-	ft_memdel((*data)->env[i]);
-	ft_memdel((*data)->env);
-}
-
-int	copy_env(t_global **data)
-{
-	int	i;
-	int	env_size;
-
-	env_size = ft_strarray_len(__environ);
-	(*data)->env = malloc((env_size + 1) * sizeof(char *));
-	if (!(*data)->env)
-		return (EXIT_FAILURE);
-	i = 0;
-	while (i < env_size)
-	{
-		(*data)->env[i] = ft_strdup(__environ[i]);
-		if (!(*data)->env[i])
+		delim_pos = ft_strchr(__environ[i], '=');
+		new_node = malloc(sizeof(t_env));
+		if (!new_node)
 		{
-			while (i > 0)
-			{
-				i--;
-				free((*data)->env[i]);
-			}
-			free((*data)->env);
+			free_env(&((*data)->env));
 			return (EXIT_FAILURE);
 		}
+		new_node->key = ft_strndup(__environ[i], delim_pos - __environ[i]);
+		new_node->value = strdup(delim_pos + 1);
+		if (!new_node->key || !new_node->value)
+		{
+			free_env(&((*data)->env));
+			return (EXIT_FAILURE);
+		}
+		append_env_node(&((*data)->env), new_node);
 		i++;
 	}
-	(*data)->env[env_size] = NULL;
 	return (EXIT_SUCCESS);
 }
 
@@ -103,7 +163,6 @@ char	**ft_strarray_dup(char **array)
 	return (dup);
 }	
 
-// "export" shows environment variables in alphabetical order, but it has 1 line less than envp
 void sort_env(t_global **data)
 {
     int ordered;
@@ -111,18 +170,9 @@ void sort_env(t_global **data)
     int env_len;
     char *tmp;
 
-    env_len = ft_strarray_len((*data)->env); // Corrected access to data's members
+    env_len = ft_strarray_len((*data)->env);
     ordered = 0;
 	(*data)->sorted_env = ft_strarray_dup((*data)->env);
-    // (*data)->sorted_env = (char **)ft_calloc(env_len + 1, sizeof(char *));
-    // if (!(*data)->sorted_env)
-    //     return;
-    // i = 0;
-    // while (i < env_len) {
-    //     (*data)->sorted_env[i] = ft_strdup((*data)->env[i]); // Corrected access
-    //     i++;
-    // }
-    // (*data)->sorted_env[env_len] = NULL;
     while (!ordered)
 	{
         ordered = 1;
@@ -136,9 +186,39 @@ void sort_env(t_global **data)
             }
             i++;
         }
-        env_len--; // This line is placed correctly; it gradually reduces the array's size being sorted.
+        env_len--;
     }
 
+}
+
+void sort_env(t_global **data)
+{
+    int ordered;
+    t_env	**current;
+	t_env	*temp;
+	t_env	*next_node;
+
+	ordered = 0;
+    if (!data || !(*data) || !(*data)->env)
+        return;
+    while (!ordered)
+	{
+        ordered = 1;
+        current = &((*data)->env);
+        while ((*current) != NULL && (*current)->next != NULL)
+		{
+            if (ft_strcmp((*current)->key, (*current)->next->key) > 0)
+			{
+                temp = *current;
+                next_node = (*current)->next;
+                temp->next = next_node->next;
+                next_node->next = temp;
+                *current = next_node;            
+                ordered = 0;
+            }
+            current = &((*current)->next);
+        }
+    }
 }
 
 
@@ -164,14 +244,26 @@ void sort_env(t_global **data)
 //     }
 // }
 
-int	main(void)
+int		env(t_env *env)
 {
-	static t_global	*data;
-
-	data = init_data();
-	copy_env(&data);
-	sort_env(&data);
-	print_env(data->sorted_env);
-	free(data);
-	free(data->cur_path);
+	while (env && env->next != NULL)
+	{
+		ft_printf("%s/n"env->value);
+		env = env->next;
+	}
+	if (env)
+		ft_printf("%s/n"env->value);
+	return (0);
 }
+
+// int	main(void)
+// {
+// 	static t_global	*data;
+
+// 	data = init_data();
+// 	copy_env(&data);
+// 	sort_env(&data);
+// 	print_env(data->sorted_env);
+// 	free(data);
+// 	free(data->cur_path);
+// }

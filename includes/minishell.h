@@ -46,9 +46,16 @@ typedef struct s_tkn
 	struct s_tkn	*next;
 }	t_tkn;
 
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_global
 {
-	char			**env;
+	t_env			*env;
 	char			**sorted_env;
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
