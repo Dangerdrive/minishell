@@ -12,8 +12,7 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 		while ((*hashtable)[i])
 		{
 			if ((is_pipe_and_or((*hashtable)[i]->content) && !(*hashtable)[i]->next)
-			|| ((*hashtable)[i] && (*hashtable)[i]->next && is_pipe_and_or((*hashtable)[i]->content)
-				&& is_special_token((*hashtable)[i]->next->content)))
+			|| ((*hashtable)[i] && (*hashtable)[i]->next && is_special_token((*hashtable)[i]->content) && is_special_token((*hashtable)[i]->next->content)))
 			{
 				printf("Syntax error.\n");
 				(*hashtable)[i] = temp;

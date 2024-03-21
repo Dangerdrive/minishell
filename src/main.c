@@ -11,7 +11,7 @@ int	main(void)
 	while (!data->exit)
 	{
 		printf("%s ", data->cur_path);
-		//handle_signal(&data);
+		//handle_signal();
 		if (readline_and_handle_input(&data) == -1)
 			break ;
 		clean_input_and_hashtable(&data);

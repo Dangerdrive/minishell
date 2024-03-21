@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int	g_signal = 1;
+int	g_signal;
 
 t_global	*init_data(void)
 {
@@ -21,22 +21,26 @@ void	sig_handler(int signo)
 {
 	if (signo == SIGINT)
 	{
-		printf("\n");
 		g_signal = 0;
+		printf("g_signal = %d\n", g_signal);
 	}
+	return ;
 }
 
-void	handle_signal(t_global **data)
+int	handle_signal(void)
 {
 	struct sigaction	act;
 
+	g_signal = 1;
 	act.sa_handler = sig_handler;
-	sigaction(SIGINT, &act, NULL);
-	if (g_signal == 0)
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = 0;
+	if (sigaction(SIGINT, &act, NULL) == 0)
 	{
-		(*data)->exit = 1;
-		//printf("\exit %d\n", (*data)->exit);
+		printf("G_signal = %d\n", g_signal);
+		return (1);
 	}
+	return (0);
 }
 
 void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])

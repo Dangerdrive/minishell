@@ -3,7 +3,7 @@
 void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
 {
 	int		i;
-	t_tkn *temp;
+	t_tkn	*temp;
 
 	i = 0;
 	while (hashtable[i])
@@ -11,7 +11,8 @@ void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
 		temp = hashtable[i];
 		while (hashtable[i])
 		{
-			printf("%s%s%s	-	type: %s\n", YELLOW, hashtable[i]->content, END, hashtable[i]->type);
+			printf("%s%s%s	-	type: %s\n", YELLOW, hashtable[i]->content, END, 
+				hashtable[i]->type);
 			hashtable[i] = hashtable[i]->next;
 		}
 		hashtable[i] = temp;
@@ -48,16 +49,16 @@ int	get_token_len(char *input, int i)
 	int	len;
 
 	len = 0;
-	if (input[i] == '|')
+	if (input[i] == '|' || input[i] == '&' || input[i] == '<' || input[i] == '>')
 	{
 		len++;
-		if (input[i + 1] == '|')
+		if (input[i + 1] == input[i])
 			len++;
 	}
 	else if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
 		len = check_quotes(input, i);
 	else
-	{ // NEEDS TO APPART SPECIAL TOKENS TYPED WITHOUT SPACE - EX: "&&||"
+	{
 		while (input[i + len] && input[i + len] != ' '
 			&& input[i + len] != SIMPLE_QUOTE && input[i + len] != DOUBLE_QUOTE)
 		{

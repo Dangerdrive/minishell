@@ -69,7 +69,7 @@ typedef struct s_global
 }	t_global;
 
 t_global	*init_data(void);
-void		handle_signal(t_global **data);
+int			handle_signal(void);
 void		clean_stuff(t_global **data);
 void		clean_input_and_hashtable(t_global **data);
 
