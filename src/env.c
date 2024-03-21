@@ -15,30 +15,6 @@
 // 	free((*data)->env);
 // }
 
-
-void free_env(t_env **env)
-{
-    t_env *current;
-    t_env *next;
-
-    if (!env || !(*env))
-        return;
-    current = *env;
-    while (current != NULL)
-	{
-        next = current->next;
-        if (current->key)
-            ft_memdel((void **)&(current->key));
-        if (current->value)
-            ft_memdel((void **)&(current->value));
-        ft_memdel((void **)&current);
-        current = next;
-    }
-    *env = NULL;
-}
-
-
-
 // int	copy_env(t_global **data)
 // {
 // 	int	i;
@@ -68,39 +44,64 @@ void free_env(t_env **env)
 // 	return (EXIT_SUCCESS);
 // }
 
-t_env *new_env_node(const char *key, const char *value)
-{
-	t_env *node = malloc(sizeof(t_env));
-	if (!node) return NULL;
+// t_env *new_env_node(const char *key, const char *value)
+// {
+// 	t_env *node = malloc(sizeof(t_env));
+// 	if (!node) return NULL;
 
-	node->key = strdup(key);
-	if (!node->key)
+// 	node->key = strdup(key);
+// 	if (!node->key)
+// 	{
+// 		free(node);
+// 		return NULL;
+// 	}
+// 	node->value = strdup(value);
+// 	if (!node->value)
+// 	{
+// 		free(node->key);
+// 		free(node);
+// 		return NULL;
+// 	}
+// 	node->next = NULL;
+// 	return node;
+// }
+
+void free_env(t_env **env)
+{
+	t_env *current;
+	t_env *next;
+
+	if (!env || !(*env))
+		return;
+	current = *env;
+	while (current != NULL)
 	{
-		free(node);
-		return NULL;
+		next = current->next;
+		if (current->key)
+			ft_memdel((void **)&(current->key));
+		if (current->value)
+			ft_memdel((void **)&(current->value));
+		ft_memdel((void **)&current);
+		current = next;
 	}
-	node->value = strdup(value);
-	if (!node->value)
-	{
-		free(node->key);
-		free(node);
-		return NULL;
-	}
-	node->next = NULL;
-	return node;
+	*env = NULL;
 }
 
 void append_env_node(t_env **env, t_env *new_node)
 {
-	if (!(*env)) {
+	t_env *temp;
+	if (!env || !new_node)
+		return;
+	if (!(*env))
+	{
 		*env = new_node;
-	} else {
-		t_env *temp = *env;
-		while (temp->next) {
-			temp = temp->next;
-		}
-		temp->next = new_node;
-	}
+		return;
+	}	
+	temp = *env;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = new_node;
+	
 }
 
 int copy_env(t_global **data)
@@ -117,144 +118,117 @@ int copy_env(t_global **data)
 		if (!new_node)
 		{
 			free_env(&((*data)->env));
-			return (EXIT_FAILURE);
+			return (1);
 		}
 		new_node->key = ft_strndup(__environ[i], delim_pos - __environ[i]);
 		new_node->value = strdup(delim_pos + 1);
-		if (!new_node->key || !new_node->value)
-		{
-			free_env(&((*data)->env));
-			return (EXIT_FAILURE);
-		}
+		// if (!new_node->key || !new_node->value)
+		// {
+		// 	free_env(&((*data)->env));
+		// 	return (1);
+		// }
 		append_env_node(&((*data)->env), new_node);
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (0);
 }
 
-char	**ft_strarray_dup(char **array)
-{
-	int		i;
-	char	**dup;
 
-	i = 0;
-	while (array[i])
-		i++;
-	dup = ft_calloc(1, (i + 1) * sizeof(char *));
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (array[i])
+int				copy_env(t_global *data)
+{
+	t_env	*env;
+	t_env	*new;
+	int		i;
+
+	if (!(env = malloc(sizeof(t_env))))
+		return (1);
+	env->value = ft_strdup(__environ[0]);
+	env->next = NULL;
+	data->env = env;
+	i = 1;
+	while (__environ && __environ[0] && __environ[i])
 	{
-		dup[i] = ft_strdup(array[i]);
-		if (!dup[i])
-		{
-			while (i > 0)
-			{
-				i--;
-				free(dup[i]);
-			}
-			free(dup);
-			return (NULL);
-		}
+		if (!(new = malloc(sizeof(t_env))))
+			return (1);
+		new->value = ft_strdup(__environ[i]);
+		new->next = NULL;
+		env->next = new;
+		env = new; 
 		i++;
 	}
-	dup[i] = NULL;
-	return (dup);
-}	
-
-void sort_env(t_global **data)
-{
-    int ordered;
-    int i;
-    int env_len;
-    char *tmp;
-
-    env_len = ft_strarray_len((*data)->env);
-    ordered = 0;
-	(*data)->sorted_env = ft_strarray_dup((*data)->env);
-    while (!ordered)
-	{
-        ordered = 1;
-        i = 0;
-        while (i < env_len - 1) {
-            if (ft_strcmp((*data)->sorted_env[i], (*data)->sorted_env[i + 1]) > 0) {
-                tmp = (*data)->sorted_env[i];
-                (*data)->sorted_env[i] = (*data)->sorted_env[i + 1];
-                (*data)->sorted_env[i + 1] = tmp;
-                ordered = 0;
-            }
-            i++;
-        }
-        env_len--;
-    }
-
+	return (0);
 }
 
 void sort_env(t_global **data)
 {
-    int ordered;
-    t_env	**current;
+	int ordered;
+	t_env	**current;
 	t_env	*temp;
 	t_env	*next_node;
 
 	ordered = 0;
-    if (!data || !(*data) || !(*data)->env)
-        return;
-    while (!ordered)
+	if (!data || !(*data) || !(*data)->env)
+		return;
+	while (!ordered)
 	{
-        ordered = 1;
-        current = &((*data)->env);
-        while ((*current) != NULL && (*current)->next != NULL)
+		ordered = 1;
+		current = &((*data)->env);
+		while ((*current) != NULL && (*current)->next != NULL)
 		{
-            if (ft_strcmp((*current)->key, (*current)->next->key) > 0)
+			if (ft_strcmp((*current)->key, (*current)->next->key) > 0)
 			{
-                temp = *current;
-                next_node = (*current)->next;
-                temp->next = next_node->next;
-                next_node->next = temp;
-                *current = next_node;            
-                ordered = 0;
-            }
-            current = &((*current)->next);
-        }
-    }
+				temp = *current;
+				next_node = (*current)->next;
+				temp->next = next_node->next;
+				next_node->next = temp;
+				*current = next_node;
+				ordered = 0;
+			}
+			current = &((*current)->next);
+		}
+	}
 }
-
-
-//    data->sorted_env = (char **)malloc(sizeof(char *) * (env_len + 1));
-//     for (i = 0; i < env_len; i++) {
-//         data->sorted_env[i] = data->env[i];
-//     }
-//     data->sorted_env[env_len] = NULL; // Null-terminate the array
-
-//     // Now sort data->sorted_env
-//     ordered = 0;
-//     while (!ordered) {
-//         ordered = 1;
-//         for (i = 0; i < env_len - 1; i++) {
-//             if (strcmp(data->sorted_env[i], data->sorted_env[i + 1]) > 0) {
-//                 tmp = data->sorted_env[i];
-//                 data->sorted_env[i] = data->sorted_env[i + 1];
-//                 data->sorted_env[i + 1] = tmp;
-//                 ordered = 0;
-//             }
-//         }
-//         env_len--;
-//     }
-// }
 
 int		env(t_env *env)
 {
 	while (env && env->next != NULL)
 	{
-		ft_printf("%s/n"env->value);
+		ft_printf("%s\n", env->value);
 		env = env->next;
 	}
 	if (env)
-		ft_printf("%s/n"env->value);
+		ft_printf("%s\n", env->value);
 	return (0);
 }
+
+
+// void sort_env(t_global **data)
+// {
+//     int ordered;
+//     int i;
+//     int env_len;
+//     char *tmp;
+
+//     env_len = ft_strarray_len((*data)->env);
+//     ordered = 0;
+// 	(*data)->sorted_env = ft_strarray_dup((*data)->env);
+//     while (!ordered)
+// 	{
+//         ordered = 1;
+//         i = 0;
+//         while (i < env_len - 1) {
+//             if (ft_strcmp((*data)->sorted_env[i], (*data)->sorted_env[i + 1]) > 0) {
+//                 tmp = (*data)->sorted_env[i];
+//                 (*data)->sorted_env[i] = (*data)->sorted_env[i + 1];
+//                 (*data)->sorted_env[i + 1] = tmp;
+//                 ordered = 0;
+//             }
+//             i++;
+//         }
+//         env_len--;
+//     }
+
+// }
 
 // int	main(void)
 // {

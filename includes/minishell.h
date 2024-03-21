@@ -30,7 +30,7 @@
 
 //colors
 # define RED     		"\033[1;31m"
-# define GREEN   		"\033[1;32m"
+# define GREEN   		"\033[1;32m"ft_strarray_dupft_strarray_dup
 # define YELLOW 		"\033[1;33m"
 # define BLUE   	 	"\033[1;34m"
 # define MAGENTA    	"\033[1;35m"
@@ -70,7 +70,7 @@ void		clean_stuff(t_global **data);
 
 /*---------------env----------------*/
 int			copy_env(t_global **data);
-void		free_env(t_global **data);
+void		free_env(t_env **env);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);

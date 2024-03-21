@@ -37,6 +37,7 @@ SRCS		=   $(addprefix $(SRCDIR)/, ft_atoi.c \
 				ft_putstr.c \
 				ft_putstr_fd.c \
 				ft_split.c \
+				ft_strarray_dup.c \
 				ft_strarray_len.c \
 				ft_strchr.c \
 				ft_strdup.c \

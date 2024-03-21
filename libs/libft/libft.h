@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 13:20:58 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/19 15:54:05 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:39:15 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void				ft_putstr(char *str);
 char				**ft_split(char *str, char c);
 void				*ft_free_split(char **split, size_t len);
 int					ft_strarray_len(char **tab);
+char				**ft_strarray_dup(char **array);
 char				*ft_strchr(const char *s, int c);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strdup(const char *src);
