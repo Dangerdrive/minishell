@@ -17,7 +17,7 @@
 # define FLAG "flag"
 # define SPECIAL_CHAR "special char"
 # define STRING_STRONG "string strong"
-# define STRING_STD "double standard"
+# define STRING_STD "string standard"
 
 //colors
 # define RED     		"\033[1;31m"
@@ -91,5 +91,8 @@ bool		is_pipe(char *token);
 bool		is_and_or(char *token);
 bool		is_pipe_and_or(char *token);
 bool		is_special_token(char *token);
+
+/*--------------lexer--------------*/
+int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
 
 #endif

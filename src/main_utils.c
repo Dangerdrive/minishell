@@ -17,31 +17,39 @@ t_global	*init_data(void)
 	return (data);
 }
 
-void	sig_handler(int signo)
-{
-	if (signo == SIGINT)
-	{
-		g_signal = 0;
-		printf("g_signal = %d\n", g_signal);
-	}
-	return ;
-}
+// void	sig_handler(int signo)
+// {
+// 	if (signo == SIGINT)
+// 	{
+// 		g_signal = 0;
+// 		printf("g_signal = %d\n", g_signal);
+// 	}
+// }
 
-int	handle_signal(void)
-{
-	struct sigaction	act;
+// int	handle_signal(void)
+// {
+// 	struct sigaction	act;
 
-	g_signal = 1;
-	act.sa_handler = sig_handler;
-	sigemptyset(&act.sa_mask);
-	act.sa_flags = 0;
-	if (sigaction(SIGINT, &act, NULL) == 0)
-	{
-		printf("G_signal = %d\n", g_signal);
-		return (1);
-	}
-	return (0);
-}
+// 	g_signal = 1;
+// 	act.sa_handler = sig_handler;
+// 	sigemptyset(&act.sa_mask);
+// 	act.sa_flags = 0;
+// 	sigaction(SIGINT, &act, NULL);
+// 	while (g_signal == 1)
+// 	{
+// 		usleep(100);
+// 	}
+// 	if (g_signal == 0)
+// 	{
+// 		//printf("G2_signal = %d\n", g_signal);
+// 		return (1);
+// 	}
+// 	if (sigaction(SIGINT, &act, NULL) == -1) {
+//         perror("sigaction");
+//         exit(EXIT_FAILURE);
+//     }
+// 	return (0);
+// }
 
 void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 {

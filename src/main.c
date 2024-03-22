@@ -8,11 +8,11 @@ int	main(void)
 	if (copy_env(&data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	data->usr_input = NULL;
+	//data->exit = handle_signal();
 	while (!data->exit)
 	{
 		printf("%s ", data->cur_path);
-		//handle_signal();
-		if (readline_and_handle_input(&data) == -1)
+		if (!data->exit && readline_and_handle_input(&data) == -1)
 			break ;
 		clean_input_and_hashtable(&data);
 	}

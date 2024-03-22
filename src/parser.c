@@ -63,5 +63,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE])
 		i++;
 	}
 	syntax = check_syntax(hashtable);
+	if (syntax)
+		syntax = lexer(hashtable);
 	return (syntax);
 }

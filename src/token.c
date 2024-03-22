@@ -11,7 +11,7 @@ void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
 		temp = hashtable[i];
 		while (hashtable[i])
 		{
-			printf("%s%s%s	-	type: %s\n", YELLOW, hashtable[i]->content, END, 
+			printf("%s%s%s	-	type: %s\n", YELLOW, hashtable[i]->content, END,
 				hashtable[i]->type);
 			hashtable[i] = hashtable[i]->next;
 		}
