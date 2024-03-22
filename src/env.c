@@ -192,7 +192,7 @@ void append_env_node(t_env **env, t_env *new_node)
 // delim_pos = ft_strchr(data->value, '=');
 // new->key = ft_strndup(__environ[i], delim_pos - ft_strlen(__environ[i]));
 
-t_env   *ft_new_env_node(char *key, char *value)
+t_env   *new_env_node(char *key, char *value)
 {
     t_env   *node;
 
@@ -319,7 +319,7 @@ void    ft_copy_env_list(t_global *data)
     last_node_addr = &(data->sorted_env);
     while (current)
     {
-        new_node = ft_new_env_node(current->key, current->value);
+        new_node = new_env_node(current->key, current->value);
         if (!new_node)
         {
             // Handle error
