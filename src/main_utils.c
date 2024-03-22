@@ -10,7 +10,7 @@ t_global	*init_data(void)
 	if (!data)
 		return (NULL);
 	data->usr_input = NULL;
-	data->env = __environ;
+	data->env = NULL;
 	data->cur_path = getcwd(NULL, 0);
 	data->exit = 0;
 	init_hashtable(&data->hashtable);
@@ -75,7 +75,7 @@ void	clean_stuff(t_global **data)
 		free((*data)->cur_path);
 		(*data)->cur_path = NULL;
 	}
-	free_env(data);
+	free_env(&(*data)->env);
 	free_hashtable(data);
 	rl_clear_history();
 	ft_memdel((*data)->usr_input);

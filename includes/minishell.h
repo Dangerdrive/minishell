@@ -56,7 +56,7 @@ typedef struct s_env
 typedef struct s_global
 {
 	t_env			*env;
-	char			**sorted_env;
+	t_env			*sorted_env;
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
@@ -69,7 +69,7 @@ void		handle_signal(t_global **data);
 void		clean_stuff(t_global **data);
 
 /*---------------env----------------*/
-int			copy_env(t_global **data);
+int			copy_env(t_global *data);
 void		free_env(t_env **env);
 
 /*--------------token--------------*/
