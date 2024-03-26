@@ -10,10 +10,11 @@ t_global	*init_data(void)
 	if (!data)
 		return (NULL);
 	data->usr_input = NULL;
-	data->env = __environ;
+	data->env = NULL;
 	data->cur_path = getcwd(NULL, 0);
 	data->exit = 0;
 	init_hashtable(&data->hashtable);
+	printf("PATH %s\n", data->cur_path);
 	return (data);
 }
 
@@ -63,7 +64,13 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 		while ((*hashtable)[i] != NULL)
 		{
 			temp = (*hashtable)[i]->next;
+//			printf("FREE::: %s\n", (*hashtable)[i]->content);
 			free((*hashtable)[i]->content);
+			if ((*hashtable)[i]->expanded)
+			{
+				printf("FREE-EXP: %s\n", (*hashtable)[i]->expanded);
+				free((*hashtable)[i]->expanded);
+			}
 			free((*hashtable)[i]);
 			(*hashtable)[i] = temp;
 		}

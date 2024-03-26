@@ -8,15 +8,16 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 	i = 0;
 	while ((*hashtable)[i])
 	{
-		if (strcmp((*hashtable)[i]->type, COMMAND))
-		{
-			printf("%s: command not found\n", (*hashtable)[0]->content);
-			return (0);
-		}
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			// PRECISA VALIDAR SE ANTES DE UMA FLAG TEM UM COMANDO;
+			if ((i == 0 && !(*hashtable)[i]->prev && ft_strcmp((*hashtable)[i]->type, COMMAND))
+				|| (i > 0 && (*hashtable)[i]->prev && !ft_strcmp((*hashtable)[i]->prev->content, PIPE)
+					&& ft_strcmp((*hashtable)[i]->type, COMMAND)))
+			{
+				printf("%s: command not found\n", (*hashtable)[i]->content);
+				return (0);
+			}
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;

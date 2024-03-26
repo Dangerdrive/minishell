@@ -26,19 +26,34 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 	return (1);
 }
 
-char	*get_tkn_type(char *token)
+int	is_file(char *token)
 {
 	int	i;
 
 	i = 0;
-	if (token[i] == SIMPLE_QUOTE)
+	while (token[i])
+	{
+		if (token[i] == '.' && strcmp((token + i + 1), ".txt"))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*get_tkn_type(char *token, t_tkn *prev)
+{
+	if (token[0] == SIMPLE_QUOTE)
 		return (STRING_STRONG);
-	else if (token[i] == DOUBLE_QUOTE)
+	else if (token[0] == DOUBLE_QUOTE)
 		return (STRING_STD);
 	else if (is_special_token(token))
 		return (SPECIAL_CHAR);
-	else if (token[i] == '-' && token[i + 1])
+	else if (token[0] == '-' && token[1])
 		return (FLAG);
+	else if (token[0] == '$')
+		return (VARIABLE);
+	else if (prev && ft_strcmp(prev->type, COMMAND) == 0 && is_file(token))
+		return (FILE_TXT);
 	else
 		return (COMMAND);
 
@@ -56,7 +71,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE])
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]->content);
+			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]->content, (*hashtable)[i]->prev);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;

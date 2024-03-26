@@ -43,7 +43,9 @@ void	add_node(t_tkn **tkn_node, char **content)
 		while ((*tkn_node)->next != NULL)
 			(*tkn_node) = (*tkn_node)->next;
 		(*tkn_node)->next = new_node;
+		new_node->prev = (*tkn_node);
 		*tkn_node = temp;
+		//printf("NODE::: %s\n", (*tkn_node)->content);
 	}
 }
 

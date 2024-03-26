@@ -15,6 +15,8 @@
 # define DOUBLE_GREATER_THAN ">>"
 # define COMMAND "command"
 # define FLAG "flag"
+# define FILE_TXT "file"
+# define VARIABLE "variable"
 # define SPECIAL_CHAR "special char"
 # define STRING_STRONG "string strong"
 # define STRING_STD "string standard"
@@ -54,6 +56,7 @@ typedef struct s_tkn
 {
 	char			*content;
 	char			*type;
+	char			*expanded;
 	struct s_tkn	*prev;
 	struct s_tkn	*next;
 }	t_tkn;
@@ -63,6 +66,7 @@ typedef struct s_global
 	char			**env;
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
+	char			*expanded_var[TABLE_SIZE];
 	char			*cur_path;
 	int				exit;
 	struct s_global	*next;
@@ -76,6 +80,9 @@ void		clean_input_and_hashtable(t_global **data);
 /*---------------env----------------*/
 int			copy_env(t_global **data);
 void		free_env(t_global **data);
+
+/*---------------exp----------------*/
+void		expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);
