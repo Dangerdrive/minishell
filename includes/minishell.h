@@ -56,7 +56,6 @@ typedef struct s_tkn
 {
 	char			*content;
 	char			*type;
-	char			*expanded;
 	struct s_tkn	*prev;
 	struct s_tkn	*next;
 }	t_tkn;
@@ -66,7 +65,6 @@ typedef struct s_global
 	char			**env;
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
-	char			*expanded_var[TABLE_SIZE];
 	char			*cur_path;
 	int				exit;
 	struct s_global	*next;
