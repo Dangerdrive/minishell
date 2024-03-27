@@ -5,7 +5,7 @@ int	main(void)
 	static t_global	*data;
 
 	data = init_data();
-	if (copy_env(data) == EXIT_FAILURE)
+	if (copy_env(&data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	data->usr_input = NULL;
 	// while (!data->exit)
@@ -15,7 +15,11 @@ int	main(void)
 	// 	if (readline_and_handle_input(&data) == -1)
 	// 		break ;
 	// 	ft_memdel(data->usr_input);
+	// 	// if (data->exit == true)
+	// 	// 	break ;
 	// }
-	//clean_stuff(&data);
+	char *args[] = {"test1", "test2", NULL};
+	export(args, data);
+	clean_stuff(&data);
 	return (0);
 }

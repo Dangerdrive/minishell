@@ -1,55 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strarray_dup.c                                  :+:      :+:    :+:   */
+/*   ft_strarray_concat.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:38:40 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/25 17:17:40 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/03/25 16:52:05 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	free_error_strarray_dup(char **array, int i)
-{
-	while (i > 0)
-	{
-		i--;
-		free(array[i]);
-	}
-	free(array);
-}
-
-/**
- * Duplicates an array of strings.
- *
- * @param array The array of strings to duplicate.
- * @return The duplicated array of strings, or NULL if the allocation fails.
- */
-char	**ft_strarray_dup(char **array)
+/*
+*/
+char	**ft_strarraycat(char **tab2, char **tab1)
 {
 	int		i;
-	char	**dup;
+	int		j;
+	int		tab2_len;
+	int		tab1_len;
+	char	**new;
 
-	i = 0;
-	while (array[i])
-		i++;
-	dup = ft_calloc(1, (i + 1) * sizeof(char *));
-	if (!dup)
+	tab2_len = ft_strarray_len(tab2);
+	tab1_len = ft_strarray_len(tab1);
+	new = (char **)malloc(sizeof(char *) * (tab1_len + tab2_len + 1));
+	if (!new)
 		return (NULL);
 	i = 0;
-	while (array[i])
+	while (tab1 && tab1[i])
 	{
-		dup[i] = ft_strdup(array[i]);
-		if (!dup[i])
-		{
-			free_error_strarray_dup(dup, i);
-			return (NULL);
-		}
+		new[i] = ft_strdup(tab1[i]);
 		i++;
 	}
-	dup[i] = NULL;
-	return (dup);
-}	
+	j = 0;
+	while (tab2 && tab2[j])
+	{
+		new[i + j] = ft_strdup(tab2[j]);
+		j++;
+	}
+	new[i + j] = NULL;
+	return (new);
+}

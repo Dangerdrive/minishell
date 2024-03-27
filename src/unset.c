@@ -1,21 +1,6 @@
 #include "minishell.h"
 
-static size_t env_size(char *env)
-{
-    size_t i;
 
-    i = 0;
-    while (env[i] && env[i] != '=')
-        i++;
-    return (i);
-}
-
-static void free_node(t_env *env)
-{
-    ft_memdel(env->key);
-    ft_memdel(env->value);
-    ft_memdel(env);
-}
 
 /*adequar args para como receberemos argumentos*/
 int ft_unset(char **args, t_global *data)

@@ -30,7 +30,7 @@
 
 //colors
 # define RED     		"\033[1;31m"
-# define GREEN   		"\033[1;32m"ft_strarray_dupft_strarray_dup
+# define GREEN   		"\033[1;32m"
 # define YELLOW 		"\033[1;33m"
 # define BLUE   	 	"\033[1;34m"
 # define MAGENTA    	"\033[1;35m"
@@ -46,17 +46,10 @@ typedef struct s_tkn
 	struct s_tkn	*next;
 }	t_tkn;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
 typedef struct s_global
 {
-	t_env			*env;
-	t_env			*sorted_env;
+	char			**env;
+	char			**sorted_env;
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
@@ -69,8 +62,10 @@ void		handle_signal(t_global **data);
 void		clean_stuff(t_global **data);
 
 /*---------------env----------------*/
-int			copy_env(t_global *data);
-void		free_env(t_env **env);
+int			copy_env(t_global **data);
+void		free_env(t_global **data);
+int			export(char **args, t_global *data);
+
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);
