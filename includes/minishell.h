@@ -93,7 +93,7 @@ void		add_node(t_tkn **tkn_node, char **content);
 int			check_exit_input(char **input, int *exit);
 
 /*--------------parse--------------*/
-int			parse(t_tkn *(*hashtable)[TABLE_SIZE]);
+int			parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env);
 bool		is_pipe(char *token);
 bool		is_and_or(char *token);
 bool		is_pipe_and_or(char *token);

@@ -59,7 +59,7 @@ char	*get_tkn_type(char *token, t_tkn *prev)
 
 }
 
-int	parse(t_tkn *(*hashtable)[TABLE_SIZE])
+int	parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env)
 {
 	int		i;
 	int		syntax;
@@ -77,6 +77,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE])
 		(*hashtable)[i] = temp;
 		i++;
 	}
+	expand(hashtable, env);
 	syntax = check_syntax(hashtable);
 	if (syntax)
 		syntax = lexer(hashtable);

@@ -18,7 +18,8 @@ char	*get_token(char *input, int i, int len)
 	char	*token;
 
 	token = ft_calloc(len + 1, sizeof(char));
-	token[len] = '\0';
+	if (!token)
+		return (NULL);
 	while (--len >= 0)
 		token[len] = input[i + len];
 	return (token);

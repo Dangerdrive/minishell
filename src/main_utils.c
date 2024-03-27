@@ -67,10 +67,7 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 //			printf("FREE::: %s\n", (*hashtable)[i]->content);
 			free((*hashtable)[i]->content);
 			if ((*hashtable)[i]->expanded)
-			{
-				printf("FREE-EXP: %s\n", (*hashtable)[i]->expanded);
 				free((*hashtable)[i]->expanded);
-			}
 			free((*hashtable)[i]);
 			(*hashtable)[i] = temp;
 		}

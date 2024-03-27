@@ -105,8 +105,8 @@ int	readline_and_handle_input(t_global **data)
 	if (input == 1)
 	{
 		//prt_hashtable((*data)->hashtable);
-		input = parse(&(*data)->hashtable);
-		expand(&(*data)->hashtable, (*data)->env);
+		input = parse(&(*data)->hashtable, (*data)->env);
+		//expand(&(*data)->hashtable, (*data)->env);
 		if (input == 1)
 			prt_hashtable((*data)->hashtable);
 	}
