@@ -13,23 +13,23 @@ char	*fetch_on_env(char *env_value)
 	return (result);
 }
 
-char	*get_var_value(char **var, char **env, char *type)
+char	*get_var_value(char *var, char **env, char *type)
 {
 	int		i;
 	int		len;
+	char	*value;
 
 	len = 0;
-	while ((type[0] == 'v' && *var[len])
-		|| ((type[0] == 's' && *var[len] != ' ') && (type[0] == 's' && *var[len] != '"')))
+	while ((type[0] == 'v' && var[len])
+		|| ((type[0] == 's' && var[len] != ' ') && (type[0] == 's' && var[len] != '"')))
 		len++;
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(*var, env[i], len) == 0)
+		if (ft_strncmp(var, env[i], len) == 0)
 		{
-			free(var);
-			*var = fetch_on_env(env[i]);
-			return (*var);
+			value = fetch_on_env(env[i]);
+			return (value);
 		}
 		i++;
 	}
@@ -39,6 +39,7 @@ char	*get_var_value(char **var, char **env, char *type)
 void	check_if_expandable(t_tkn **node, char **env)
 {
 	int		i;
+	char	*value;
 
 	if (!ft_strcmp((*node)->type, VARIABLE) || !ft_strcmp((*node)->type, STRING_STD))
 	{
@@ -48,8 +49,13 @@ void	check_if_expandable(t_tkn **node, char **env)
 			if ((*node)->content[i] == '$')
 			{
 				i++;
-				(*node)->content = get_var_value(&(*node)->content + i, env, (*node)->type);
-				printf("var_value = %s\n", (*node)->content);
+				value = get_var_value((*node)->content + i, env, (*node)->type);
+				if (value)
+				{
+					free((*node)->content);
+					(*node)->content = value;
+					printf("var_value = %s\n", (*node)->content);
+				}
 			}
 			i++;
 		}

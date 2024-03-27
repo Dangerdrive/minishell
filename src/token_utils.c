@@ -67,7 +67,7 @@ void	populate_hashtable(t_global **data, int idx, int len)
 		while ((*data)->hashtable[i + 1] != NULL)
 			i++;
 	}
-	add_node(&(**data).hashtable[i], &token);
+	add_node(&(*data)->hashtable[i], &token);
 }
 
 int	check_exit_input(char **input, int *exit)
