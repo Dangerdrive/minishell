@@ -19,7 +19,8 @@ SRC = 	./src/main.c \
 		./src/env.c \
 		./src/token.c \
 		./src/token_utils.c \
-		./src/export.c
+		./src/export.c \
+		./src/unset.c \
 #		./src/lexer/.c \
 #		./src/parser/.c \
 #		./src/executor/.c \

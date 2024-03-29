@@ -1,30 +1,25 @@
 #include "minishell.h"
 
-
-
-/*adequar args para como receberemos argumentos*/
-int ft_unset(char **args, t_global *data)
+int	ft_unset(char **args, t_global *data)
 {
-    t_env *prev;
-    t_env *current;
-
-    if (!args[1])
-        return (0);
-    prev = NULL;
-    current = data->env;
-    while (current)
-    {
-        if (ft_strncmp(args[1], current->key, env_size(current->key)) == 0)
-        {
-            if (prev)
-                prev->next = current->next;
-            else
-                data->env = current->next;
-            free_node(current);
-            return (0);
-        }
-        prev = current;
-        current = current->next;
-    }
+	int i;
+	char **temp;
+		
+	if (!args)
+	{
+		ft_printf("unset: not enough arguments\n");
+		return (1);
+	}
+	i = 0;
+	while (args[i])
+	{
+		if (ft_strarr_str(data->env, args[i]))
+		{
+			temp = ft_strarr_strrm(&data->env, args[i]);
+			ft_strarr_free(data->env, ft_strarr_len(data->env));
+			data->env = temp;
+		}
+		i++;
+	}
     return (0);
 }

@@ -28,60 +28,81 @@
 // }
 
 
-void sort_env(t_global **data)
-{
-    int ordered;
-    int i;
-    int env_len;
-    char *tmp;
-
-    env_len = ft_strarray_len((*data)->env);
-    ordered = 0;
-	(*data)->sorted_env = ft_strarray_dup((*data)->env);
-    while (!ordered)
-	{
-        ordered = 1;
-        i = 0;
-        while (i < env_len - 1) {
-            if (ft_strcmp((*data)->sorted_env[i], (*data)->sorted_env[i + 1]) > 0) {
-                tmp = (*data)->sorted_env[i];
-                (*data)->sorted_env[i] = (*data)->sorted_env[i + 1];
-                (*data)->sorted_env[i + 1] = tmp;
-                ordered = 0;
-            }
-            i++;
-        }
-        env_len--;
-    }
-}
-
 void		print_exp(char **sorted_env)
 {
-	int	i;
+	char	*key;
+	char	*value;
+	int		i;
+	int		delim_pos;
 
 	i = 0;
-	while (sorted_env[i])
+	while (sorted_env && sorted_env[i])
 	{
-		ft_printf("declare -x %s\n", sorted_env[i]);
+		delim_pos = ft_strchr_i(sorted_env[i], '=');
+		if (delim_pos != -1)
+		{
+			value = ft_strdup(sorted_env[i] + delim_pos + 1);
+			key = strndup(sorted_env[i], delim_pos - ft_strlen(sorted_env[i]) + 1);
+			if (value) 
+				ft_printf("declare -x %s=\"%s\"\n", key, value);
+			else
+				ft_printf("declare -x %s=\"\"\n", key);
+		}
+		else
+			ft_printf("declare -x %s\n", sorted_env[i]);
 		i++;
 	}
 }
 
-int	export(char **args, t_global *data)
+int validate_identifier(char *str)
 {
-	if (args && args[1])
+	int i;
+
+	i = 0;
+	if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (1);
+	i++;
+	while (str[i])
 	{
-		ft_strarraycat(args, data->env);
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_export(char **args, t_global *data)
+{
+	char	**sorted_env;
+	char	**sorted_export;
+	int		i;
+
+	if (args)
+	{
+		i = 0;
+		while (args[i])
+		{
+			if (!validate_identifier(args[i]))
+				ft_printf("export: `%s': not a valid identifier\n", args[i]);
+			else if (((ft_strnstr(data-env, args[i], ft_strlen(args[i])) != NULL) || (ft_strnstr(data-exported, args[i], ft_strlen(args[i])) != NULL)) && (ft_strchr_i(args[i], '=') != -1))
+			{
+				//substituir valor
+				//free(valorencontrado);
+				valorencontrado = ft_strdup(args[i]);
+			}
+			else if (ft_strchr_i(args[i], '=') != -1)
+				ft_strarr_stradd(&data->exported, args[i]);
+		i++;
+		}
 	}
 	else
 	{
-		sort_env(&data);
-		print_exp(data->sorted_env);
+		sorted_env = ft_strarr_sort(data->env);
+		sorted_export = ft_strarr_sort(data->exported);
+		print_exp(sorted_env);
+		print_exp(sorted_export);
 	}
-	print_exp(data->env); //
 	return (0);
 }
-//se o export for chamado sem argumentos, ele deve mostrar todas as variáveis de ambiente
-//se o export for chamado com argumentos e atribuir valor, ele deve adicionar ou modificar a variável de ambiente
-//se o export for chamado com argumentos sem atribuir valor
+
 

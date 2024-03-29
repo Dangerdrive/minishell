@@ -5,8 +5,6 @@ int	main(void)
 	static t_global	*data;
 
 	data = init_data();
-	if (copy_env(&data) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
 	data->usr_input = NULL;
 	// while (!data->exit)
 	// {
@@ -18,8 +16,12 @@ int	main(void)
 	// 	// if (data->exit == true)
 	// 	// 	break ;
 	// }
-	char *args[] = {"test1", "test2", NULL};
-	export(args, data);
+	char *args[] = {"test1=2", "test2=3", NULL};
+	char *args2[] = {"PATH", NULL};
+	ft_export(args, data);
+	ft_unset(args2, data);
+	ft_export(NULL, data);
+	// ft_env(&data);
 	clean_stuff(&data);
 	return (0);
 }

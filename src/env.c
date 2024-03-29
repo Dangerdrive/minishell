@@ -15,19 +15,6 @@
 // 	free((*data)->env);
 // }
 
-void	print_our_env(t_global **data)
-{
-	int	i;
-
-	i = 0;
-	while ((*data)->env[i])
-	{
-		//printf("%s\n", (*data)->env[i]);
-		i++;
-	}
-	free_env(data);
-}
-
 void	free_env(t_global **data)
 {
 	int	i;
@@ -44,37 +31,95 @@ void	free_env(t_global **data)
 	ft_memdel((*data)->env);
 }
 
-int	copy_env(t_global **data)
+
+int	ft_env(t_global **data)
 {
 	int	i;
-	int	env_size;
 
-	env_size = 0;
-	while (__environ[env_size])
-		env_size++;
-	(*data)->env = malloc((env_size + 1) * sizeof(char *));
 	if (!(*data)->env)
-		return (EXIT_FAILURE);
+		return (1);
 	i = 0;
-	while (i < env_size)
+	while ((*data)->env[i])
 	{
-		(*data)->env[i] = ft_strdup(__environ[i]);
-		if (!(*data)->env[i])
-		{
-			while (i > 0)
-			{
-				i--;
-				free((*data)->env[i]);
-			}
-			free((*data)->env);
-			return (EXIT_FAILURE);
-		}
+		printf("%s\n", (*data)->env[i]);
+		if ( (*data)->exported && (*data)->exported[i])
+			if (ft_strchr_i((*data)->exported[i], '=') != -1)
+				printf("%s\n", (*data)->exported[i]);
 		i++;
 	}
-	(*data)->env[env_size] = NULL;
-	//print_our_env(data); // for testing
-	return (EXIT_SUCCESS);
+	while ((*data)->exported && (*data)->exported[i])
+	{
+			if (ft_strchr_i((*data)->exported[i], '=') != -1)
+				printf("%s\n", (*data)->exported[i]);
+		i++;
+	}
+	return (0);
 }
+
+
+
+// int				charenv_to_envlist(char **env)
+// {
+// 	t_env	*env;
+// 	t_env	*new;
+// 	int		i;
+
+// 	env = malloc(sizeof(t_env));
+// 	if (!env)
+// 		return (1);
+// 	// env->value = ft_strdup(env[0]);
+// 	// env->next = NULL;
+// 	data->env = env;
+// 	i = 0;
+// 	// while (env && env[0] && env[i])
+// 	while (env && env[i])
+// 	{
+// 		new = malloc(sizeof(t_env));
+// 		if (!new)
+// 			return (1);
+// 		new->value = ft_strdup(env[i]);
+// 		new->next = NULL;
+// 		env->next = new;
+// 		env = new; 
+// 		i++;
+// 	}
+// 	ft_env(data->env);//
+// 	return (0);
+// }
+
+
+// t_env   *new_env_node(char *key, char *value)
+// {
+// 	t_env   *node;
+
+// 	node = (t_env *)malloc(sizeof(t_env));
+// 	if (!node)
+// 		return (NULL);
+// 	node->key = strdup(key);
+// 	if (!(node->key))
+// 	{
+// 		free(node);
+// 		return (NULL);
+// 	}
+// 	node->value = strdup(value);
+// 	if (!(node->value))
+// 	{
+// 		free(node->key);
+// 		free(node);
+// 		return (NULL);
+// 	}
+// 	node->next = NULL;
+// 	return (node);
+// }
+
+
+
+
+
+
+
+
+
 
 // int	main(void)
 // {

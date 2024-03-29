@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strarray_concat.c                               :+:      :+:    :+:   */
+/*   ft_strarr_concat.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,7 +14,7 @@
 
 /*
 */
-char	**ft_strarraycat(char **tab2, char **tab1)
+char	**ft_strarrcat(char **tab2, char **tab1)
 {
 	int		i;
 	int		j;
@@ -22,8 +22,8 @@ char	**ft_strarraycat(char **tab2, char **tab1)
 	int		tab1_len;
 	char	**new;
 
-	tab2_len = ft_strarray_len(tab2);
-	tab1_len = ft_strarray_len(tab1);
+	tab2_len = ft_strarr_len(tab2);
+	tab1_len = ft_strarr_len(tab1);
 	new = (char **)malloc(sizeof(char *) * (tab1_len + tab2_len + 1));
 	if (!new)
 		return (NULL);

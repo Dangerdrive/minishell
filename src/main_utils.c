@@ -13,6 +13,8 @@ t_global	*init_data(void)
 	data->env = __environ;
 	data->cur_path = getcwd(NULL, 0);
 	data->exit = 0;
+	data->env = ft_strarr_dup(__environ);
+	data->exported = NULL;
 	init_hashtable(&data->hashtable);
 	return (data);
 }
