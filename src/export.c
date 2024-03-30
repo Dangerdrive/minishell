@@ -28,7 +28,7 @@
 // }
 
 
-void		print_exp(char **sorted_env)
+void		print_exp(char **sorted_arr)
 {
 	char	*key;
 	char	*value;
@@ -36,22 +36,33 @@ void		print_exp(char **sorted_env)
 	int		delim_pos;
 
 	i = 0;
-	while (sorted_env && sorted_env[i])
+	while (sorted_arr && sorted_arr[i])
 	{
-		delim_pos = ft_strchr_i(sorted_env[i], '=');
+		delim_pos = ft_strchr_i(sorted_arr[i], '=');
 		if (delim_pos != -1)
 		{
-			value = ft_strdup(sorted_env[i] + delim_pos + 1);
-			key = strndup(sorted_env[i], delim_pos - ft_strlen(sorted_env[i]) + 1);
+			key = strndup(sorted_arr[i], delim_pos);
+			value = ft_strdup(sorted_arr[i] + delim_pos + 1);
 			if (value) 
 				ft_printf("declare -x %s=\"%s\"\n", key, value);
 			else
 				ft_printf("declare -x %s=\"\"\n", key);
 		}
 		else
-			ft_printf("declare -x %s\n", sorted_env[i]);
+			ft_printf("declare -x %s\n", sorted_arr[i]);
 		i++;
 	}
+}
+
+void	export_no_args(t_global *data)
+{
+	char	**sorted_env;
+	char	**sorted_export;
+
+	sorted_env = ft_strarr_sort(data->env);
+	sorted_export = ft_strarr_sort(data->exported);
+	print_exp(sorted_env);
+	print_exp(sorted_export);
 }
 
 int validate_identifier(char *str)
@@ -71,10 +82,26 @@ int validate_identifier(char *str)
 	return (0);
 }
 
+void replace_or_add(char *arg, t_global *data)
+{
+	char *key;
+
+	key = NULL;
+	if (ft_strchr_i(arg, '=') != -1)
+		key = ft_strndup(arg, ft_strchr_i(arg, '='));
+	else if (ft_strchr_i(arg, '=') == -1)
+		key = ft_strdup(arg);
+	ft_strarr_str_replace(data->env, key, arg);
+	ft_strarr_str_replace(data->exported, key, arg);
+	free(key);
+	if (ft_strarr_str(data->exported, key) == NULL 
+		&& ft_strarr_str(data->exported, key) == NULL) //revisar se o certo é key mesmo, ou seria arg/ se faz diferença
+		ft_strarr_stradd(&data->exported, arg);
+}
+
 int	ft_export(char **args, t_global *data)
 {
-	char	**sorted_env;
-	char	**sorted_export;
+
 	int		i;
 
 	if (args)
@@ -84,25 +111,15 @@ int	ft_export(char **args, t_global *data)
 		{
 			if (!validate_identifier(args[i]))
 				ft_printf("export: `%s': not a valid identifier\n", args[i]);
-			else if (((ft_strnstr(data-env, args[i], ft_strlen(args[i])) != NULL) || (ft_strnstr(data-exported, args[i], ft_strlen(args[i])) != NULL)) && (ft_strchr_i(args[i], '=') != -1))
-			{
-				//substituir valor
-				//free(valorencontrado);
-				valorencontrado = ft_strdup(args[i]);
-			}
-			else if (ft_strchr_i(args[i], '=') != -1)
-				ft_strarr_stradd(&data->exported, args[i]);
+			else if (validate_identifier(args[i]))
+				replace_or_add(args[i], data);
 		i++;
 		}
 	}
 	else
-	{
-		sorted_env = ft_strarr_sort(data->env);
-		sorted_export = ft_strarr_sort(data->exported);
-		print_exp(sorted_env);
-		print_exp(sorted_export);
-	}
+		export_no_args(data);
 	return (0);
 }
 
-
+// ~/Documents/Projects/minishell/minishell (develop*) » export ""
+// export: not valid in this context: 

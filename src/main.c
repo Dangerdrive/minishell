@@ -17,9 +17,9 @@ int	main(void)
 	// 	// 	break ;
 	// }
 	char *args[] = {"test1=2", "test2=3", NULL};
-	char *args2[] = {"PATH", NULL};
+	// char *args2[] = {"PATH", NULL};
 	ft_export(args, data);
-	ft_unset(args2, data);
+	// ft_unset(args2, data);
 	ft_export(NULL, data);
 	// ft_env(&data);
 	clean_stuff(&data);

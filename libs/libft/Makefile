@@ -43,6 +43,7 @@ SRCS		=   $(addprefix $(SRCDIR)/, ft_atoi.c \
 				ft_strarr_len.c \
 				ft_strarr_ndup.c \
 				ft_strarr_sort.c \
+				ft_strarr_str_replace.c \
 				ft_strarr_str.c \
 				ft_strarr_stradd.c \
 				ft_strarr_strrm.c \
