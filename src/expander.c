@@ -74,7 +74,7 @@ void	update_list(t_tkn **node, int i, int len, char **exp_value)
 	}
 }
 
-void	get_var_value(t_tkn **node, int i, char **env)
+void	get_var_value(t_tkn **node, int i, char **env, char **exported)
 {
 	int		j;
 	int		len;
@@ -102,9 +102,23 @@ void	get_var_value(t_tkn **node, int i, char **env)
 		}
 		j++;
 	}
+	while (exported[j])
+	{
+		if (ft_strncmp((*node)->content + i, exported[j], len) == 0)
+		{
+			value = fetch_on_env(exported[j]);
+			if (value)
+			{
+				update_list(node, i, i + len, &value);
+				printf("var_value = %s\n", (*node)->content);
+				break ;
+			}
+		}
+		j++;
+	}
 }
 
-void	check_if_expandable(t_tkn **node, char **env)
+void	check_if_expandable(t_tkn **node, char **env, char **exported)
 {
 	int		i;
 
@@ -116,7 +130,7 @@ void	check_if_expandable(t_tkn **node, char **env)
 			if ((*node)->content[i] == '$')
 			{
 				i++;
-				get_var_value(node, i, env);
+				get_var_value(node, i, env, exported);
 				break ;
 			}
 			i++;
@@ -125,7 +139,7 @@ void	check_if_expandable(t_tkn **node, char **env)
 	return ;
 }
 
-void	expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env)
+void	expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
 	t_tkn	*temp;
@@ -136,7 +150,7 @@ void	expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env)
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			check_if_expandable(&(*hashtable)[i], env);
+			check_if_expandable(&(*hashtable)[i], (*data)->env, (*data)->exported);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;

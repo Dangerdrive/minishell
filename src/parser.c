@@ -146,7 +146,7 @@ void	update_content(t_tkn **node)
 		split_token(node);
 }
 
-int	parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env)
+int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
 	int		syntax;
@@ -165,7 +165,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env)
 		(*hashtable)[i] = temp;
 		i++;
 	}
-	expand(hashtable, env);
+	expand(hashtable, data);
 	syntax = check_syntax(hashtable);
 	if (syntax)
 		syntax = lexer(hashtable);

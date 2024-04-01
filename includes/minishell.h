@@ -83,11 +83,8 @@ int			ft_export(char **args, t_global *data);
 int			ft_unset(char **args, t_global *data);
 int			ft_env(t_global **data);
 
-
-
-
 /*---------------exp----------------*/
-void		expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env);
+void		expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);
@@ -98,7 +95,7 @@ void		add_node(t_tkn **tkn_node, char **content);
 int			check_exit_input(char **input, int *exit);
 
 /*--------------parse--------------*/
-int			parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env);
+int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
 bool		is_pipe(char *token);
 bool		is_and_or(char *token);
 bool		is_pipe_and_or(char *token);
