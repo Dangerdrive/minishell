@@ -75,11 +75,12 @@ char	*get_var_value(t_tkn **node, int i, char **env)
 	return (NULL);
 }
 
-void	check_if_expandable(t_tkn **node, char **env)
+char	*check_if_expandable(t_tkn **node, char **env)
 {
 	int		i;
 	char	*value;
 
+	value = NULL;
 	if (!ft_strcmp((*node)->type, VARIABLE) || !ft_strcmp((*node)->type, STRING_STD))
 	{
 		i = 0;
@@ -89,11 +90,12 @@ void	check_if_expandable(t_tkn **node, char **env)
 			{
 				i++;
 				value = get_var_value(node, i, env);
+				break ;
 			}
 			i++;
 		}
 	}
-	return ;
+	return (value);
 }
 
 void	expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env)

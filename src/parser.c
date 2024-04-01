@@ -40,22 +40,26 @@ int	is_file(char *token)
 	return (0);
 }
 
-char	*get_tkn_type(char *token, t_tkn *prev)
+char	*get_tkn_type(t_tkn *node)
 {
-	if (token[0] == SIMPLE_QUOTE)
-		return (STRING_STRONG);
-	else if (token[0] == DOUBLE_QUOTE)
-		return (STRING_STD);
-	else if (is_special_token(token))
-		return (SPECIAL_CHAR);
-	else if (token[0] == '-' && token[1])
-		return (FLAG);
-	else if (token[0] == '$')
-		return (VARIABLE);
-	else if (prev && ft_strcmp(prev->type, COMMAND) == 0 && is_file(token))
-		return (FILE_TXT);
-	else
-		return (COMMAND);
+	if (!node->type)
+	{
+		if (node->content[0] == SIMPLE_QUOTE)
+			return (STRING_STRONG);
+		else if (node->content[0] == DOUBLE_QUOTE)
+			return (STRING_STD);
+		else if (is_special_token(node->content))
+			return (SPECIAL_CHAR);
+		else if (node->content[0] == '-' && node->content[1])
+			return (FLAG);
+		else if (node->content[0] == '$')
+			return (VARIABLE);
+		else if (node->prev && ft_strcmp(node->prev->type, COMMAND) == 0 && is_file(node->content))
+			return (FILE_TXT);
+		else
+			return (COMMAND);
+	}
+	return (node->type);
 }
 
 bool	check_var_btw_simple_quote(char *content)
@@ -80,27 +84,43 @@ bool	check_var_btw_simple_quote(char *content)
 	return (false);
 }
 
-// void	add_node_later(t_tkn **node)
-// {
-// 	t_tkn	*new_node;
-// 	int		i;
-// 	int		q_len;
+void	split_token(t_tkn **node)
+{
+	t_tkn	*new_node;
+	t_tkn	*new_node2;
+	char	*temp;
+	int		i;
+	int		len;
 
-// 	new_node = ft_calloc(1, sizeof(t_tkn));
-// 	if (!new_node)
-// 		return ;
-// 	while ((*node)->content[i] != 39)
-// 		i++;
-// 	new_node->content = ft_strndup((*node)->content + i);
-// 	new_node->type = STRING_STD;
-// 	new_node->next = (*node)->next;
-// 	new_node->prev = *node;
-// 	if ((*node)->next)
-// 		(*node)->next->prev = new_node;
-// 	free((*node)->content);
-// 	(*node)->content = *exp_value;
-// 	(*node)->next = new_node;
-// }
+	temp = (*node)->content;
+	i = 0;
+	while (temp[i])
+	{
+		if (i > 0 && temp[i] == 39)
+		{
+			i++;
+			len = 0;
+			while (temp[i + len] != 39)
+				len++;
+			new_node = ft_calloc(1, sizeof(t_tkn));
+			new_node->content = ft_strndup((*node)->content + i, len);
+			new_node->type = STRING_STRONG;
+			new_node->next = (*node)->next;
+			new_node->prev = (*node);
+			if ((*node)->next)
+				(*node)->next->prev = new_node;
+			(*node)->next = new_node;
+			free((*node)->content);
+			(*node)->content = ft_strndup(temp, i - 1);
+			new_node2 = ft_calloc(1, sizeof(t_tkn));
+			new_node2->content = ft_strdup(temp + len);
+			new_node2->next = new_node->next;
+			new_node2->prev = new_node;
+			new_node->next = new_node2;
+			new_node2->next->prev = new_node2;
+		}
+	}
+}
 
 void	update_content(t_tkn **node)
 {
@@ -121,6 +141,9 @@ void	update_content(t_tkn **node)
 		free((*node)->content);
 		(*node)->content = new_content;
 	}
+	if (ft_strcmp((*node)->type, STRING_STD)
+		&& check_var_btw_simple_quote((*node)->content))
+		split_token(node);
 }
 
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env)
@@ -135,11 +158,8 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env)
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]->content, (*hashtable)[i]->prev);
+			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
 			update_content(hashtable[i]);
-			// if (ft_strcmp((*hashtable)[i]->type, STRING_STD)
-			// 	&& check_var_btw_simple_quote((*hashtable)[i]->content))
-			// 	add_nodes_later(hashtable[i]);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
