@@ -5,8 +5,6 @@ int	main(void)
 	static t_global	*data;
 
 	data = init_data();
-	if (copy_env(&data) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
 	data->usr_input = NULL;
 	//data->exit = handle_signal();
 	while (!data->exit)

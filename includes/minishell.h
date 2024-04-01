@@ -63,6 +63,7 @@ typedef struct s_tkn
 typedef struct s_global
 {
 	char			**env;
+	char			**exported;
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
@@ -76,8 +77,14 @@ void		clean_stuff(t_global **data);
 void		clean_input_and_hashtable(t_global **data);
 
 /*---------------env----------------*/
-int			copy_env(t_global **data);
+int			init_env(t_global **data);
 void		free_env(t_global **data);
+int			ft_export(char **args, t_global *data);
+int			ft_unset(char **args, t_global *data);
+int			ft_env(t_global **data);
+
+
+
 
 /*---------------exp----------------*/
 void		expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env);

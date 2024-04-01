@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 13:20:58 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/13 13:04:15 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/01 15:27:46 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,19 @@ void				ft_putstr_fd(char *str, int fd);
 void				ft_putstr(char *str);
 char				**ft_split(char *str, char c);
 void				*ft_free_split(char **split, size_t len);
+char				**ft_strarrcat(char **tab2, char **tab1);
+void				ft_strarr_free(char **array, int len);
+int					ft_strarr_len(char **tab);
+char				**ft_strarr_ndup(char **array, int n);
+char				**ft_strarr_dup(char **array);
+char				**ft_strarr_sort(char **strarr);
+void				ft_strarr_str_replace(char **strarr, char *target,
+						char *replcmt);
+int				ft_strarr_str(char **strarr, const char *str);
+void				ft_strarr_stradd(char ***strarr, const char *str);
+char				**ft_strarr_strrm(char ***strarr, const char *str);
 char				*ft_strchr(const char *s, int c);
+int					ft_strchr_i(const char *str, char c);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strdup(const char *src);
 void				ft_string_toupper(char *str);

@@ -8,7 +8,7 @@ OBJDIR	  =   obj
 
 # Compiler and flags
 CC		  =   cc
-CFLAGS	  =   -Wall -Wextra -Werror -fPIE
+CFLAGS	  =   -Wall -Wextra -Werror -fPIE -g
 
 # Source files and object files
 SRCS		=   $(addprefix $(SRCDIR)/, ft_atoi.c \
@@ -37,7 +37,18 @@ SRCS		=   $(addprefix $(SRCDIR)/, ft_atoi.c \
 				ft_putstr.c \
 				ft_putstr_fd.c \
 				ft_split.c \
+				ft_strarr_cat.c \
+				ft_strarr_dup.c \
+				ft_strarr_free.c \
+				ft_strarr_len.c \
+				ft_strarr_ndup.c \
+				ft_strarr_sort.c \
+				ft_strarr_str_replace.c \
+				ft_strarr_str.c \
+				ft_strarr_stradd.c \
+				ft_strarr_strrm.c \
 				ft_strchr.c \
+				ft_strchr_i.c \
 				ft_strdup.c \
 				ft_striteri.c \
 				ft_strjoin.c \
