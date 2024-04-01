@@ -67,19 +67,18 @@ void	export_no_args(t_global *data)
 
 int validate_identifier(char *str)
 {
-	int i;
+    int i;
 
-	i = 0;
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (1);
-	i++;
-	while (str[i])
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (1);
-		i++;
-	}
-	return (0);
+    if (!ft_isalpha(str[0]) && str[0] != '_')
+        return (0);
+    i = 1;
+    while (str[i])
+    {
+        if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
+            return (0);
+        i++;
+    }
+    return (1);
 }
 
 void replace_or_add(char *arg, t_global *data)
@@ -88,15 +87,17 @@ void replace_or_add(char *arg, t_global *data)
 
 	key = NULL;
 	if (ft_strchr_i(arg, '=') != -1)
+	{
 		key = ft_strndup(arg, ft_strchr_i(arg, '='));
+		ft_strarr_str_replace(data->env, key, arg);
+		ft_strarr_str_replace(data->exported, key, arg);
+	}
 	else if (ft_strchr_i(arg, '=') == -1)
 		key = ft_strdup(arg);
-	ft_strarr_str_replace(data->env, key, arg);
-	ft_strarr_str_replace(data->exported, key, arg);
-	free(key);
-	if (ft_strarr_str(data->exported, key) == NULL 
-		&& ft_strarr_str(data->exported, key) == NULL) //revisar se o certo é key mesmo, ou seria arg/ se faz diferença
+	if (ft_strarr_str(data->env, key) == -1
+		&& ft_strarr_str(data->exported, key) == -1)
 		ft_strarr_stradd(&data->exported, arg);
+	free(key);
 }
 
 int	ft_export(char **args, t_global *data)
@@ -109,9 +110,9 @@ int	ft_export(char **args, t_global *data)
 		i = 0;
 		while (args[i])
 		{
-			if (!validate_identifier(args[i]))
+			if (validate_identifier(args[i]) == 0)
 				ft_printf("export: `%s': not a valid identifier\n", args[i]);
-			else if (validate_identifier(args[i]))
+			else if (validate_identifier(args[i]) == 1)
 				replace_or_add(args[i], data);
 		i++;
 		}

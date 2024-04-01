@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 20:52:11 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/28 20:56:55 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/01 13:13:57 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ft_strarr_stradd(char ***strarr, const char *str)
 	int		len;
 	char 	**new_arr;
 
-	if (!strarr || !(*strarr) || !str)
+	if (!str)
 		return ;
 	len = ft_strarr_len(*strarr);
 	new_arr = ft_strarr_dup_extend(*strarr, len, str);

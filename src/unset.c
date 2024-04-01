@@ -13,7 +13,7 @@ int	ft_unset(char **args, t_global *data)
 	i = 0;
 	while (args[i])
 	{
-		if (ft_strarr_str(data->env, args[i]))
+		if (ft_strarr_str(data->env, args[i]) != -1)
 		{
 			temp = ft_strarr_strrm(&data->env, args[i]);
 			ft_strarr_free(data->env, ft_strarr_len(data->env));

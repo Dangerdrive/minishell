@@ -12,25 +12,18 @@
 
 #include "libft.h"
 
-char	*ft_strarr_str(char **strarr, const char *str)
+int	ft_strarr_str(char **strarr, const char *target)
 {
-	int		i;
-	int		len;
-	char	*result;
+	int	i;
 
-	if (!strarr || !str)
-		return (NULL);
-	len = ft_strarr_len(strarr);
+	if (!strarr || !target)
+		return (-1);
 	i = 0;
-	while (i < len)
+	while (strarr[i])
 	{
-		if (!strarr[i])
-			continue;	
-		result = ft_strnstr(strarr[i], str, ft_strlen(str));
-		if (result)
-			return (result);
+		if (ft_strncmp(strarr[i], target, ft_strlen(target)) == 0)
+			return (i);
 		i++;
 	}
-	return (result);
+	return (-1);
 }
-

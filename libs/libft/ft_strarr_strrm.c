@@ -35,7 +35,7 @@ char	**ft_strarr_strrm(char ***strarr, const char *str)
 	found = 0;
 	while (i < len)
 	{
-		if (!found && ft_strcmp((*strarr)[i], str) == 0)
+		if (!found && ft_strncmp((*strarr)[i], str, ft_strlen(str)) == 0)
 		{
 			found = 1;
 			/* Uncomment if memory deallocation is needed
