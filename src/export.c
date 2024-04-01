@@ -27,7 +27,6 @@
 // 	return (0);
 // }
 
-
 void		print_exp(char **sorted_arr)
 {
 	char	*key;
@@ -47,6 +46,8 @@ void		print_exp(char **sorted_arr)
 				ft_printf("declare -x %s=\"%s\"\n", key, value);
 			else
 				ft_printf("declare -x %s=\"\"\n", key);
+			free (key);
+			free (value);
 		}
 		else
 			ft_printf("declare -x %s\n", sorted_arr[i]);
@@ -63,6 +64,8 @@ void	export_no_args(t_global *data)
 	sorted_export = ft_strarr_sort(data->exported);
 	print_exp(sorted_env);
 	print_exp(sorted_export);
+	ft_strarr_free(sorted_env, ft_strarr_len(sorted_env));
+	ft_strarr_free(sorted_export, ft_strarr_len(sorted_export));
 }
 
 int validate_identifier(char *str)
@@ -97,7 +100,8 @@ void replace_or_add(char *arg, t_global *data)
 	if (ft_strarr_str(data->env, key) == -1
 		&& ft_strarr_str(data->exported, key) == -1)
 		ft_strarr_stradd(&data->exported, arg);
-	free(key);
+	if (key != NULL)
+		free(key);
 }
 
 int	ft_export(char **args, t_global *data)

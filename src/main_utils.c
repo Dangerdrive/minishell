@@ -84,7 +84,9 @@ void	clean_stuff(t_global **data)
 		free((*data)->cur_path);
 		(*data)->cur_path = NULL;
 	}
-	free_env(data);
+	ft_strarr_free((*data)->env, ft_strarr_len((*data)->env));
+	if ((*data)->exported != NULL)
+		ft_strarr_free((*data)->exported, ft_strarr_len((*data)->exported));
 	free_hashtable(&(*data)->hashtable);
 	rl_clear_history();
 	ft_memdel((*data)->usr_input);
