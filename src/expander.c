@@ -23,29 +23,58 @@ bool	is_special_char(char c)
 	return (false);
 }
 
-void	update_list(t_tkn **node, int len, char **exp_value)
+void	add_node_before(t_tkn **node, int i)
 {
 	t_tkn	*new_node;
 
+	new_node = ft_calloc(1, sizeof(t_tkn));
+	if (!new_node)
+		return ;
+	new_node->content = ft_strndup((*node)->content, i - 1);
+	new_node->type = STRING_STD;
+	new_node->next = (*node);
+	new_node->prev = (*node)->prev;
+	(*node)->prev->next = new_node;
+}
+
+t_tkn	*add_node_after(t_tkn **node, int i)
+{
+	t_tkn	*new_node;
+
+	new_node = ft_calloc(1, sizeof(t_tkn));
+	if (!new_node)
+		return (NULL);
+	new_node->content = ft_strdup((*node)->content + i);
+	new_node->type = STRING_STD;
+	new_node->next = (*node)->next;
+	new_node->prev = *node;
+	if ((*node)->next)
+		(*node)->next->prev = new_node;
+	return (new_node);
+}
+
+void	update_list(t_tkn **node, int i, int len, char **exp_value)
+{
+	t_tkn 	*new_node;
+
 	new_node = NULL;
+	if (i > 1)
+	{
+		add_node_before(node, i);
+	}
 	if ((*node)->content[len])
 	{
-		new_node = ft_calloc(1, sizeof(t_tkn));
-		if (!new_node)
-			return ;
-		new_node->content = ft_strdup((*node)->content + len);
-		new_node->type = STRING_STD;
-		new_node->next = (*node)->next;
-		new_node->prev = *node;
-		if ((*node)->next)
-			(*node)->next->prev = new_node;
+		new_node = add_node_after(node, len);
 	}
 	free((*node)->content);
 	(*node)->content = *exp_value;
-	(*node)->next = new_node;
+	if (new_node)
+	{
+		(*node)->next = new_node;
+	}
 }
 
-char	*get_var_value(t_tkn **node, int i, char **env)
+void	get_var_value(t_tkn **node, int i, char **env)
 {
 	int		j;
 	int		len;
@@ -55,10 +84,10 @@ char	*get_var_value(t_tkn **node, int i, char **env)
 	value = NULL;
 	while (((*node)->type[0] == 'v' && (*node)->content[i + len]
 		&& !is_special_char((*node)->content[i + len]))
-		|| ((*node)->type[0] == 's' && !is_special_char((*node)->content[i + len])))
+		|| ((*node)->type[0] == 's' && (*node)->content[i + len]
+			&& !is_special_char((*node)->content[i + len])))
 		len++;
 	j = 0;
-	//printf ("ENTROU AQUI %d\n", len);
 	while (env[j])
 	{
 		if (ft_strncmp((*node)->content + i, env[j], len) == 0)
@@ -66,21 +95,19 @@ char	*get_var_value(t_tkn **node, int i, char **env)
 			value = fetch_on_env(env[j]);
 			if (value)
 			{
-				update_list(node, i + len, &value);
+				update_list(node, i, i + len, &value);
 				printf("var_value = %s\n", (*node)->content);
+				break ;
 			}
 		}
 		j++;
 	}
-	return (NULL);
 }
 
-char	*check_if_expandable(t_tkn **node, char **env)
+void	check_if_expandable(t_tkn **node, char **env)
 {
 	int		i;
-	char	*value;
 
-	value = NULL;
 	if (!ft_strcmp((*node)->type, VARIABLE) || !ft_strcmp((*node)->type, STRING_STD))
 	{
 		i = 0;
@@ -89,13 +116,13 @@ char	*check_if_expandable(t_tkn **node, char **env)
 			if ((*node)->content[i] == '$')
 			{
 				i++;
-				value = get_var_value(node, i, env);
+				get_var_value(node, i, env);
 				break ;
 			}
 			i++;
 		}
 	}
-	return (value);
+	return ;
 }
 
 void	expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env)

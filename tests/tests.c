@@ -85,21 +85,28 @@ void test_handle_input_SuccessfullyHandlesSimpleInput(void) {
 void test_handle_input_SuccessfullyHandlesInputWithQuotes(void) {
     data->usr_input = strdup("\"ls -l\"");
     handle_input(&data);
-    TEST_ASSERT_EQUAL_STRING("ls -l", data->hashtable[0]->content);
+    TEST_ASSERT_EQUAL_STRING("ls -l: command not found", data->hashtable[0]->content);
     ft_memdel(data->usr_input);
 }
 
 void test_handle_input_SuccessfullyHandlesInputWithOpenQuoteEnd(void) {
-    data->usr_input = strdup("Hello world\"");
+    data->usr_input = strdup("echo Hello world\"");
     handle_input(&data);
     TEST_ASSERT_EQUAL_STRING("Error: open quote.\n", data->hashtable[0]->content);
     ft_memdel(data->usr_input);
 }
 
 void test_handle_input_SuccessfullyHandlesInputWithOpenQuoteRandom(void) {
-    data->usr_input = strdup("\"He\"'llo 'worl'd");
+    data->usr_input = strdup("echo \"He\"'llo 'worl'd");
     handle_input(&data);
     TEST_ASSERT_EQUAL_STRING("Error: open quote.\n", data->hashtable[0]->content);
+    ft_memdel(data->usr_input);
+}
+
+void test_handle_input_SuccessfullyHandlesInputWithExpandableVariable(void) {
+    data->usr_input = strdup("echo \"hello $USER\"");
+    handle_input(&data);
+    TEST_ASSERT_EQUAL_STRING("hello gde-souz\n", data->hashtable[0]->content);
     ft_memdel(data->usr_input);
 }
 
