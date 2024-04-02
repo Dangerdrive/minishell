@@ -14,6 +14,7 @@
 # define DOUBLE_LESS_THAN "<<"
 # define DOUBLE_GREATER_THAN ">>"
 # define COMMAND "command"
+# define ARGUMENT "argument"
 # define FLAG "flag"
 # define FILE_TXT "file"
 # define VARIABLE "variable"
@@ -67,7 +68,6 @@ typedef struct s_global
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
-	t_list			*gc;
 	int				exit;
 }	t_global;
 
@@ -83,7 +83,7 @@ int			ft_export(char **args, t_global *data);
 int			ft_unset(char **args, t_global *data);
 int			ft_env(t_global **data);
 
-/*---------------exp----------------*/
+/*--------------expand--------------*/
 void		expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
 
 /*--------------token--------------*/
@@ -91,7 +91,7 @@ int			readline_and_handle_input(t_global **data);
 int			handle_input(t_global **data);
 void		populate_hashtable(t_global **data, int idx, int len);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
-void		add_node(t_tkn **tkn_node, char **content);
+t_tkn		*add_node(t_tkn **tkn_node, char **content);
 int			check_exit_input(char **input, int *exit);
 
 /*--------------parse--------------*/
@@ -103,5 +103,8 @@ bool		is_special_token(char *token);
 
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
+
+/*--------------export-------------*/
+int			validate_identifier(char *str);
 
 #endif

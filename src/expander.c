@@ -74,6 +74,16 @@ void	update_list(t_tkn **node, int i, int len, char **exp_value)
 	}
 }
 
+bool	is_var_name(t_tkn **node, int i, int len)
+{
+	if (((*node)->type[0] == 'v' && (*node)->content[i + len]
+		&& !is_special_char((*node)->content[i + len]))
+		|| ((*node)->type[0] == 's' && (*node)->content[i + len]
+			&& !is_special_char((*node)->content[i + len])))
+		return (true);
+	return (false);
+}
+
 void	get_var_value(t_tkn **node, int i, char **env, char **exported)
 {
 	int		j;
@@ -82,41 +92,33 @@ void	get_var_value(t_tkn **node, int i, char **env, char **exported)
 
 	len = 0;
 	value = NULL;
-	while (((*node)->type[0] == 'v' && (*node)->content[i + len]
-		&& !is_special_char((*node)->content[i + len]))
-		|| ((*node)->type[0] == 's' && (*node)->content[i + len]
-			&& !is_special_char((*node)->content[i + len])))
+	while (is_var_name(node, i, len))
 		len++;
 	j = 0;
 	while (env[j])
 	{
-		// if (ft_strncmp((*node)->content + i, env[j], len) == 0)
-		// {
-		// 	value = fetch_on_env(env[j]);
-		// 	if (value)
-		// 	{
-		// 		update_list(node, i, i + len, &value);
-		// 		printf("var_value = %s\n", (*node)->content);
-		// 		break ;
-		// 	}
-		// }
-		j++;
-	}
-	j = 0;
-	printf("exp: %s\n", exported[0]);
-	while (exported[j])
-	{
-		// if (ft_strncmp((*node)->content + i, exported[j], len) == 0)
+		if (ft_strncmp((*node)->content + i, env[j], len) == 0)
+		{
+			value = fetch_on_env(env[j]);
+			if (value)
+			{
+				update_list(node, i, i + len, &value);
+				//printf("var_value = %s\n", (*node)->content);
+				break ;
+			}
+		}
+		exported = NULL;
+		// if (exported[j] && ft_strncmp((*node)->content + i, exported[j], len) == 0)
 		// {
 		// 	value = fetch_on_env(exported[j]);
-		// 	if (value)
-		// 	{
-		// 		update_list(node, i, i + len, &value);
-		// 		printf("var_value = %s\n", (*node)->content);
-		// 		break ;
-		// 	}
+		// 	// if (value)
+		// 	// {
+		// 	// 	update_list(node, i, i + len, &value);
+		// 	// 	printf("var_value = %s\n", (*node)->content);
+		// 	// 	break ;
+		// 	// }
 		// }
-		// j++;
+		j++;
 	}
 }
 

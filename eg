@@ -1,0 +1,18 @@
+[33me3b5272[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m starting garbage colector
+[33m644e2e2[m Merge branch 'develop' of https://github.com/Dangerdrive/minishell into develop
+[33m7cb8e43[m added search on 'exported' in the expander file
+[33ma91b22e[m added pwd
+[33m0088aea[m trying to merge 2.0
+[33mb1f0981[m[33m ([m[1;31morigin/feature/env[m[33m)[m export working. Unset not yet
+[33md0095d8[m expand() is handling multiple variables and quotes
+[33m75ac428[m update parser
+[33ma4f3ed5[m export working with no args.
+[33mce3734b[m working on ft_export and ft_unset
+[33mf36893f[m treated variable followed by special chars
+[33m823b944[m expand() is working, but with 5 valgrind errors
+[33m058a34c[m pointer *next is getting lost before parse()
+[33m0dc7925[m reimplementing env/export
+[33m068a96e[m last leaks fixed | doesn't recognize a variable at the end of a string
+[33mcef202f[m expander.c in development - but with lots of errors yet
+[33md338e55[m created export and unset
+[33m942e667[m starting lexer()

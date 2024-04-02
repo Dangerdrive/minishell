@@ -26,19 +26,19 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 	return (1);
 }
 
-int	is_file(char *token)
-{
-	int	i;
+// int	is_file(char *token)
+// {
+// 	int	i;
 
-	i = 0;
-	while (token[i])
-	{
-		if (token[i] == '.' && strcmp((token + i + 1), ".txt"))
-			return (1);
-		i++;
-	}
-	return (0);
-}
+// 	i = 0;
+// 	while (token[i])
+// 	{
+// 		if (token[i] == '.' && strcmp((token + i + 1), ".txt"))
+// 			return (1);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 char	*get_tkn_type(t_tkn *node)
 {
@@ -50,37 +50,30 @@ char	*get_tkn_type(t_tkn *node)
 			return (STRING_STD);
 		else if (is_special_token(node->content))
 			return (SPECIAL_CHAR);
+		// else if (node->content[0] == '$' && validate_identifier(node->content + 1))
+		// 	return (VARIABLE);
 		else if (node->content[0] == '-' && node->content[1])
 			return (FLAG);
-		else if (node->content[0] == '$')
-			return (VARIABLE);
-		else if (node->prev && ft_strcmp(node->prev->type, COMMAND) == 0 && is_file(node->content))
-			return (FILE_TXT);
-		else
+		else if (!node->prev || !strcmp(node->prev->type, PIPE)
+			|| !strcmp(node->prev->type, LOGIC_AND) || !strcmp(node->prev->type, LOGIC_OR))
 			return (COMMAND);
+		else
+			return (ARGUMENT);
 	}
 	return (node->type);
 }
 
-bool	check_var_btw_simple_quote(char *content)
+bool	check_there_is_var(char *content)
 {
 	int	i;
-	int	count;
 
 	i = 0;
-	count = 0;
 	while (content[i])
 	{
-		if (content[i] == 39)
-			count++;
-		if (count == 1 && content[i] == '$')
-			count++;
-		if (count == 2 && content[i] == 39)
-			count++;
+		if (content[i] == '$' && (ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
+			return (true);
 		i++;
 	}
-	if (count == 3)
-		return (true);
 	return (false);
 }
 
@@ -128,7 +121,10 @@ void	update_content(t_tkn **node)
 	int	len;
 	int	i;
 
-	if ((*node)->content[0] == 34 || (*node)->content[0] == 39)
+	//printf("ENTROU NA UPDATE::: %s\n", (*node)->content);
+	if (ft_strcmp((*node)->content, PIPE) == 0)
+		printf("ENTROU NA UPDATE::: %s\n", (*node)->content);
+	if (ft_strcmp((*node)->content, PIPE) && ((*node)->content[0] == 34 || (*node)->content[0] == 39))
 	{
 		len = ft_strlen((*node)->content) - 1;
 		new_content = ft_calloc(len, sizeof(char));
@@ -142,7 +138,7 @@ void	update_content(t_tkn **node)
 		(*node)->content = new_content;
 	}
 	if (ft_strcmp((*node)->type, STRING_STD)
-		&& check_var_btw_simple_quote((*node)->content))
+		&& check_there_is_var((*node)->content))
 		split_token(node);
 }
 
@@ -159,6 +155,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		while ((*hashtable)[i])
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
+			printf("PASSOU AQUI: %s\n", (*hashtable)[i]->content);
 			update_content(hashtable[i]);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}

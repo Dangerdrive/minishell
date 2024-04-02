@@ -15,7 +15,6 @@ t_global	*init_data(void)
 	data->exit = 0;
 	data->env = ft_strarr_dup(__environ);
 	data->exported = NULL;
-	data->gc = NULL;
 	init_hashtable(&data->hashtable);
 	printf("%s\n", data->cur_path);
 	return (data);

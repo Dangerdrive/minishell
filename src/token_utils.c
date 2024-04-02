@@ -25,7 +25,7 @@ char	*get_token(char *input, int i, int len)
 	return (token);
 }
 
-void	add_node(t_tkn **tkn_node, char **content)
+t_tkn	*add_node(t_tkn **tkn_node, char **content)
 {
 	t_tkn	*new_node;
 	t_tkn	*temp;
@@ -33,7 +33,7 @@ void	add_node(t_tkn **tkn_node, char **content)
 	new_node = ft_calloc(1, sizeof(t_tkn));
 	temp = NULL;
 	if (!new_node)
-		return ;
+		return (NULL);
 	new_node->content = *content;
 	new_node->next = NULL;
 	if (!(*tkn_node))
@@ -46,8 +46,8 @@ void	add_node(t_tkn **tkn_node, char **content)
 		(*tkn_node)->next = new_node;
 		new_node->prev = (*tkn_node);
 		*tkn_node = temp;
-		//printf("NODE::: %s\n", (*tkn_node)->content);
 	}
+	return (new_node);
 }
 
 void	populate_hashtable(t_global **data, int idx, int len)

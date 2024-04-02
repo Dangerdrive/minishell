@@ -24,7 +24,8 @@ SRC = 	./src/main.c \
 		./src/parser.c \
 		./src/parser_utils.c \
 		./src/lexer.c \
-		./src/expander.c
+		./src/expander.c \
+		./src/pwd.c
 #		./src/executor/.c \
 #		./src/utils/.c \
 
