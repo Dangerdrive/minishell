@@ -90,31 +90,33 @@ void	get_var_value(t_tkn **node, int i, char **env, char **exported)
 	j = 0;
 	while (env[j])
 	{
-		if (ft_strncmp((*node)->content + i, env[j], len) == 0)
-		{
-			value = fetch_on_env(env[j]);
-			if (value)
-			{
-				update_list(node, i, i + len, &value);
-				printf("var_value = %s\n", (*node)->content);
-				break ;
-			}
-		}
+		// if (ft_strncmp((*node)->content + i, env[j], len) == 0)
+		// {
+		// 	value = fetch_on_env(env[j]);
+		// 	if (value)
+		// 	{
+		// 		update_list(node, i, i + len, &value);
+		// 		printf("var_value = %s\n", (*node)->content);
+		// 		break ;
+		// 	}
+		// }
 		j++;
 	}
+	j = 0;
+	printf("exp: %s\n", exported[0]);
 	while (exported[j])
 	{
-		if (ft_strncmp((*node)->content + i, exported[j], len) == 0)
-		{
-			value = fetch_on_env(exported[j]);
-			if (value)
-			{
-				update_list(node, i, i + len, &value);
-				printf("var_value = %s\n", (*node)->content);
-				break ;
-			}
-		}
-		j++;
+		// if (ft_strncmp((*node)->content + i, exported[j], len) == 0)
+		// {
+		// 	value = fetch_on_env(exported[j]);
+		// 	if (value)
+		// 	{
+		// 		update_list(node, i, i + len, &value);
+		// 		printf("var_value = %s\n", (*node)->content);
+		// 		break ;
+		// 	}
+		// }
+		// j++;
 	}
 }
 

@@ -67,8 +67,8 @@ typedef struct s_global
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
+	t_list			*gc;
 	int				exit;
-	struct s_global	*next;
 }	t_global;
 
 t_global	*init_data(void);

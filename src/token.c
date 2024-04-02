@@ -107,7 +107,10 @@ int	readline_and_handle_input(t_global **data)
 		//prt_hashtable((*data)->hashtable);
 		input = parse(&(*data)->hashtable, data);
 		if (input == 1)
+		{
+			ft_export(, data);
 			prt_hashtable((*data)->hashtable);
+		}
 	}
 	return (1);
 }
