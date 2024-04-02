@@ -22,10 +22,11 @@ int	main(void)
 
 	char *args[] = {"test1=2", "test2=3", "USER=fucker"/* , "test3", "123test", "PATH", "XMODIFIERS=" */, NULL};
 	ft_export(args, data);
-
+	
 	char *args2[] = {"PATH", "test2", "123", NULL};
 	ft_unset(args2, ft_strarr_len(args2), data);
-
+	char *args3[] =	{"test1=exp2", "OLDPWD=qqr coisa", "OUT=", NULL};
+	ft_export(args3, data);
 	ft_export(NULL, data);
 	// ft_env(&data);
 	clean_stuff(&data);

@@ -89,7 +89,7 @@ int			ft_unset(char **args, int args_len, t_global *data);
 int			ft_env(t_global **data);
 /*--------------echo----------------*/
 int			ft_echo(char **args, int args_len);
-int			pwd(void);
+int			ft_pwd(void);
 
 /*---------------exp----------------*/
 void		expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env);

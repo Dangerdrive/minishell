@@ -23,13 +23,13 @@ int	exec_builtin(char **args, int args_len, t_global *data)
 
 	result = 0;
 	if (ft_strcmp(args[0], "echo") == 0)
-		result = ft_echo(args);
+		result = ft_echo(args, args_len);
 	// if (ft_strcmp(args[0], "cd") == 0)
 	// 	result = ft_cd(args, data->env);
 	if (ft_strcmp(args[0], "pwd") == 0)
 		result = ft_pwd();
 	if (ft_strcmp(args[0], "env") == 0)
-		ft_env(data->env);
+		ft_env(&data);
 	if (ft_strcmp(args[0], "export") == 0)
 		ft_export(args, data);
 	if (ft_strcmp(args[0], "unset") == 0)

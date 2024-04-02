@@ -43,14 +43,18 @@ void	export_no_args(t_global *data)
 
 int	validate_identifier(char *str)
 {
-	int	i;
+	int		i;
+	char	*key;
 
-	if (!ft_isalpha(str[0]) && str[0] != '_')
+	key = str;
+	if (ft_strchr_i(str, '=') != -1)
+		key = ft_strndup(str, ft_strchr_i(str, '='));
+	if (!ft_isalpha(key[0]) && key[0] != '_')
 		return (0);
 	i = 1;
-	while (str[i])
+	while (key[i])
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
+		if (!ft_isalnum(key[i]) && key[i] != '_' && key[i] != '=')
 			return (0);
 		i++;
 	}
