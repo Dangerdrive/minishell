@@ -67,6 +67,7 @@ typedef struct s_global
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
+	int				ret;
 	int				exit;
 	struct s_global	*next;
 }	t_global;
@@ -76,15 +77,19 @@ int			handle_signal(void);
 void		clean_stuff(t_global **data);
 void		clean_input_and_hashtable(t_global **data);
 
+/*------------BUILTINS-------------*/
+int			exec_builtin(char **args, int args_len, t_global *data);
+int			is_builtin(char *command);
 /*---------------env----------------*/
 int			init_env(t_global **data);
-void		free_env(t_global **data);
+int			validate_identifier(char *str);
+void		replace_or_add(char *arg, t_global *data);
 int			ft_export(char **args, t_global *data);
-int			ft_unset(char **args, t_global *data);
+int			ft_unset(char **args, int args_len, t_global *data);
 int			ft_env(t_global **data);
-
-
-
+/*--------------echo----------------*/
+int			ft_echo(char **args, int args_len);
+int			pwd(void);
 
 /*---------------exp----------------*/
 void		expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env);

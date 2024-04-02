@@ -12,7 +12,7 @@
  * - 1: Success, directory printed.
  * - 0: Failure, getcwd error.
  */
-int		pwd(void)
+int	pwd(void)
 {
 	char	*cwd;
 

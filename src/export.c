@@ -1,33 +1,6 @@
 #include "../includes/minishell.h"
 
-//teria que receber sorted_env
-// int			add_to_env(char *str, t_env *sorted_env)
-// {
-// 	t_env	*new;
-// 	t_env	*temp;
-
-// 	if (env && sorted_env->value == NULL)
-// 	{
-// 		new->key = ft_strndup(str, ft_strchr_i(str, '='));
-// 		new->value = ft_strdup(ft_strchr(str, '=') + 1);
-// 		new->next = NULL;
-// 		return (0);
-// 	}
-// 	new = malloc(sizeof(t_env));
-// 	if (!new)
-// 		return (-1);
-// 	new->key = ft_strndup(str, ft_strchr_i(str, '='));
-// 	new->value = ft_strdup(ft_strchr(str, '=') + 1);
-// 	new->next = NULL;
-// 	while (env && sorted_env->next && sorted_env->next->next)
-// 		env = sorted_env->next;
-// 	temp = sorted_env->next;
-// 	sorted_env->next = new;
-// 	new->next = temp;
-// 	return (0);
-// }
-
-void		print_exp(char **sorted_arr)
+void	print_exp(char **sorted_arr)
 {
 	char	*key;
 	char	*value;
@@ -42,7 +15,7 @@ void		print_exp(char **sorted_arr)
 		{
 			key = strndup(sorted_arr[i], delim_pos);
 			value = ft_strdup(sorted_arr[i] + delim_pos + 1);
-			if (value) 
+			if (value)
 				ft_printf("declare -x %s=\"%s\"\n", key, value);
 			else
 				ft_printf("declare -x %s=\"\"\n", key);
@@ -68,25 +41,25 @@ void	export_no_args(t_global *data)
 	ft_strarr_free(sorted_export, ft_strarr_len(sorted_export));
 }
 
-int validate_identifier(char *str)
+int	validate_identifier(char *str)
 {
-    int i;
+	int	i;
 
-    if (!ft_isalpha(str[0]) && str[0] != '_')
-        return (0);
-    i = 1;
-    while (str[i])
-    {
-        if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
-            return (0);
-        i++;
-    }
-    return (1);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
+	i = 1;
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-void replace_or_add(char *arg, t_global *data)
+void	replace_or_add(char *arg, t_global *data)
 {
-	char *key;
+	char	*key;
 
 	key = NULL;
 	if (ft_strchr_i(arg, '=') != -1)
@@ -106,7 +79,6 @@ void replace_or_add(char *arg, t_global *data)
 
 int	ft_export(char **args, t_global *data)
 {
-
 	int		i;
 
 	if (args)

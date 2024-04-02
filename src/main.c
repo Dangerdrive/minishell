@@ -14,14 +14,18 @@ int	main(void)
 			break ;
 		clean_input_and_hashtable(&data);
 	}
-	char *args[] = {"test1=2", "test2=3", "USER=fucker", "test3", "123test", "PATH", "XMODIFIERS=", NULL};
+
 	//primeiro e segundo e 4º devem ser adicionados. USER deve modificar o valor de user. 
 	//123test deve ser invalido (começa com numero)
 	//PATH não deve ser alterado, pois não tem igual.
 	//XMODIFIERS deve ser modificado para valor vazio
-	char *args2[] = {"PATH", "test2", NULL};
+
+	char *args[] = {"test1=2", "test2=3", "USER=fucker"/* , "test3", "123test", "PATH", "XMODIFIERS=" */, NULL};
 	ft_export(args, data);
-	ft_unset(args2, data);
+
+	char *args2[] = {"PATH", "test2", "123", NULL};
+	ft_unset(args2, ft_strarr_len(args2), data);
+
 	ft_export(NULL, data);
 	// ft_env(&data);
 	clean_stuff(&data);

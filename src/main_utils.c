@@ -12,6 +12,7 @@ t_global	*init_data(void)
 	data->usr_input = NULL;
 	data->env = NULL;
 	data->cur_path = getcwd(NULL, 0);
+	data->ret = 0;
 	data->exit = 0;
 	data->env = ft_strarr_dup(__environ);
 	data->exported = NULL;
