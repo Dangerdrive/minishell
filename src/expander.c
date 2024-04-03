@@ -1,18 +1,5 @@
 #include "../includes/minishell.h"
 
-// char	*fetch_on_env(char *env_value)
-// {
-// 	char	*result;
-
-// 	while (*env_value != '=')
-// 	{
-// 		env_value++;
-// 	}
-// 	env_value++;
-// 	result = ft_strdup(env_value);
-// 	return (result);
-// }
-
 bool	is_special_char(char c)
 {
 	if ((c >= 32 && c <= 47 && c != 35) || (c >= 58 && c <= 64 && c != 63)
@@ -99,7 +86,18 @@ char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
 	return (NULL);
 }
 
-void	get_var_value(t_tkn **node, int i, char **env, char **exported)
+bool	is_special_variable(char *var)
+{
+	if (!ft_strcmp(var, "$#")  || !ft_strcmp(var, "$!") || !ft_strcmp(var, "$@")
+		|| !ft_strcmp(var, "$$") || !ft_strcmp(var, "$0") || !ft_strcmp(var, "$-")
+		|| !ft_strcmp(var, "$*"))
+	{
+		return (true);
+	}
+	return (false);
+}
+
+int	get_var_value(t_tkn **node, int i, t_global **data)
 {
 	int		j;
 	int		len;
@@ -109,24 +107,30 @@ void	get_var_value(t_tkn **node, int i, char **env, char **exported)
 	value = NULL;
 	while (is_var_name(node, i, len))
 		len++;
-	if (!ft_strcmp((*node)->content, "$?") || !ft_strcmp((*node)->content, "$#"))
-		value = ft_strdup("0"); /* precisa mallocar senão dá invalid free() */
-	j = 0;
-	while (!value && env[j++])
-		value = fetch_in_array(node, i, len, env[j]);
-	j = 0;
-	while (!value && exported[j++])
-		value = fetch_in_array(node, i, len, exported[j]);
-	if (value)
+	if (!ft_strcmp((*node)->content, "$?"))
+		value = ft_itoa((*data)->prev_process);
+	if (is_special_variable((*node)->content))
 	{
-		update_list(node, i, i + len, &value);
+		printf("%s\nThis functionality is beyond Minishell's scope, M0therF@ck&r.\n\n%s", RED, END);
+		return (0);
 	}
+	j = 0;
+	while (!value && (*data)->env[j++])
+		value = fetch_in_array(node, i, len, (*data)->env[j]);
+	j = 0;
+	while (!value && (*data)->exported[j++])
+		value = fetch_in_array(node, i, len, (*data)->exported[j]);
+	if (value)
+		update_list(node, i, i + len, &value);
+	return (1);
 }
 
-void	check_if_expandable(t_tkn **node, char **env, char **exported)
+int	check_if_expandable(t_tkn **node, t_global **data)
 {
 	int		i;
+	int		result;
 
+	result = 1;
 	if (!ft_strcmp((*node)->type, VARIABLE) || !ft_strcmp((*node)->type, STRING_STD))
 	{
 		i = 0;
@@ -135,40 +139,38 @@ void	check_if_expandable(t_tkn **node, char **env, char **exported)
 			if ((*node)->content[i] == '$')
 			{
 				i++;
-				get_var_value(node, i, env, exported);
+				result = get_var_value(node, i, data);
 				break ;
 			}
 			i++;
 		}
 	}
-	return ;
+	return (result);
 }
 
-void	expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
+int	expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
+	int		result;
 	t_tkn	*temp;
 
 	i = 0;
+	result = 1;
 	while ((*hashtable)[i])
 	{
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			check_if_expandable(&(*hashtable)[i], (*data)->env, (*data)->exported);
+			result = check_if_expandable(&(*hashtable)[i], data);
+			if (result == 0)
+			{
+				(*hashtable)[i] = temp;
+				return (result);
+			}
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
 		i++;
 	}
-	return ;
+	return (result);
 }
-
-
-// TO TEST:
-// echo "hello $USER"
-// echo "hello $USER !!"
-// echo 'hello $USER'
-// echo '"hello $USER"'
-// echo hello "'"$USER"'"
-// echo "hello '$USER!' How are you?"

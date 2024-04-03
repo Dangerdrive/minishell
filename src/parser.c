@@ -51,7 +51,7 @@ char	*get_tkn_type(t_tkn *node)
 		else if (is_special_token(node->content))
 			return (SPECIAL_CHAR);
 		else if ((node->content[0] == '$' && validate_identifier(node->content + 1))
-			|| !strcmp(node->content, "$?") || !strcmp(node->content, "$#"))
+			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
 		else if (node->content[0] == '-' && node->content[1])
 			return (FLAG);
@@ -159,9 +159,8 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		(*hashtable)[i] = temp;
 		i++;
 	}
-	expand(hashtable, data);
-	syntax = check_syntax(hashtable);
-	if (syntax)
+	syntax = 0;
+	if (expand(hashtable, data) == 1 && check_syntax(hashtable) == 1)
 		syntax = lexer(hashtable);
 	return (syntax);
 }

@@ -68,6 +68,7 @@ typedef struct s_global
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
+	int				prev_process;
 	int				exit;
 	struct s_global	*next;
 }	t_global;
@@ -85,7 +86,8 @@ int			ft_unset(char **args, t_global *data);
 int			ft_env(t_global **data);
 
 /*--------------expand--------------*/
-void		expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
+int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
+bool		is_special_variable(char *var);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);
