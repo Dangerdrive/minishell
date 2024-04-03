@@ -1,10 +1,12 @@
 #include "../includes/minishell.h"
 
-bool	input_starts_with_command(t_tkn	*node, int i)
+bool	input_starts_with_command(t_tkn	*node)
 {
-	if ((i == 0 && !node->prev && ft_strcmp(node->type, COMMAND) != 0)
-		|| (i > 0 && node->prev && !ft_strcmp(node->prev->content, PIPE)
-			&& ft_strcmp(node->type, COMMAND)))
+	if ((!node->prev && !ft_strcmp(node->type, COMMAND))
+		|| (node->prev && ft_strcmp(node->type, COMMAND)
+			&& (!ft_strcmp(node->prev->content, PIPE)
+				|| !ft_strcmp(node->prev->content, LOGIC_AND)
+				|| !ft_strcmp(node->prev->content, LOGIC_AND))))
 		return (false);
 	return (true);
 }
@@ -20,7 +22,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			if (!input_starts_with_command((*hashtable)[i], i))
+			if (!input_starts_with_command((*hashtable)[i]))
 			{
 				printf("%s: command not found\n", (*hashtable)[i]->content);
 				(*hashtable)[i] = temp;

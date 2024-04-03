@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int	g_signal;
+int	g_signal = 0;
 
 t_global	*init_data(void)
 {
@@ -35,7 +35,6 @@ t_global	*init_data(void)
 
 // 	g_signal = 1;
 // 	act.sa_handler = sig_handler;
-// 	sigemptyset(&act.sa_mask);
 // 	act.sa_flags = 0;
 // 	sigaction(SIGINT, &act, NULL);
 // 	while (g_signal == 1)
@@ -53,6 +52,35 @@ t_global	*init_data(void)
 //     }
 // 	return (0);
 // }
+
+void interrupt_handler(int signal) {
+	(void)signal;
+    printf("SIGINT received, stopping program...\n");
+	g_signal = 1;
+    // Add any cleanup or exit actions here
+}
+
+int	handle_signal(t_global **data)
+{
+	struct sigaction sa;
+
+    sa.sa_handler = interrupt_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+
+    if (sigaction(SIGINT, &sa, NULL) == -1)
+	{
+        perror("sigaction");
+        return (EXIT_FAILURE);
+    }
+	if (g_signal == 1)
+	{
+		(*data)->exit = 1;
+		(*data)->prev_process = 130;
+		return (1);
+	}
+    return (0);
+}
 
 void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 {

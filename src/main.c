@@ -6,9 +6,10 @@ int	main(void)
 
 	data = init_data();
 	data->usr_input = NULL;
-	//data->exit = handle_signal();
+	handle_signal(&data);
 	while (!data->exit)
 	{
+		//data->exit = handle_signal();
 		printf("%s ", data->cur_path);
 		if (!data->exit && readline_and_handle_input(&data) == -1)
 			break ;
