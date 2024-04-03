@@ -23,6 +23,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 			if (!input_starts_with_command((*hashtable)[i], i))
 			{
 				printf("%s: command not found\n", (*hashtable)[i]->content);
+				(*hashtable)[i] = temp;
 				return (0);
 			}
 			(*hashtable)[i] = (*hashtable)[i]->next;

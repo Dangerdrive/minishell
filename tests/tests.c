@@ -104,9 +104,9 @@ void test_handle_input_SuccessfullyHandlesInputWithOpenQuoteRandom(void) {
 }
 
 void test_handle_input_SuccessfullyHandlesInputWithExpandableVariable(void) {
-    data->usr_input = strdup("echo \"hello $DESKTOP_SESSION\"");
+    data->usr_input = strdup("echo \"hello $USER\"");
     handle_input(&data);
-    TEST_ASSERT_EQUAL_STRING("hello ubuntu\n", data->hashtable[0]->content);
+    TEST_ASSERT_EQUAL_STRING("hello gde-souz\n", data->hashtable[0]->content);
     ft_memdel(data->usr_input);
 }
 

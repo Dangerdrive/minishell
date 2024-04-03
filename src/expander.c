@@ -1,21 +1,21 @@
 #include "../includes/minishell.h"
 
-char	*fetch_on_env(char *env_value)
-{
-	char	*result;
+// char	*fetch_on_env(char *env_value)
+// {
+// 	char	*result;
 
-	while (*env_value != '=')
-	{
-		env_value++;
-	}
-	env_value++;
-	result = ft_strdup(env_value);
-	return (result);
-}
+// 	while (*env_value != '=')
+// 	{
+// 		env_value++;
+// 	}
+// 	env_value++;
+// 	result = ft_strdup(env_value);
+// 	return (result);
+// }
 
 bool	is_special_char(char c)
 {
-	if ((c >= 32 && c <= 47) || (c >= 58 && c <= 64)
+	if ((c >= 32 && c <= 47 && c != 35) || (c >= 58 && c <= 64 && c != 63)
 		|| (c >= 93 && c <= 96 && c != '_') || (c >= 123 && c <= 126))
 	{
 		return (true);
@@ -84,6 +84,21 @@ bool	is_var_name(t_tkn **node, int i, int len)
 	return (false);
 }
 
+char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
+{
+	char	*value;
+
+	if (ft_strncmp((*node)->content + i, arr, len) == 0)
+	{
+		while (*arr != '=')
+			arr++;
+		arr++;
+		value = ft_strdup(arr);
+		return (value);
+	}
+	return (NULL);
+}
+
 void	get_var_value(t_tkn **node, int i, char **env, char **exported)
 {
 	int		j;
@@ -94,31 +109,17 @@ void	get_var_value(t_tkn **node, int i, char **env, char **exported)
 	value = NULL;
 	while (is_var_name(node, i, len))
 		len++;
+	if (!ft_strcmp((*node)->content, "$?") || !ft_strcmp((*node)->content, "$#"))
+		value = ft_strdup("0"); /* precisa mallocar senão dá invalid free() */
 	j = 0;
-	while (env[j])
+	while (!value && env[j++])
+		value = fetch_in_array(node, i, len, env[j]);
+	j = 0;
+	while (!value && exported[j++])
+		value = fetch_in_array(node, i, len, exported[j]);
+	if (value)
 	{
-		if (ft_strncmp((*node)->content + i, env[j], len) == 0)
-		{
-			value = fetch_on_env(env[j]);
-			if (value)
-			{
-				update_list(node, i, i + len, &value);
-				//printf("var_value = %s\n", (*node)->content);
-				break ;
-			}
-		}
-		exported = NULL;
-		// if (exported[j] && ft_strncmp((*node)->content + i, exported[j], len) == 0)
-		// {
-		// 	value = fetch_on_env(exported[j]);
-		// 	// if (value)
-		// 	// {
-		// 	// 	update_list(node, i, i + len, &value);
-		// 	// 	printf("var_value = %s\n", (*node)->content);
-		// 	// 	break ;
-		// 	// }
-		// }
-		j++;
+		update_list(node, i, i + len, &value);
 	}
 }
 

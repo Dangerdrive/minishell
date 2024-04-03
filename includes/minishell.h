@@ -69,6 +69,7 @@ typedef struct s_global
 	char			*usr_input;
 	char			*cur_path;
 	int				exit;
+	struct s_global	*next;
 }	t_global;
 
 t_global	*init_data(void);

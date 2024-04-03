@@ -50,12 +50,13 @@ char	*get_tkn_type(t_tkn *node)
 			return (STRING_STD);
 		else if (is_special_token(node->content))
 			return (SPECIAL_CHAR);
-		// else if (node->content[0] == '$' && validate_identifier(node->content + 1))
-		// 	return (VARIABLE);
+		else if ((node->content[0] == '$' && validate_identifier(node->content + 1))
+			|| !strcmp(node->content, "$?") || !strcmp(node->content, "$#"))
+			return (VARIABLE);
 		else if (node->content[0] == '-' && node->content[1])
 			return (FLAG);
-		else if (!node->prev || !strcmp(node->prev->type, PIPE)
-			|| !strcmp(node->prev->type, LOGIC_AND) || !strcmp(node->prev->type, LOGIC_OR))
+		else if (!node->prev || !strcmp(node->prev->content, PIPE)
+			|| !strcmp(node->prev->content, LOGIC_AND) || !strcmp(node->prev->content, LOGIC_OR))
 			return (COMMAND);
 		else
 			return (ARGUMENT);
@@ -115,31 +116,28 @@ void	split_token(t_tkn **node)
 	}
 }
 
-void	update_content(t_tkn **node)
+void	update_content(t_tkn **node, char *content)
 {
 	char *new_content;
 	int	len;
 	int	i;
 
-	//printf("ENTROU NA UPDATE::: %s\n", (*node)->content);
-	if (ft_strcmp((*node)->content, PIPE) == 0)
-		printf("ENTROU NA UPDATE::: %s\n", (*node)->content);
-	if (ft_strcmp((*node)->content, PIPE) && ((*node)->content[0] == 34 || (*node)->content[0] == 39))
+	if (ft_strcmp(content, PIPE) && (content[0] == 34 || content[0] == 39))
 	{
-		len = ft_strlen((*node)->content) - 1;
+		len = ft_strlen(content) - 1;
 		new_content = ft_calloc(len, sizeof(char));
 		i = 1;
 		while (i < len)
 		{
-			new_content[i - 1] = (*node)->content[i];
+			new_content[i - 1] = content[i];
 			i++;
 		}
-		free((*node)->content);
-		(*node)->content = new_content;
+		free(content);
+		content = new_content;
+		if (ft_strcmp((*node)->type, STRING_STD)
+			&& check_there_is_var(content))
+			split_token(node);
 	}
-	if (ft_strcmp((*node)->type, STRING_STD)
-		&& check_there_is_var((*node)->content))
-		split_token(node);
 }
 
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
@@ -155,8 +153,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		while ((*hashtable)[i])
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
-			printf("PASSOU AQUI: %s\n", (*hashtable)[i]->content);
-			update_content(hashtable[i]);
+			update_content(hashtable[i], (*hashtable)[i]->content);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
