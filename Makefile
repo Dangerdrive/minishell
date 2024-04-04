@@ -16,16 +16,18 @@ FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 # push_swap
 SRC = 	./src/main.c \
 		./src/main_utils.c \
-		./src/env.c \
-		./src/token.c \
-		./src/token_utils.c \
-		./src/export.c \
-		./src/unset.c \
-		./src/parser.c \
-		./src/parser_utils.c \
-		./src/lexer.c \
-		./src/expander.c \
-		./src/pwd.c
+		./src/token/token.c \
+		./src/token/token_utils.c \
+		./src/parse/parser.c \
+		./src/parse/parser_utils.c \
+		./src/expand/expander.c \
+		./src/expand/expander_utils.c \
+		./src/signals/signal_handler.c \
+		./src/main/lexer.c \
+		./src/main/env.c \
+		./src/main/export.c \
+		./src/main/unset.c \
+		./src/main/pwd.c
 #		./src/executor/.c \
 #		./src/utils/.c \
 
@@ -69,7 +71,7 @@ $(FTPRINTF):
 	@make -C $(FTPRINTF_PATH)
 
 # Builds mandatory object files
-$(OBJ_PATH)%.o: src/%.c
+$(OBJ_PATH)%.o: src/**/%.c
 	@mkdir -p $(OBJ_PATH)
 	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
 

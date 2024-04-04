@@ -15,7 +15,6 @@
 # define DOUBLE_GREATER_THAN ">>"
 # define COMMAND "command"
 # define ARGUMENT "argument"
-# define FLAG "flag"
 # define FILE_TXT "file"
 # define VARIABLE "variable"
 # define SPECIAL_CHAR "special char"
@@ -68,7 +67,7 @@ typedef struct s_global
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
-	int				prev_process;
+	int				prev_process_status;
 	int				exit;
 	struct s_global	*next;
 }	t_global;
@@ -87,7 +86,11 @@ int			ft_env(t_global **data);
 
 /*--------------expand--------------*/
 int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
+bool		is_special_char(char c);
 bool		is_special_variable(char *var);
+bool		is_var_name(t_tkn **node, int i, int len);
+void		add_node_before(t_tkn **node, int i);
+t_tkn		*add_node_after(t_tkn **node, int i);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);
@@ -109,5 +112,9 @@ int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
 
 /*--------------export-------------*/
 int			validate_identifier(char *str);
+
+/*--------------lexer--------------*/
+void		handle_signals(t_global **data);
+void		interrupt_handler(int signal);
 
 #endif

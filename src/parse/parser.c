@@ -53,8 +53,6 @@ char	*get_tkn_type(t_tkn *node)
 		else if ((node->content[0] == '$' && validate_identifier(node->content + 1))
 			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
-		else if (node->content[0] == '-' && node->content[1])
-			return (FLAG);
 		else if (!node->prev || !strcmp(node->prev->content, PIPE)
 			|| !strcmp(node->prev->content, LOGIC_AND) || !strcmp(node->prev->content, LOGIC_OR))
 			return (COMMAND);
