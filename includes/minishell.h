@@ -40,6 +40,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdbool.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <dirent.h>
 # include <sys/stat.h>
@@ -74,7 +75,7 @@ typedef struct s_global
 	char			*usr_input;
 	char			*cur_path;
 	int				ret;
-	int				exit;
+	t_bool			exit;
 	struct s_global	*next;
 }	t_global;
 
@@ -92,7 +93,8 @@ t_bool		identifier_is_valid(char *str);
 void		replace_or_add(char *arg, t_global *data);
 int			ft_export(char **args, t_global *data);
 int			ft_unset(char **args, int args_len, t_global *data);
-int			ft_env(t_global **data);
+int			ft_env(char **args, int args_len, t_global **data);
+
 /*--------------echo----------------*/
 int			ft_echo(char **args, int args_len);
 int			ft_pwd(void);
