@@ -6,7 +6,7 @@ static int	key_matches_target(const char *strarr_elem, const char *tgt)
 	int		result;
 
 	key = strndup(strarr_elem, ft_strchr_i(strarr_elem, '='));
-	result = ft_strcmp(strarr_elem, tgt);
+	result = ft_strcmp(key, tgt);
 	free(key);
 	return (result == 0);
 }
