@@ -41,7 +41,7 @@ void	export_no_args(t_global *data)
 	ft_strarr_free(sorted_export, ft_strarr_len(sorted_export));
 }
 
-int	validate_identifier(char *str)
+t_bool	identifier_is_valid(char *str)
 {
 	int		i;
 	char	*key;
@@ -50,15 +50,15 @@ int	validate_identifier(char *str)
 	if (ft_strchr_i(str, '=') != -1)
 		key = ft_strndup(str, ft_strchr_i(str, '='));
 	if (!ft_isalpha(key[0]) && key[0] != '_')
-		return (0);
+		return (FALSE);
 	i = 1;
 	while (key[i])
 	{
 		if (!ft_isalnum(key[i]) && key[i] != '_' && key[i] != '=')
-			return (0);
+			return (FALSE);
 		i++;
 	}
-	return (1);
+	return (TRUE);
 }
 
 void	replace_or_add(char *arg, t_global *data)
@@ -68,15 +68,20 @@ void	replace_or_add(char *arg, t_global *data)
 	key = NULL;
 	if (ft_strchr_i(arg, '=') != -1)
 	{
-		key = ft_strndup(arg, ft_strchr_i(arg, '='));
+		key = ft_strndup(arg, ft_strchr_i(arg, '=') + 1);
 		ft_strarr_str_replace(data->env, key, arg);
 		ft_strarr_str_replace(data->exported, key, arg);
 	}
 	else if (ft_strchr_i(arg, '=') == -1)
 		key = ft_strdup(arg);
 	if (ft_strarr_str(data->env, key) == -1
-		&& ft_strarr_str(data->exported, key) == -1)
+		&& ft_strarr_str(data->exported, key) == -1
+		&& ft_strarr_str(__environ, key) == -1)
 		ft_strarr_stradd(&data->exported, arg);
+	if (ft_strarr_str(data->env, key) == -1
+		&& ft_strarr_str(data->exported, key) == -1
+		&& ft_strarr_str(__environ, key) != -1)
+		ft_strarr_stradd(&data->env, arg);
 	if (key != NULL)
 		free(key);
 }
@@ -90,9 +95,9 @@ int	ft_export(char **args, t_global *data)
 		i = 0;
 		while (args[i])
 		{
-			if (validate_identifier(args[i]) == 0)
+			if (!identifier_is_valid(args[i]))
 				ft_printf("export: `%s': not a valid identifier\n", args[i]);
-			else if (validate_identifier(args[i]) == 1)
+			else if (identifier_is_valid(args[i]))
 				replace_or_add(args[i], data);
 		i++;
 		}

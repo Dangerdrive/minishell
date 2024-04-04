@@ -15,15 +15,17 @@ int	main(void)
 		clean_input_and_hashtable(&data);
 	}
 
-	//primeiro e segundo e 4º devem ser adicionados. USER deve modificar o valor de user. 
+	//primeiro e segundo e 4º devem ser adicionados. 
+	//USER deve modificar o valor de USER mas não deve modificar o valor de USER_ZDOTDIR
 	//123test deve ser invalido (começa com numero)
 	//PATH não deve ser alterado, pois não tem igual.
 	//XMODIFIERS deve ser modificado para valor vazio
-
+	// char *args0[] = {"CC=sucker", NULL};
+	// ft_export(args0, data);
 	char *args[] = {"test1=2", "test2=3", "USER=fucker"/* , "test3", "123test", "PATH", "XMODIFIERS=" */, NULL};
 	ft_export(args, data);
 	
-	char *args2[] = {"PATH", "test2", "123", NULL};
+	char *args2[] = {"213", "test2", "123", NULL};
 	ft_unset(args2, ft_strarr_len(args2), data);
 	char *args3[] =	{"test1=exp2", "OLDPWD=qqr coisa", "OUT=", NULL};
 	ft_export(args3, data);

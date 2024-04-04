@@ -18,7 +18,7 @@ void	ft_strarr_str_replace(char **strarr, char *target, char *replcmt)
 	int	len;
 
 	if (!strarr || !target || !replcmt)
-		return;
+		return ;
 	len = ft_strarr_len(strarr);
 	i = 0;
 	while (i < len)
@@ -29,7 +29,7 @@ void	ft_strarr_str_replace(char **strarr, char *target, char *replcmt)
 			strarr[i] = ft_strdup(replcmt);
 			if (!strarr[i])
 			{
-				return;
+				return ;
 			}
 		}
 		i++;

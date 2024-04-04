@@ -52,6 +52,12 @@
 # include "../libs/libft/libft.h"
 # include "../libs/ft_printf/ft_printf.h"
 
+typedef enum e_bool
+{
+	FALSE = 0,
+	TRUE = 1
+}	t_bool;
+
 typedef struct s_tkn
 {
 	char			*content;
@@ -79,10 +85,10 @@ void		clean_input_and_hashtable(t_global **data);
 
 /*------------BUILTINS-------------*/
 int			exec_builtin(char **args, int args_len, t_global *data);
-int			is_builtin(char *command);
+t_bool		is_builtin(char *command);
 /*---------------env----------------*/
 int			init_env(t_global **data);
-int			validate_identifier(char *str);
+t_bool		identifier_is_valid(char *str);
 void		replace_or_add(char *arg, t_global *data);
 int			ft_export(char **args, t_global *data);
 int			ft_unset(char **args, int args_len, t_global *data);
@@ -104,10 +110,10 @@ int			check_exit_input(char **input, int *exit);
 
 /*--------------parse--------------*/
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env);
-bool		is_pipe(char *token);
-bool		is_and_or(char *token);
-bool		is_pipe_and_or(char *token);
-bool		is_special_token(char *token);
+t_bool		is_pipe(char *token);
+t_bool		is_and_or(char *token);
+t_bool		is_pipe_and_or(char *token);
+t_bool		is_special_token(char *token);
 
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
