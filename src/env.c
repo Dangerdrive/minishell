@@ -2,25 +2,28 @@
 
 static int	env_print(t_global **data)
 {
-	int	i;
+	int		i;
+	t_bool	exp_ended;
 
+	exp_ended = FALSE;
 	if (!(*data)->env)
 		return (1);
 	i = 0;
 	while ((*data)->env[i])
 	{
 		printf("%s\n", (*data)->env[i]);
-		if ((*data)->exported && (*data)->exported[i])
+		if (!exp_ended && (*data)->exported && (*data)->exported[i])
+		{
 			if (ft_strchr_i((*data)->exported[i], '=') != -1)
 				printf("%s\n", (*data)->exported[i]);
+			if (!(*data)->exported[i + 1])
+				exp_ended = TRUE;
+		}
 		i++;
 	}
-	while ((*data)->exported && (*data)->exported[i])
-	{
+	while (!exp_ended && (*data)->exported && (*data)->exported[i++ - 1])
 		if (ft_strchr_i((*data)->exported[i], '=') != -1)
 			printf("%s\n", (*data)->exported[i]);
-		i++;
-	}
 	return (0);
 }
 
@@ -30,22 +33,11 @@ int	ft_env(char **args, int args_len, t_global **data)
 		return (env_print(data));
 	else if (args_len > 1)
 	{
-		if (access(args[1], F_OK) == -1)
-		{
-			if (errno == EACCES)
-			{
-				ft_putstr_fd("env: ", STDERR_FILENO);
-				ft_putstr_fd(args[1], STDERR_FILENO);
-				ft_putendl_fd(": Permission denied", STDERR_FILENO);
-			}
-			else
-			{
-				ft_putstr_fd("env: ", STDERR_FILENO);
-				ft_putstr_fd(args[1], STDERR_FILENO);
-				ft_putendl_fd(": No such file or directory", STDERR_FILENO);
-			}
-			return (1);
-		}
+		if (access(args[1], F_OK) == 0)
+			ft_printf_fd(2, "env: %s: Permission denied\n", args[1]);
+		else
+			ft_printf_fd(2, "env: %s: No such file or directory\n", args[1]);
+		return (1);
 	}
 	return (0);
 }

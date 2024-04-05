@@ -1,13 +1,13 @@
 #include "../includes/minishell.h"
 
-bool	is_pipe(char *token)
+t_bool	is_pipe(char *token)
 {
 	if (token && (ft_strcmp(token, PIPE) == 0))
 		return (true);
 	return (false);
 }
 
-bool	is_and_or(char *token)
+t_bool	is_and_or(char *token)
 {
 	if (token && (ft_strcmp(token, LOGIC_AND) == 0
 		|| ft_strcmp(token, LOGIC_OR) == 0))
@@ -15,7 +15,7 @@ bool	is_and_or(char *token)
 	return (false);
 }
 
-bool	is_pipe_and_or(char *token)
+t_bool	is_pipe_and_or(char *token)
 {
 	if (token && (ft_strcmp(token, PIPE) == 0
 		|| ft_strcmp(token, LOGIC_AND) == 0
@@ -24,7 +24,7 @@ bool	is_pipe_and_or(char *token)
 	return (false);
 }
 
-bool	is_special_token(char *token)
+t_bool	is_special_token(char *token)
 {
 	if (token
 		&& ((ft_strncmp(token, PIPE, 1) == 0)

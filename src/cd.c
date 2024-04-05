@@ -78,41 +78,41 @@ static int		update_oldpwd(t_global *data)
 	return (0);
 }
 
-// static int		go_to_path(int option, t_env *env)
-// {
-// 	int		ret;
-// 	char	*env_path;
+static int		go_to_path(int option, t_env *env)
+{
+	int		ret;
+	char	*path;
 
-// 	env_path = NULL;
-// 	if (option == 0)
-// 	{
-// 		update_oldpwd(env);
-// 		env_path = get_env_path(env, "HOME", 4);
-// 		if (!env_path)
-// 			ft_putendl_fd("minishell : cd: HOME not set", STDERR);
-// 		if (!env_path)
-// 			return (ERROR);
-// 	}
-// 	else if (option == 1)
-// 	{
-// 		env_path = get_env_path(env, "OLDPWD", 6);
-// 		if (!env_path)
-// 			ft_putendl_fd("minishell : cd: OLDPWD not set", STDERR);
-// 		if (!env_path)
-// 			return (ERROR);
-// 		update_oldpwd(env);
-// 	}
-// 	ret = chdir(env_path);
-// 	ft_memdel(env_path);
-// 	return (ret);
-// }
+	path = NULL;
+	if (option == 0)
+	{
+		update_oldpwd(env);
+		path = get_env_path(env, "HOME", 4);
+		if (!path)
+			ft_printf_fd(STDERR_FILENO, "minishell : cd: HOME not set\n");
+		if (!path)
+			return (ERROR);
+	}
+	else if (option == 1)
+	{
+		path = get_env_path(env, "OLDPWD", 6);
+		if (!path)
+			ft_printf_fd(STDERR_FILENO, "minishell : cd: OLDPWD not set\n");
+		if (!path)
+			return (ERROR);
+		update_oldpwd(env);
+	}
+	ret = chdir(path);
+	ft_memdel(path);
+	return (ret);
+}
 
 int	ft_cd(char **args, int args_len, t_global *data)
 {
 	int		result;
 
 	if (args_len > 2)
-		ft_printf("minishell : cd: too many arguments");
+		ft_printf_fd(2, "minishell : cd: too many arguments");
 	if (args_len == 1)
 		return (go_to_path(0, data));
 	if (ft_strcmp(args[1], "-") == 0)

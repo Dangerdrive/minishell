@@ -94,10 +94,11 @@ void		replace_or_add(char *arg, t_global *data);
 int			ft_export(char **args, t_global *data);
 int			ft_unset(char **args, int args_len, t_global *data);
 int			ft_env(char **args, int args_len, t_global **data);
-
 /*--------------echo----------------*/
 int			ft_echo(char **args, int args_len);
 int			ft_pwd(void);
+void		ft_exit(char **args, int args_len, t_global *data);
+
 
 /*---------------exp----------------*/
 void		expand(t_tkn *(*hashtable)[TABLE_SIZE], char **env);
@@ -108,7 +109,7 @@ int			handle_input(t_global **data);
 void		populate_hashtable(t_global **data, int idx, int len);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
 void		add_node(t_tkn **tkn_node, char **content);
-int			check_exit_input(char **input, int *exit);
+int			check_exit_input(char **input, t_global *data);
 
 /*--------------parse--------------*/
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], char **env);

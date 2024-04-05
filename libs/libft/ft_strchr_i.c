@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:59:21 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/28 12:36:30 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:44:55 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int ft_strchr_i(const char *str, char c)
 {
     int i;
 
+    if (!str)
+        return (-1);
     i = 0;
     while (str[i])
     {

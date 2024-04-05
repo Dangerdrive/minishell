@@ -53,7 +53,11 @@ static int	ft_strarr_str_unset(char **strarr, const char *target)
 	{
 		key = strndup(strarr[i], ft_strchr_i(strarr[i], '='));
 		if ((ft_strcmp(key, target) == 0))
+		{
+			free(key);
 			return (i);
+		}
+		free(key);
 		i++;
 	}
 	return (-1);

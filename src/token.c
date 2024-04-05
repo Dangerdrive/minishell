@@ -74,7 +74,7 @@ int	handle_input(t_global **data)
 	int		len;
 
 	add_history((*data)->usr_input);
-	if (check_exit_input(&(*data)->usr_input, &(*data)->exit))
+	if (check_exit_input(&(*data)->usr_input, *data)) // só deve ser chamado se não houver pipe
 		return (-1);
 	i = 0;
 	while ((*data)->usr_input[i])
@@ -107,7 +107,11 @@ int	readline_and_handle_input(t_global **data)
 		//prt_hashtable((*data)->hashtable);
 		input = parse(&(*data)->hashtable, (*data)->env);
 		if (input == 1)
+		{
 			prt_hashtable((*data)->hashtable);
+			//call exec
+		}	
+		
 	}
 	return (1);
 }
