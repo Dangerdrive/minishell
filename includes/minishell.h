@@ -6,8 +6,6 @@
 # define SIMPLE_QUOTE 39
 # define DOUBLE_QUOTE 34
 # define PIPE "|"
-# define LOGIC_OR "||"
-# define LOGIC_AND "&&"
 # define AMPERSAND "&"
 # define LESS_THAN "<"
 # define GREATER_THAN ">"
@@ -104,7 +102,6 @@ int			check_exit_input(char **input, int *exit);
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
 bool		is_pipe(char *token);
 bool		is_and_or(char *token);
-bool		is_pipe_and_or(char *token);
 bool		is_special_token(char *token);
 
 /*--------------lexer--------------*/

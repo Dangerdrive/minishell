@@ -74,7 +74,8 @@ int	handle_input(t_global **data)
 	int		len;
 
 	add_history((*data)->usr_input);
-	if (check_exit_input(&(*data)->usr_input, &(*data)->exit))
+	if (((*data)->usr_input && check_exit_input(&(*data)->usr_input, &(*data)->exit))
+		|| !(*data)->usr_input)
 		return (-1);
 	i = 0;
 	while ((*data)->usr_input[i])
@@ -97,6 +98,7 @@ int	readline_and_handle_input(t_global **data)
 {
 	int	input;
 
+	handle_signals(data);
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
 	input = handle_input(data);

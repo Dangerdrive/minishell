@@ -4,7 +4,7 @@ bool	input_starts_with_command(t_tkn	*node, int i)
 {
 	if ((i == 0 && !node->prev && ft_strcmp(node->type, COMMAND))
 		|| (i > 0 && node->prev && ft_strcmp(node->type, COMMAND)
-			&& is_pipe_and_or(node->prev->content)))
+			&& is_pipe(node->prev->content)))
 		return (false);
 	return (true);
 }

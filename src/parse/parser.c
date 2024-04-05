@@ -11,8 +11,10 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			if ((is_pipe_and_or((*hashtable)[i]->content) && !(*hashtable)[i]->next)
-			|| ((*hashtable)[i] && (*hashtable)[i]->next && is_special_token((*hashtable)[i]->content) && is_special_token((*hashtable)[i]->next->content)))
+			if (((*hashtable)[i] && (*hashtable)[i]->next
+				&& is_special_token((*hashtable)[i]->content)
+				&& is_special_token((*hashtable)[i]->next->content))
+				|| (is_and_or((*hashtable)[i]->content)))
 			{
 				printf("Syntax error.\n");
 				(*hashtable)[i] = temp;
@@ -25,20 +27,6 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 	}
 	return (1);
 }
-
-// int	is_file(char *token)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (token[i])
-// 	{
-// 		if (token[i] == '.' && strcmp((token + i + 1), ".txt"))
-// 			return (1);
-// 		i++;
-// 	}
-// 	return (0);
-// }
 
 char	*get_tkn_type(t_tkn *node)
 {
@@ -53,8 +41,7 @@ char	*get_tkn_type(t_tkn *node)
 		else if ((node->content[0] == '$' && validate_identifier(node->content + 1))
 			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
-		else if (!node->prev || !strcmp(node->prev->content, PIPE)
-			|| !strcmp(node->prev->content, LOGIC_AND) || !strcmp(node->prev->content, LOGIC_OR))
+		else if (!node->prev || !strcmp(node->prev->content, PIPE))
 			return (COMMAND);
 		else
 			return (ARGUMENT);
