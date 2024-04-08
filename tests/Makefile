@@ -1,39 +1,40 @@
 # Name of the executable
-NAME = minishell
+NAME = minitests
 
 # Compilation flags
 CFLAGS = -Wall -Wextra -Werror -g
-INCLUDES = -I ./includes/ -I $(LIBFT_PATH)/ -I $(FTPRINTF_PATH)/
+INCLUDES = -I ../includes/ -I . -I $(LIBFT_PATH)/ -I $(FTPRINTF_PATH)/ -I $(UNITY_PATH)/ 
+LINKING = -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline -L$(UNITY_PATH) -lunity
 
+UNITY_PATH = ./unity
 # Libft
-LIBFT_PATH	=	./libs/libft
+LIBFT_PATH	=	../libs/libft
 LIBFT		=	$(LIBFT_PATH)/libft.a
-
-# Libftprintf
-FTPRINTF_PATH	= ./libs/ft_printf
+FTPRINTF_PATH	= ../libs/ft_printf
 FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
 # push_swap
-SRC = 	./src/main.c \
-		./src/main_utils.c \
-		./src/token/token.c \
-		./src/token/token_utils.c \
-		./src/parse/parser.c \
-		./src/parse/parser_utils.c \
-		./src/expand/expander.c \
-		./src/expand/expander_utils.c \
-		./src/signals/signal_handler.c \
-		./src/main/lexer.c \
-		./src/main/env.c \
-		./src/main/export.c \
-		./src/main/unset.c \
-		./src/main/pwd.c
+SRC_PATH = ../src/
+SRC = 	$(SRC_PATH)env.c \
+		$(SRC_PATH)token.c \
+		$(SRC_PATH)token_utils.c \
+		$(SRC_PATH)main_utils.c
+
+#		
+#		$(SRC_PATH)main.c
+#		./src/token.c
+#		./src/lexer/.c \
+#		./src/parser/.c \
 #		./src/executor/.c \
 #		./src/utils/.c \
 
+TESTS_PATH = ./
+TESTS = tests.c
+
 # Objects
-OBJ_PATH = src/build/
+OBJ_PATH = .build/
 OBJ = $(addprefix $(OBJ_PATH), $(notdir $(SRC:.c=.o)))
+TESTS_OBJ = $(addprefix $(OBJ_PATH), $(notdir $(TESTS:.c=.o)))
 # OBJ_PATH_BONUS = ./build_bonus/
 # OBJ_BONUS = $(addprefix $(OBJ_PATH_BONUS), $(notdir $(SRC_BONUS:.c=.o)))
 
@@ -47,18 +48,14 @@ END = \033[0m
 all: $(NAME)
 
 # Target to build the mandatory part
-$(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
+$(NAME): $(TESTS_OBJ) $(OBJ) $(LIBFT) $(FTPRINTF)
 # 	@cp $(LIBFT) $(NAME)
 # 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
-	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline
+	@$(CC) $(CFLAGS) $(OBJ) $(TESTS_OBJ) -o $@ $(LINKING) 
 #	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
 	@echo "$(GREEN)--------------------------------------------------$(END)"
-	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
+	@echo "$(GREEN)[$(CYAN)Tests$(GREEN)] compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
-
-valgrind: all
-	@echo "Running the program with valgrind..."
-	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
 
 run: all
 	@echo "Running the program..."
@@ -71,7 +68,11 @@ $(FTPRINTF):
 	@make -C $(FTPRINTF_PATH)
 
 # Builds mandatory object files
-$(OBJ_PATH)%.o: src/**/%.c
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+	@mkdir -p $(OBJ_PATH)
+	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
+
+$(OBJ_PATH)%.o: $(TESTS_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
 	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
 
@@ -101,4 +102,4 @@ fclean: clean
 re: fclean all
 
 # Phony targets
-.PHONY: all bonus clean fclean re run valgrind
+.PHONY: all bonus clean fclean re run
