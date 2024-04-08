@@ -11,7 +11,7 @@ void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
 		temp = hashtable[i];
 		while (hashtable[i])
 		{
-			printf("%s%s%s	-	type: %s\n", YELLOW, hashtable[i]->content, END,
+			printf("'%s%s%s'	-	type: %s\n", YELLOW, hashtable[i]->content, END,
 				hashtable[i]->type);
 			hashtable[i] = hashtable[i]->next;
 		}
@@ -61,9 +61,7 @@ int	get_token_len(char *input, int i)
 	{
 		while (input[i + len] && input[i + len] != ' '
 			&& input[i + len] != SIMPLE_QUOTE && input[i + len] != DOUBLE_QUOTE)
-		{
 			len++;
-		}
 	}
 	return (len);
 }
@@ -73,7 +71,6 @@ int	handle_input(t_global **data)
 	int		i;
 	int		len;
 
-	add_history((*data)->usr_input);
 	if (((*data)->usr_input && check_exit_input(&(*data)->usr_input, &(*data)->exit))
 		|| !(*data)->usr_input)
 		return (-1);
@@ -88,7 +85,8 @@ int	handle_input(t_global **data)
 			printf("Error: open quote.\n");
 			return (0);
 		}
-		populate_hashtable(data, i, len);
+		if (len > 0)
+			populate_hashtable(data, i, len);
 		i += len;
 	}
 	return (1);
@@ -101,12 +99,12 @@ int	readline_and_handle_input(t_global **data)
 	handle_signals(data);
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
+	add_history((*data)->usr_input);
 	input = handle_input(data);
 	if (input == -1)
 		return (-1);
 	if (input == 1)
 	{
-		//prt_hashtable((*data)->hashtable);
 		input = parse(&(*data)->hashtable, data);
 		if (input == 1)
 			prt_hashtable((*data)->hashtable);

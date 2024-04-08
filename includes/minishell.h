@@ -65,6 +65,7 @@ typedef struct s_global
 	t_tkn			*hashtable[TABLE_SIZE];
 	char			*usr_input;
 	char			*cur_path;
+	int				is_exec;
 	int				prev_process_status;
 	int				exit;
 	struct s_global	*next;

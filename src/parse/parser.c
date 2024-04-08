@@ -98,6 +98,34 @@ void	split_token(t_tkn **node)
 			new_node->next = new_node2;
 			new_node2->next->prev = new_node2;
 		}
+		i++;
+	}
+}
+
+bool	is_empty_str(char *content, char quote)
+{
+	int	i;
+
+	i = 1;
+	while (content[i] && content[i] != quote)
+	{
+		if (content[i] != 32)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+void	join_tokens(t_tkn **node, int len)
+{
+	char	*new_content;
+
+	if ((*node)->next && ft_strcmp((*node)->next->content, PIPE))
+	{
+		if ((*node)->next->content[0] == SIMPLE_QUOTE || (*node)->next->content[0] == DOUBLE_QUOTE)
+			(*node)->next->content++;
+		(*node)->content[len] = '\0';
+		new_content = ft_strjoin((*node)->content, (*node)->next->content);
 	}
 }
 
@@ -107,9 +135,12 @@ void	update_content(t_tkn **node, char *content)
 	int	len;
 	int	i;
 
-	if (ft_strcmp(content, PIPE) && (content[0] == 34 || content[0] == 39))
+	len = ft_strlen(content) - 1;
+	// if (is_empty_str(content, content[0]))
+	// 	join_tokens(node, len);
+	if (ft_strcmp(content, PIPE)
+		&& (content[0] == 34 || content[0] == 39))
 	{
-		len = ft_strlen(content) - 1;
 		new_content = ft_calloc(len, sizeof(char));
 		i = 1;
 		while (i < len)
@@ -117,8 +148,8 @@ void	update_content(t_tkn **node, char *content)
 			new_content[i - 1] = content[i];
 			i++;
 		}
-		free(content);
-		content = new_content;
+		ft_strlcpy(content, new_content, len);
+		free(new_content);
 		if (ft_strcmp((*node)->type, STRING_STD)
 			&& check_there_is_var(content))
 			split_token(node);
