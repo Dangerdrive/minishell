@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 21:09:15 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/02 23:24:08 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:59:40 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,14 @@
 
 // print type functions
 int			ft_print_char(int fd, char c);
-int			ft_print_hex(unsigned int num, const char format, const char flag);
+int			ft_print_hex(int fd, unsigned int num,
+				const char format, const char flag);
 int			ft_print_nbr(int fd, int num, const char flag);
 int			ft_print_ptr(int fd, unsigned long int num);
 int			ft_print_str(int fd, char *str);
-int			ft_print_unsigned(unsigned int num);
+int			ft_print_unsigned(int fd, unsigned int num);
 // ft_print
 int			ft_printf(const char *frmt, ...);
+int			ft_printf_fd(int fd, const char *frmt, ...);
 
 #endif

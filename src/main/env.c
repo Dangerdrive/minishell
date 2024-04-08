@@ -1,132 +1,72 @@
 #include "../includes/minishell.h"
 
-// void	print_our_env(t_global **data)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while ((*data)->env[i])
-// 	{
-// 		printf("%s\n", (*data)->env[i]);
-// 		free((*data)->env[i]);
-// 		i++;
-// 	}
-// 	free((*data)->env[i]);
-// 	free((*data)->env);
-// }
-
-void	free_env(t_global **data)
+char	*ft_getenv(char *name, t_global **data)
 {
-	int	i;
+	int		i;
+	char	*value;
 
-	if (!(*data)->env)
-		return ;
 	i = 0;
 	while ((*data)->env[i])
 	{
-		ft_memdel((*data)->env[i]);
+		if (ft_strncmp((*data)->env[i], name, ft_strlen(name)) == 0)
+		{
+			value = ft_strchr((*data)->env[i], '=') + 1;
+			return (value);
+		}
 		i++;
 	}
-	ft_memdel((*data)->env[i]);
-	ft_memdel((*data)->env);
+	i = 0;
+	while ((*data)->exported[i])
+	{
+		if (ft_strncmp((*data)->env[i], name, ft_strlen(name)) == 0)
+		{
+			value = ft_strchr((*data)->exported[i], '=') + 1;
+			return (value);
+		}
+		i++;
+	}
+	return (NULL);
 }
 
-
-int	ft_env(t_global **data)
+static int	env_print(t_global **data)
 {
-	int	i;
+	int		i;
+	t_bool	exp_ended;
 
+	exp_ended = FALSE;
 	if (!(*data)->env)
 		return (1);
 	i = 0;
 	while ((*data)->env[i])
 	{
 		printf("%s\n", (*data)->env[i]);
-		if ( (*data)->exported && (*data)->exported[i])
+		if (!exp_ended && (*data)->exported && (*data)->exported[i])
+		{
 			if (ft_strchr_i((*data)->exported[i], '=') != -1)
 				printf("%s\n", (*data)->exported[i]);
+			if (!(*data)->exported[i + 1])
+				exp_ended = TRUE;
+		}
 		i++;
 	}
-	while ((*data)->exported && (*data)->exported[i])
+	while (!exp_ended && (*data)->exported && (*data)->exported[i++ - 1])
+		if (ft_strchr_i((*data)->exported[i], '=') != -1)
+			printf("%s\n", (*data)->exported[i]);
+	return (0);
+}
+
+int	ft_env(char **args, int args_len, t_global **data)
+{
+	if (args_len == 1)
+		return (env_print(data));
+	else if (args_len > 1)
 	{
-			if (ft_strchr_i((*data)->exported[i], '=') != -1)
-				printf("%s\n", (*data)->exported[i]);
-		i++;
+		if (access(args[1], F_OK) == 0)
+			ft_printf_fd(2, "env: %s: Permission denied\n", args[1]);
+		else
+			ft_printf_fd(2, "env: %s: No such file or directory\n", args[1]);
+		return (1);
 	}
 	return (0);
 }
 
-
-
-// int				charenv_to_envlist(char **env)
-// {
-// 	t_env	*env;
-// 	t_env	*new;
-// 	int		i;
-
-// 	env = malloc(sizeof(t_env));
-// 	if (!env)
-// 		return (1);
-// 	// env->value = ft_strdup(env[0]);
-// 	// env->next = NULL;
-// 	data->env = env;
-// 	i = 0;
-// 	// while (env && env[0] && env[i])
-// 	while (env && env[i])
-// 	{
-// 		new = malloc(sizeof(t_env));
-// 		if (!new)
-// 			return (1);
-// 		new->value = ft_strdup(env[i]);
-// 		new->next = NULL;
-// 		env->next = new;
-// 		env = new;
-// 		i++;
-// 	}
-// 	ft_env(data->env);//
-// 	return (0);
-// }
-
-
-// t_env   *new_env_node(char *key, char *value)
-// {
-// 	t_env   *node;
-
-// 	node = (t_env *)malloc(sizeof(t_env));
-// 	if (!node)
-// 		return (NULL);
-// 	node->key = strdup(key);
-// 	if (!(node->key))
-// 	{
-// 		free(node);
-// 		return (NULL);
-// 	}
-// 	node->value = strdup(value);
-// 	if (!(node->value))
-// 	{
-// 		free(node->key);
-// 		free(node);
-// 		return (NULL);
-// 	}
-// 	node->next = NULL;
-// 	return (node);
-// }
-
-
-
-
-
-
-
-
-
-
-// int	main(void)
-// {
-// 	static t_global	*data;
-
-// 	data = init_data();
-// 	copy_env(&data);
-// 	free(data);
-// 	free(data->cur_path);
-// }

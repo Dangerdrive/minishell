@@ -27,7 +27,11 @@ SRC = 	./src/main.c \
 		./src/main/env.c \
 		./src/main/export.c \
 		./src/main/unset.c \
-		./src/main/pwd.c
+		./src/main/pwd.c \
+		./src/main/echo.c \
+		./src/main/exit.c \
+		./src/main/exec_builtins.c \
+		./src/main/exec.c
 #		./src/executor/.c \
 #		./src/utils/.c \
 

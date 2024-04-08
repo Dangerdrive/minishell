@@ -38,6 +38,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdbool.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <dirent.h>
 # include <sys/stat.h>
@@ -49,6 +50,12 @@
 //my libs
 # include "../libs/libft/libft.h"
 # include "../libs/ft_printf/ft_printf.h"
+
+typedef enum e_bool
+{
+	FALSE = 0,
+	TRUE = 1
+}	t_bool;
 
 typedef struct s_tkn
 {
@@ -63,11 +70,13 @@ typedef struct s_global
 	char			**env;
 	char			**exported;
 	t_tkn			*hashtable[TABLE_SIZE];
+	char			*usr;
 	char			*usr_input;
 	char			*cur_path;
 	int				is_exec;
 	int				prev_process_status;
-	int				exit;
+	int				ret;
+	t_bool			exit;
 	struct s_global	*next;
 }	t_global;
 
@@ -76,14 +85,21 @@ int			handle_signal(t_global **data);
 void		clean_stuff(t_global **data);
 void		clean_input_and_hashtable(t_global **data);
 
+/*------------BUILTINS-------------*/
+int			exec_builtin(char **args, int args_len, t_global *data);
+t_bool		is_builtin(char *command);
 /*---------------env----------------*/
 int			init_env(t_global **data);
-void		free_env(t_global **data);
-int			ft_export(char **args, t_global *data);
-int			ft_unset(char **args, t_global *data);
-int			ft_env(t_global **data);
-
-/*--------------expand--------------*/
+t_bool		identifier_is_valid(char *str);
+void		replace_or_add(char *arg, t_global *data);
+int			ft_export(char **args, int args_len, t_global *data);
+int			ft_unset(char **args, int args_len, t_global *data);
+char		*ft_getenv(char *name, t_global **data);
+int			ft_env(char **args, int args_len, t_global **data);
+/*--------------echo----------------*/
+int			ft_echo(char **args, int args_len);
+int			ft_pwd(void);
+void		ft_exit(char **args, int args_len, t_global *data);/*--------------expand--------------*/
 int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
 bool		is_special_char(char c);
 bool		is_special_variable(char *var);
@@ -101,9 +117,9 @@ int			check_exit_input(char **input, int *exit);
 
 /*--------------parse--------------*/
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
-bool		is_pipe(char *token);
-bool		is_and_or(char *token);
-bool		is_special_token(char *token);
+t_bool		is_pipe(char *token);
+t_bool		is_and_or(char *token);
+t_bool		is_special_token(char *token);
 
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
@@ -114,5 +130,10 @@ int			validate_identifier(char *str);
 /*--------------lexer--------------*/
 void		handle_signals(t_global **data);
 void		interrupt_handler(int signal);
+
+/*--------------exec---------------*/
+int		prepare_exec(t_global *data);
+
+
 
 #endif
