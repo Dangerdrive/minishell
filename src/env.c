@@ -1,7 +1,5 @@
 #include "../includes/minishell.h"
 
-
-
 char	*ft_getenv(char *name, t_global **data)
 {
 	int		i;

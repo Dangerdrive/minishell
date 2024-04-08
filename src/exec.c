@@ -47,16 +47,18 @@ int	prepare_exec(t_global *data)
 {
 	char	**args;
 	// int		i;
+	int			ret;
 
 	// i = 0;
+	ret = 1;
 	args = hash_to_args(data->hashtable[0]);
 	if (is_builtin(args[0]))
-		return (exec_builtin(args, hashsize(data->hashtable[0]), data));
+		ret =exec_builtin(args, hashsize(data->hashtable[0]), data);
 	// else
 	// 	return (exec(data, args));
 	if (args)
 		ft_strarr_free(args, hashsize(data->hashtable[0]));
-	return (0);
+	return (ret);
 }
 
 // int	exec(t_global *data, char **args)

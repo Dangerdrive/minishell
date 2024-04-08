@@ -72,6 +72,7 @@ typedef struct s_global
 	char			**env;
 	char			**exported;
 	t_tkn			*hashtable[TABLE_SIZE];
+	char			*usr;
 	char			*usr_input;
 	char			*cur_path;
 	int				ret;

@@ -13,7 +13,7 @@ static int	print_cwd(t_global **data)
 	}
 	home = ft_strlen(ft_getenv("HOME", data));
 	if (ft_strncmp(cwd, ft_getenv("HOME", data), home) == 0)
-		ft_printf_fd(1, "~%s$ ", &cwd[home]);
+		ft_printf_fd(1, "%s:~%s$ ", (*data)->usr, &cwd[home]);
 	else
 		ft_printf_fd(1, "%s$ ", cwd);
 	free(cwd);

@@ -83,7 +83,7 @@ void	get_var_value(t_tkn **node, int i, char **env)
 	len = 0;
 	value = NULL;
 	while (((*node)->type[0] == 'v' && (*node)->content[i + len]
-		&& !is_special_char((*node)->content[i + len]))
+			&& !is_special_char((*node)->content[i + len]))
 		|| ((*node)->type[0] == 's' && (*node)->content[i + len]
 			&& !is_special_char((*node)->content[i + len])))
 		len++;
@@ -96,7 +96,7 @@ void	get_var_value(t_tkn **node, int i, char **env)
 			if (value)
 			{
 				update_list(node, i, i + len, &value);
-				printf("var_value = %s\n", (*node)->content);
+				// printf("var_value = %s\n", (*node)->content);
 				break ;
 			}
 		}
