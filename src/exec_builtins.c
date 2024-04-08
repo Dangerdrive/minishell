@@ -33,7 +33,7 @@ int	exec_builtin(char **args, int args_len, t_global *data)
 	if (ft_strcmp(args[0], "env") == 0)
 		result = ft_env(args, args_len, &data);
 	if (ft_strcmp(args[0], "export") == 0)
-		result = ft_export(args, data);
+		result = ft_export(args, args_len, data);
 	if (ft_strcmp(args[0], "unset") == 0)
 		result = ft_unset(args, args_len, data);
 	if (ft_strcmp(args[0], "exit") == 0)

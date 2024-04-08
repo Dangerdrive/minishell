@@ -1,5 +1,35 @@
 #include "../includes/minishell.h"
 
+
+
+char	*ft_getenv(char *name, t_global **data)
+{
+	int		i;
+	char	*value;
+
+	i = 0;
+	while ((*data)->env[i])
+	{
+		if (ft_strncmp((*data)->env[i], name, ft_strlen(name)) == 0)
+		{
+			value = ft_strchr((*data)->env[i], '=') + 1;
+			return (value);
+		}
+		i++;
+	}
+	i = 0;
+	while ((*data)->exported[i])
+	{
+		if (ft_strncmp((*data)->env[i], name, ft_strlen(name)) == 0)
+		{
+			value = ft_strchr((*data)->exported[i], '=') + 1;
+			return (value);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 static int	env_print(t_global **data)
 {
 	int		i;

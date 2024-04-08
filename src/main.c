@@ -1,5 +1,25 @@
 #include "../includes/minishell.h"
 
+static int	print_cwd(t_global **data)
+{
+	char	*cwd;
+	int		home;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		ft_printf_fd(2, "minishell: %s\n", strerror(errno));
+		return (1);
+	}
+	home = ft_strlen(ft_getenv("HOME", data));
+	if (ft_strncmp(cwd, ft_getenv("HOME", data), home) == 0)
+		ft_printf_fd(1, "~%s$ ", &cwd[home]);
+	else
+		ft_printf_fd(1, "%s$ ", cwd);
+	free(cwd);
+	return (0);
+}
+
 int	main(void)
 {
 	static t_global	*data;
@@ -10,31 +30,16 @@ int	main(void)
 	// data->exit = handle_signal();
 	while (!data->exit)
 	{
-		printf("%s ", data->cur_path);
+		// printf("%s$ ", data->cur_path);
+		print_cwd(&data);
 		if (!data->exit && readline_and_handle_input(&data) == -1)
 			break ;
 		clean_input_and_hashtable(&data);
 	}
 	result = data->ret;
-
-	//primeiro e segundo e 4º devem ser adicionados. 
-	//USER deve modificar o valor de USER mas não deve modificar o valor de USER_ZDOTDIR
-	//123test deve ser invalido (começa com numero)
-	//PATH não deve ser alterado, pois não tem igual.
-	//XMODIFIERS deve ser modificado para valor vazio
-	char *args0[] = {"CC=sucker", NULL};
-	ft_export(args0, data);
-	char *args[] = {"test1=2", "test2=3", "USER=fucker" , "test3", "123test", "PATH", "XMODIFIERS=", NULL};
-	ft_export(args, data);
-	
-	char *args2[] = {"TERM", "test2", "123", NULL};
-	ft_unset(args2, ft_strarr_len(args2), data);
-	char *args3[] =	{"test1=exp2", "OLDPWD=qqr coisa", "OUT=", NULL};
-	ft_export(args3, data);
-	// ft_export(NULL, data);
-
-	char *args_env[] = {"env", "src/", NULL};
-	ft_env(args_env, 2, &data);
 	clean_stuff(&data);
 	return (result);
 }
+
+
+

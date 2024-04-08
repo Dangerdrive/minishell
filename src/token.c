@@ -108,8 +108,9 @@ int	readline_and_handle_input(t_global **data)
 		input = parse(&(*data)->hashtable, (*data)->env);
 		if (input == 1)
 		{
-			prt_hashtable((*data)->hashtable);
+			//prt_hashtable((*data)->hashtable);
 			//call exec
+			prepare_exec(*data);
 		}	
 		
 	}

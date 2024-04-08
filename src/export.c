@@ -46,6 +46,8 @@ t_bool	identifier_is_valid(char *str)
 	int		i;
 	char	*key;
 
+	if (str == NULL)
+		return (FALSE);
 	key = str;
 	if (ft_strchr_i(str, '=') != -1)
 		key = ft_strndup(str, ft_strchr_i(str, '='));
@@ -88,14 +90,16 @@ void	replace_or_add(char *arg, t_global *data)
 		free(key);
 }
 
-int	ft_export(char **args, t_global *data)
+int	ft_export(char **args, int args_len, t_global *data)
 {
 	int		i;
 
-	if (args)
+	if (args_len <= 1)
+		export_no_args(data);
+	else if (args_len > 1)
 	{
-		i = 0;
-		while (args[i])
+		i = 1;
+		while (i < args_len)
 		{
 			if (!identifier_is_valid(args[i]))
 				ft_printf_fd(2, "export: `%s': not a valid identifier\n",
@@ -105,10 +109,44 @@ int	ft_export(char **args, t_global *data)
 		i++;
 		}
 	}
-	else
-		export_no_args(data);
 	return (0);
 }
 
 // ~/Documents/Projects/minishell/minishell (develop*) » export ""
 // export: not valid in this context: 
+
+
+
+// //tests for export, unset, env
+// int	main(void)
+// {
+// 	static t_global	*data;
+// 	int				result;
+
+// 	data = init_data();
+// 	data->usr_input = NULL;
+
+// 	result = data->ret;
+
+// 	//primeiro e segundo e 4º devem ser adicionados. 
+// 	//USER deve modificar o valor de USER mas não deve modificar o valor de USER_ZDOTDIR
+// 	//123test deve ser invalido (começa com numero)
+// 	//PATH não deve ser alterado, pois não tem igual.
+// 	//XMODIFIERS deve ser modificado para valor vazio
+// 	char *args0[] = {"CC=sucker", NULL};
+// 	ft_export(args0, data);
+// 	char *args[] = {"test1=2", "test2=3", "USER=fucker" , "test3", "123test", "PATH", "XMODIFIERS=", NULL};
+// 	ft_export(args, data);
+	
+// 	char *args2[] = {"TERM", "test2", "123", NULL};
+// 	ft_unset(args2, ft_strarr_len(args2), data);
+// 	char *args3[] =	{"test1=exp2", "OLDPWD=qqr coisa", "OUT=", NULL};
+// 	ft_export(args3, data);e
+// 	ft_export(NULL, data);
+
+// 	char *args_env[] = {"env", "src/", NULL};
+// 	ft_env(args_env, 2, &data);
+
+// 	clean_stuff(&data);
+// 	return (result);
+// }

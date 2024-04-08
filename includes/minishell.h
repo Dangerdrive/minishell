@@ -91,8 +91,9 @@ t_bool		is_builtin(char *command);
 int			init_env(t_global **data);
 t_bool		identifier_is_valid(char *str);
 void		replace_or_add(char *arg, t_global *data);
-int			ft_export(char **args, t_global *data);
+int			ft_export(char **args, int args_len, t_global *data);
 int			ft_unset(char **args, int args_len, t_global *data);
+char		*ft_getenv(char *name, t_global **data);
 int			ft_env(char **args, int args_len, t_global **data);
 /*--------------echo----------------*/
 int			ft_echo(char **args, int args_len);
@@ -120,5 +121,10 @@ t_bool		is_special_token(char *token);
 
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
+
+/*--------------exec---------------*/
+int		prepare_exec(t_global *data);
+
+
 
 #endif

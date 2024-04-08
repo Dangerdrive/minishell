@@ -5,6 +5,8 @@ int	hashsize(t_tkn *hashtable)
 	int		i;
 	t_tkn	*temp;
 
+	if (!hashtable)
+		return (-1);
 	temp = hashtable;
 	i = 0;
 	while (temp)
@@ -15,23 +17,46 @@ int	hashsize(t_tkn *hashtable)
 	return (i);
 }
 
-char	**hash_to_args(t_global *data)
+char	**hash_to_args(t_tkn *hashtable)
 {
 	char	**args;
 	t_tkn	*temp;
 	int		i;
 	int		args_count;
 
-	args_count = hashsize(data->hashtable[0]);
+	args_count = hashsize(hashtable);
 	args = malloc(sizeof(char *) * (args_count + 1));
 	i = -1;
-	temp = data->hashtable[0];
+	temp = hashtable;
 	while (temp)
 	{
-		args[i++] = ft_strdup(temp->content);
+		args[++i] = ft_strdup(temp->content);
 		temp = temp->next;
 	}
-	args[i] = NULL;
+	args[++i] = NULL;
+	// //debug
+	// while (i >= 0)
+	// {
+	// printf("%i: %s\n", i, args[i]);
+	// 	i--;
+	// }
+	return (args);
+}	
+
+int	prepare_exec(t_global *data)
+{
+	char	**args;
+	// int		i;
+
+	// i = 0;
+	args = hash_to_args(data->hashtable[0]);
+	if (is_builtin(args[0]))
+		return (exec_builtin(args, hashsize(data->hashtable[0]), data));
+	// else
+	// 	return (exec(data, args));
+	if (args)
+		ft_strarr_free(args, hashsize(data->hashtable[0]));
+	return (0);
 }
 
 // int	exec(t_global *data, char **args)
@@ -60,4 +85,4 @@ char	**hash_to_args(t_global *data)
 // 			data->ret = WEXITSTATUS(status);
 // 	}
 // 	return (0);
-}
+// }
