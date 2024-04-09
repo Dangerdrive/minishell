@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-bool	is_special_char(char c)
+t_bool	is_special_char(char c)
 {
 	if ((c >= 32 && c <= 47 && c != 35) || (c >= 58 && c <= 64 && c != 63)
 		|| (c >= 93 && c <= 96 && c != '_') || (c >= 123 && c <= 126))
@@ -10,7 +10,7 @@ bool	is_special_char(char c)
 	return (false);
 }
 
-bool	is_special_variable(char *var)
+t_bool	is_special_variable(char *var)
 {
 	if (!ft_strcmp(var, "$#")  || !ft_strcmp(var, "$!") || !ft_strcmp(var, "$@")
 		|| !ft_strcmp(var, "$$") || !ft_strcmp(var, "$0") || !ft_strcmp(var, "$-")
@@ -21,7 +21,7 @@ bool	is_special_variable(char *var)
 	return (false);
 }
 
-bool	is_var_name(t_tkn **node, int i, int len)
+t_bool	is_var_name(t_tkn **node, int i, int len)
 {
 	if (((*node)->type[0] == 'v' && (*node)->content[i + len]
 		&& !is_special_char((*node)->content[i + len]))

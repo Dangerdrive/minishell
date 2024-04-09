@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 20:15:11 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/01/22 00:10:15 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:51:10 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
  * @param flag The flag character ('#', or other).
  * @return The length of the printed string including the prefix if applicable.
  */
-int	ft_print_hex(unsigned int num, const char format, const char flag)
+int	ft_print_hex(int fd, unsigned int num, const char format, const char flag)
 {
 	char	*str;
 	int		len;
@@ -34,15 +34,15 @@ int	ft_print_hex(unsigned int num, const char format, const char flag)
 	if (flag == '#' && num != 0)
 	{
 		if (format == 'x')
-			len += ft_print_str(FD, "0x");
+			len += ft_print_str(fd, "0x");
 		if (format == 'X')
-			len += ft_print_str(FD, "0X");
+			len += ft_print_str(fd, "0X");
 	}
 	if (format == 'x')
 		str = ft_uitoa_base(num, 16, 'x');
 	if (format == 'X')
 		str = ft_uitoa_base(num, 16, 'X');
-	len += ft_print_str(FD, str);
+	len += ft_print_str(fd, str);
 	free(str);
 	return (len);
 }

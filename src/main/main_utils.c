@@ -10,10 +10,12 @@ t_global	*init_data(void)
 	data->usr_input = NULL;
 	data->env = NULL;
 	data->cur_path = getcwd(NULL, 0);
+	data->ret = 0;
 	data->exit = 0;
 	data->env = ft_strarr_dup(__environ);
 	data->is_exec = 0;
 	data->exported = NULL;
+	data->usr = ft_strdup(ft_getenv("USER", &data));
 	init_hashtable(&data->hashtable);
 	//printf("PATH %s\n", data->cur_path);
 	return (data);
@@ -50,10 +52,13 @@ void	clean_stuff(t_global **data)
 		free((*data)->cur_path);
 		(*data)->cur_path = NULL;
 	}
-	free_env(data);
+	ft_strarr_free((*data)->env, ft_strarr_len((*data)->env));
+	if ((*data)->exported != NULL)
+		ft_strarr_free((*data)->exported, ft_strarr_len((*data)->exported));
 	free_hashtable(&(*data)->hashtable);
 	rl_clear_history();
 	ft_memdel((*data)->usr_input);
+	ft_memdel((*data)->usr);
 	ft_memdel(*data);
 	*data = NULL;
 }

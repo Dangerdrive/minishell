@@ -38,7 +38,7 @@ char	*get_tkn_type(t_tkn *node)
 			return (STRING_STD);
 		else if (is_special_token(node->content))
 			return (SPECIAL_CHAR);
-		else if ((node->content[0] == '$' && validate_identifier(node->content + 1))
+		else if ((node->content[0] == '$' && identifier_is_valid(node->content + 1))
 			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
 		else if (!node->prev || !strcmp(node->prev->content, PIPE))

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_printf_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 20:17:50 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/04/05 16:53:53 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:56:30 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
  *
  * @return The total number of characters printed.
  */
-static int	parse_format_type(va_list args, const char *type)
+static int	parse_format_type(int fd, va_list args, const char *type)
 {
 	int		len;
 	char	flag;
@@ -40,19 +40,19 @@ static int	parse_format_type(va_list args, const char *type)
 		type++;
 	}
 	if (*type == '%')
-		len += ft_print_char(FD, '%');
+		len += ft_print_char(fd, '%');
 	else if (*type == 'c')
-		len += ft_print_char(FD, va_arg(args, int));
+		len += ft_print_char(fd, va_arg(args, int));
 	else if (*type == 's')
-		len += ft_print_str(FD, va_arg(args, char *));
+		len += ft_print_str(fd, va_arg(args, char *));
 	else if (*type == 'd' || *type == 'i')
-		len += ft_print_nbr(FD, va_arg(args, int), flag);
+		len += ft_print_nbr(fd, va_arg(args, int), flag);
 	else if (*type == 'u')
-		len += ft_print_unsigned(FD, va_arg(args, unsigned int));
+		len += ft_print_unsigned(fd, va_arg(args, unsigned int));
 	else if (*type == 'x' || *type == 'X')
-		len += ft_print_hex(FD, va_arg(args, unsigned int), *type, flag);
+		len += ft_print_hex(fd, va_arg(args, unsigned int), *type, flag);
 	else if (*type == 'p')
-		len += ft_print_ptr(FD, va_arg(args, unsigned long));
+		len += ft_print_ptr(fd, va_arg(args, unsigned long));
 	return (len);
 }
 
@@ -61,9 +61,9 @@ static int	parse_format_type(va_list args, const char *type)
  * descriptor.
  *
  * This function works similarly to the standard printf but outputs to the file
- * descriptor specified by the FD macro. It can handle various format specifiers
+ * descriptor specified by the fd . It can handle various format specifiers
  * and flags. This function is useful for directing formatted output to different
- * streams, like standard output or standard error, as defined by the FD macro.
+ * streams, like standard output or standard error, as defined by the fd.
  * It parses the format string and handles each directive accordingly.
  *
  * @param[in] frmt The format string containing text to be printed and format
@@ -71,7 +71,7 @@ static int	parse_format_type(va_list args, const char *type)
  *
  * @return The total number of characters printed or -1 if an error occurs.
  */
-int	ft_printf(const char *frmt, ...)
+int	ft_printf_fd(int fd, const char *frmt, ...)
 {
 	va_list	args;
 	int		len;
@@ -84,13 +84,13 @@ int	ft_printf(const char *frmt, ...)
 	{
 		if (*frmt == '%')
 		{
-			len += parse_format_type(args, frmt + 1);
+			len += parse_format_type(fd, args, frmt + 1);
 			if (*(frmt + 1) == '#' || *(frmt + 1) == ' ' || *(frmt + 1) == '+')
 				frmt++;
 			frmt++;
 		}
 		else
-			len += ft_print_char(FD, *frmt);
+			len += ft_print_char(fd, *frmt);
 		frmt++;
 	}
 	va_end(args);

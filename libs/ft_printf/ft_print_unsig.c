@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 20:16:38 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/01/19 18:01:13 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:50:01 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@
  * @param num The unsigned integer to be printed.
  * @return The length of the printed string.
  */
-int	ft_print_unsigned(unsigned int num)
+int	ft_print_unsigned(int fd, unsigned int num)
 {
 	char	*str;
 	int		len;
 
 	str = ft_uitoa_base(num, 10, 'x');
-	len = ft_print_str(FD, str);
+	len = ft_print_str(fd, str);
 	free(str);
 	return (len);
 }
