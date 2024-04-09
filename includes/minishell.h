@@ -61,6 +61,8 @@ typedef struct s_tkn
 {
 	char			*content;
 	char			*type;
+	int				input;
+	int				output;
 	struct s_tkn	*prev;
 	struct s_tkn	*next;
 }	t_tkn;
