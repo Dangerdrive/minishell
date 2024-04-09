@@ -95,9 +95,12 @@ int	readline_and_handle_input(t_global **data)
 {
 	int	input;
 
+	input = 0;
 	handle_signals(data);
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
+	if (!(*data)->usr_input) // EOF CATCHER (CTRL-D)
+		return (-1);
 	add_history((*data)->usr_input);
 	input = handle_input(data);
 	if (input == -1)
