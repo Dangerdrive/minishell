@@ -99,13 +99,15 @@ int			ft_env(char **args, int args_len, t_global **data);
 /*--------------echo----------------*/
 int			ft_echo(char **args, int args_len);
 int			ft_pwd(void);
-void		ft_exit(char **args, int args_len, t_global *data);/*--------------expand--------------*/
+void		ft_exit(char **args, int args_len, t_global *data);
+
+/*--------------expand--------------*/
 int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
-bool		is_special_char(char c);
-bool		is_special_variable(char *var);
-bool		is_var_name(t_tkn **node, int i, int len);
 void		add_node_before(t_tkn **node, int i);
 t_tkn		*add_node_after(t_tkn **node, int i);
+t_bool		is_var_name(t_tkn **node, int i, int len);
+t_bool		is_special_variable(char *var);
+t_bool		is_special_char(char c);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);
@@ -113,7 +115,7 @@ int			handle_input(t_global **data);
 void		populate_hashtable(t_global **data, int idx, int len);
 void		init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE]);
 t_tkn		*add_node(t_tkn **tkn_node, char **content);
-int			check_exit_input(char **input, int *exit);
+int			check_exit_input(char **input, t_global *data);
 
 /*--------------parse--------------*/
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);

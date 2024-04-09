@@ -14,8 +14,14 @@ FTPRINTF_PATH	= ./libs/ft_printf
 FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
 # push_swap
-SRC = 	./src/main.c \
-		./src/main_utils.c \
+SRC = 	./src/builtins/cd.c \
+		./src/builtins/echo.c \
+		./src/builtins/env.c \
+		./src/builtins/export.c \
+		./src/builtins/exec_builtins.c \
+		./src/builtins/exit.c \
+		./src/builtins/pwd.c \
+		./src/builtins/unset.c \
 		./src/token/token.c \
 		./src/token/token_utils.c \
 		./src/parse/parser.c \
@@ -23,17 +29,10 @@ SRC = 	./src/main.c \
 		./src/expand/expander.c \
 		./src/expand/expander_utils.c \
 		./src/signals/signal_handler.c \
+		./src/main/exec.c \
 		./src/main/lexer.c \
-		./src/main/env.c \
-		./src/main/export.c \
-		./src/main/unset.c \
-		./src/main/pwd.c \
-		./src/main/echo.c \
-		./src/main/exit.c \
-		./src/main/exec_builtins.c \
-		./src/main/exec.c
-#		./src/executor/.c \
-#		./src/utils/.c \
+		./src/main/main.c \
+		./src/main/main_utils.c
 
 # Objects
 OBJ_PATH = src/build/

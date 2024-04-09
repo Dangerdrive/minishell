@@ -11,8 +11,8 @@ void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
 		temp = hashtable[i];
 		while (hashtable[i])
 		{
-			printf("'%s%s%s'	-	type: %s\n", YELLOW, hashtable[i]->content, END,
-				hashtable[i]->type);
+			// printf("'%s%s%s'	-	type: %s\n", YELLOW, hashtable[i]->content, END,
+			// 	hashtable[i]->type);
 			hashtable[i] = hashtable[i]->next;
 		}
 		hashtable[i] = temp;
@@ -71,8 +71,7 @@ int	handle_input(t_global **data)
 	int		i;
 	int		len;
 
-	if (((*data)->usr_input && check_exit_input(&(*data)->usr_input, &(*data)->exit))
-		|| !(*data)->usr_input)
+	if (check_exit_input(&(*data)->usr_input, *data)) // só deve ser chamado se não houver pipe
 		return (-1);
 	i = 0;
 	while ((*data)->usr_input[i])
@@ -106,8 +105,9 @@ int	readline_and_handle_input(t_global **data)
 	if (input == 1)
 	{
 		input = parse(&(*data)->hashtable, data);
-		if (input == 1)
-			prt_hashtable((*data)->hashtable);
+		prepare_exec(*data);
+		// if (input == 1)
+		// 	prt_hashtable((*data)->hashtable);
 	}
 	return (1);
 }

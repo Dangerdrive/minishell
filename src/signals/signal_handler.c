@@ -35,7 +35,7 @@ void	handle_sigint(int signal)
 
 void	handle_signals(t_global **data)
 {
-	printf("%s%s%s ", BLUE, (*data)->cur_path, END);
+	// printf("%s%s%s ", BLUE, (*data)->cur_path, END);
 	if (!(*data)->is_exec)
 	{
 		if (signal(SIGQUIT, SIG_IGN) == SIG_ERR
