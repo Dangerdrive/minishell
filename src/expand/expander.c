@@ -67,11 +67,17 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		return (0);
 	}
 	j = 0;
-	while (!value && (*data)->env[j++])
+	while (!value && (*data)->env[j])
+	{
 		value = fetch_in_array(node, i, len, (*data)->env[j]);
+		j++;
+	}
 	j = 0;
-	while (!value && (*data)->exported[j++])
+	while (!value && (*data)->exported[j])
+	{
 		value = fetch_in_array(node, i, len, (*data)->exported[j]);
+		j++;
+	}
 	if (value)
 		update_list(node, i, i + len, &value);
 	return (1);

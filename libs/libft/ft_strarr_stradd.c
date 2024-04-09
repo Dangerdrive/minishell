@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strarr_stradd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 20:52:11 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/04/01 13:13:57 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:40:26 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,5 @@ void	ft_strarr_stradd(char ***strarr, const char *str)
 	if (!new_arr)
 		return ;
 	ft_strarr_free(*strarr, len);
-	*strarr = new_arr; 
+	*strarr = new_arr;
 }

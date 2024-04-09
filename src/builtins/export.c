@@ -102,7 +102,7 @@ int	ft_export(char **args, int args_len, t_global *data)
 		while (i < args_len)
 		{
 			if (!identifier_is_valid(args[i]))
-				ft_printf_fd(2, "export: `%s': not a valid identifier\n",
+				ft_printf_fd(2, "export: '%s': not a valid identifier\n",
 					args[i]);
 			else if (identifier_is_valid(args[i]))
 				replace_or_add(args[i], data);
@@ -113,7 +113,7 @@ int	ft_export(char **args, int args_len, t_global *data)
 }
 
 // ~/Documents/Projects/minishell/minishell (develop*) » export ""
-// export: not valid in this context: 
+// export: not valid in this context:
 
 
 
@@ -128,7 +128,7 @@ int	ft_export(char **args, int args_len, t_global *data)
 
 // 	result = data->ret;
 
-// 	//primeiro e segundo e 4º devem ser adicionados. 
+// 	//primeiro e segundo e 4º devem ser adicionados.
 // 	//USER deve modificar o valor de USER mas não deve modificar o valor de USER_ZDOTDIR
 // 	//123test deve ser invalido (começa com numero)
 // 	//PATH não deve ser alterado, pois não tem igual.
@@ -137,7 +137,7 @@ int	ft_export(char **args, int args_len, t_global *data)
 // 	ft_export(args0, data);
 // 	char *args[] = {"test1=2", "test2=3", "USER=fucker" , "test3", "123test", "PATH", "XMODIFIERS=", NULL};
 // 	ft_export(args, data);
-	
+
 // 	char *args2[] = {"TERM", "test2", "123", NULL};
 // 	ft_unset(args2, ft_strarr_len(args2), data);
 // 	char *args3[] =	{"test1=exp2", "OLDPWD=qqr coisa", "OUT=", NULL};
