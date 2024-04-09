@@ -37,6 +37,6 @@ int	exec_builtin(char **args, int args_len, t_global *data)
 	if (ft_strcmp(args[0], "unset") == 0)
 		result = ft_unset(args, args_len, data);
 	if (ft_strcmp(args[0], "exit") == 0)
-		ft_exit(args, args_len, data);
+		result = ft_exit(args, args_len, data);
 	return (result);
 }

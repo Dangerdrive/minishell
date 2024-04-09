@@ -27,7 +27,7 @@ static t_bool	argument_is_valid(char *arg)
 	return (TRUE);
 }
 
-void	ft_exit(char **args, int args_len, t_global *data)
+int	ft_exit(char **args, int args_len, t_global *data)
 {
 	if (args_len == 1)
 	{
@@ -52,4 +52,5 @@ void	ft_exit(char **args, int args_len, t_global *data)
 		data->ret = ft_atoi(args[1]);
 		data->exit = TRUE;
 	}
+	return (data->ret);
 }
