@@ -61,6 +61,7 @@ typedef struct s_tkn
 {
 	char			*content;
 	char			*type;
+	char			*here_doc;
 	struct s_tkn	*prev;
 	struct s_tkn	*next;
 }	t_tkn;
@@ -74,6 +75,11 @@ typedef struct s_global
 	char			*usr_input;
 	char			*cur_path;
 	int				is_exec;
+	char			*input;
+	char			*output;
+	int				input_fd;
+	int				output_fd;
+	pid_t			pid;
 	int				prev_process_status;
 	int				ret;
 	t_bool			exit;
