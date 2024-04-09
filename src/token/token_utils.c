@@ -35,6 +35,8 @@ t_tkn	*add_node(t_tkn **tkn_node, char **content)
 	if (!new_node)
 		return (NULL);
 	new_node->content = *content;
+	new_node->input = STDIN_FILENO;
+	new_node->output = STDOUT_FILENO;
 	new_node->next = NULL;
 	if (!(*tkn_node))
 		(*tkn_node) = new_node;
@@ -73,10 +75,10 @@ void	populate_hashtable(t_global **data, int idx, int len)
 // int	check_exit_input(char **input, int *exit)
 int			check_exit_input(char **input, t_global *data)
 {
-	if (ft_strncmp(*input, "exit", 5) == 0)
+	if (*input && ft_strncmp(*input, "exit", 5) == 0)
 	{
 		//*exit = 1;
-		ft_exit(NULL, 1, data); //
+		ft_exit(NULL, 1, data);
 		return (TRUE);
 	}
 	return (FALSE);

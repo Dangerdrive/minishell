@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 20:52:11 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/04/09 12:40:26 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/04/09 15:25:37 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ static char **ft_strarr_dup_extend(char **array, int len, const char *new_str)
 		i++;
 	}
 	new_array[i] = ft_strdup(new_str);
-	new_array[i + 1] = NULL;
+	// new_array[i] = ft_calloc(ft_strlen(new_str), sizeof(char));
+	// ft_strlcpy(new_array[i], new_str, ft_strlen(new_str));
+	new_array[++i] = NULL;
 	return (new_array);
 }
 
