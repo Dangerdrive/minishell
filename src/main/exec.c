@@ -53,7 +53,7 @@ int	prepare_exec(t_global *data)
 	ret = 1;
 	args = hash_to_args(data->hashtable[0]);
 	if (is_builtin(args[0]))
-		ret =exec_builtin(args, hashsize(data->hashtable[0]), data);
+		ret = exec_builtin(args, hashsize(data->hashtable[0]), data);
 	// else
 	// 	return (exec(data, args));
 	if (args)

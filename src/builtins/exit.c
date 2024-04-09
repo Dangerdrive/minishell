@@ -19,12 +19,12 @@ static t_bool	argument_is_valid(char *arg)
 	while (arg[i])
 	{
 		if (arg[i] < '0' || arg[i] > '9')
-			return (0);
+			return (FALSE);
 		i++;
 	}
 	if (i > len_limit)
 		return (0);
-	return (1);
+	return (TRUE);
 }
 
 void	ft_exit(char **args, int args_len, t_global *data)
@@ -32,7 +32,7 @@ void	ft_exit(char **args, int args_len, t_global *data)
 	if (args_len == 1)
 	{
 		ft_printf("exit\n");
-		data->ret = 2;
+		data->ret = 0;
 		data->exit = TRUE;
 	}
 	else if (args_len > 1 && !argument_is_valid(args[1]))

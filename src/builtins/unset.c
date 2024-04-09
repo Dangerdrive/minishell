@@ -106,20 +106,25 @@ static void	remove_variable(char *arg, t_global *data)
 int	ft_unset(char **args, int args_len, t_global *data)
 {
 	int		i;
+	int 	ret;
 
+	ret = 0;
 	i = 1;
 	if (args_len <= 1)
 	{
 		ft_printf("unset: not enough arguments\n");
-		return (1);
+		ret = 1;
 	}
 	while (i < args_len)
 	{
 		if (!unset_identifier_is_valid(args[i]))
+		{
 			ft_printf("unset: `%s': not a valid identifier\n", args[i]);
+			ret = 1;
+		}
 		else if (unset_identifier_is_valid(args[i]))
 			remove_variable(args[i], data);
 		i++;
 	}
-	return (0);
+	return (ret);
 }
