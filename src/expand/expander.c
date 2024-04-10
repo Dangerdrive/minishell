@@ -3,25 +3,16 @@
 /**
  * It updates the token node with the variable value (*exp_value).
  */
-void	update_list(t_tkn **node, int i, int len, char **exp_value)
+void	update_node(t_tkn **node, int i, int len, char **exp_value)
 {
-	t_tkn 	*new_node;
+	int	node_len;
+	int	value_len;
+	char	*new_content;
 
-	new_node = NULL;
-	if (i > 1)
-	{
-		add_node_before(node, i);
-	}
-	if ((*node)->content[len])
-	{
-		new_node = add_node_after(node, len);
-	}
-	free((*node)->content);
-	(*node)->content = *exp_value;
-	if (new_node)
-	{
-		(*node)->next = new_node;
-	}
+	node_len = strlen((*node)->content) - (len - i);
+	value_len = ft_strlen(*exp_value);
+	new_content = ft_calloc((node_len + value_len + 1) * sizeof(char));
+	// TO BE CONTINUED...
 }
 
 /**
@@ -84,7 +75,7 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		return (0);
 	}
 	else
-		update_list(node, i, i + len, &value);
+		update_node(node, i, i + len, &value);
 	return (1);
 }
 
