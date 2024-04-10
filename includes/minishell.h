@@ -110,7 +110,7 @@ void		add_node_before(t_tkn **node, int i);
 t_tkn		*add_node_after(t_tkn **node, int i);
 t_bool		is_var_name(t_tkn **node, int i, int len);
 t_bool		is_special_variable(char *var);
-t_bool		is_special_char(char c);
+t_bool		is_special_var_char(char c);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);

@@ -1,5 +1,19 @@
 #include "../includes/minishell.h"
 
+bool	is_heredoc(char *content)
+{
+	if (strcmp(content, DOUBLE_LESS_THAN) == 0)
+		return (true);
+	return (false);
+}
+
+bool	is_double_special_token(t_tkn *node)
+{
+	if ((!node->next || is_special_token(node->next->content)) && is_special_token(node->content))
+		return (true);
+	return (false);
+}
+
 int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 {
 	int 	i;
@@ -11,9 +25,7 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			if (((*hashtable)[i]->next && is_special_token((*hashtable)[i]->content)
-				&& is_special_token((*hashtable)[i]->next->content))
-				|| ((!(*hashtable)[i]->next || is_special_token((*hashtable)[i]->next->content)) && is_special_token((*hashtable)[i]->content))
+			if ((is_double_special_token((*hashtable)[i]) && !(*hashtable)[i]->delimiter)
 				|| is_and_or((*hashtable)[i]->content))
 			{
 				printf("Syntax error.\n");
@@ -116,7 +128,7 @@ bool	is_empty_str(char *content, char quote)
 	return (true);
 }
 
-void	update_content(t_tkn **node, char *content)
+void	remove_quotes(t_tkn **node, char *content)
 {
 	char *new_content;
 	int	len;
@@ -156,11 +168,6 @@ void	check_pipe(t_tkn **node, int i)
 	}
 }
 
-// void	check_heredoc(t_tkn **node)
-// {
-// 	if (strncmp((*node)->content, DOUBLE_LESS_THAN))
-// }
-
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
@@ -175,8 +182,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		while ((*hashtable)[i])
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
-			//check_heredoc(&(*hashtable)[i]);
-			update_content(hashtable[i], (*hashtable)[i]->content);
+			remove_quotes(hashtable[i], (*hashtable)[i]->content);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
