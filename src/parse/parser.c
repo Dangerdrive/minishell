@@ -156,6 +156,11 @@ void	check_pipe(t_tkn **node, int i)
 	}
 }
 
+// void	check_heredoc(t_tkn **node)
+// {
+// 	if (strncmp((*node)->content, DOUBLE_LESS_THAN))
+// }
+
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
@@ -170,6 +175,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		while ((*hashtable)[i])
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
+			//check_heredoc(&(*hashtable)[i]);
 			update_content(hashtable[i], (*hashtable)[i]->content);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}

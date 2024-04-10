@@ -63,6 +63,7 @@ typedef struct s_tkn
 	char			*type;
 	int				input;
 	int				output;
+	char			*delimiter;
 	struct s_tkn	*prev;
 	struct s_tkn	*next;
 }	t_tkn;
