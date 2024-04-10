@@ -16,7 +16,7 @@ char	*ft_getenv(char *name, t_global **data)
 		i++;
 	}
 	i = 0;
-	while ((*data)->exported[i])
+	while ((*data)->exported && (*data)->exported[i])
 	{
 		if (ft_strncmp((*data)->env[i], name, ft_strlen(name)) == 0)
 		{

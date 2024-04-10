@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static char	**get_env_paths(t_global *data)
+char	**get_env_paths(t_global *data)
 {
 	char	*env_path_str;
 	char	**paths;
@@ -8,7 +8,7 @@ static char	**get_env_paths(t_global *data)
 	char	*tmp;
 
 	i = 0;
-	env_path_str = ft_getenv("PATH", data);
+	env_path_str = ft_getenv("PATH", &data);
 	if (!env_path_str)
 		return (NULL);
 	paths = ft_split(env_path_str, ':');
@@ -27,7 +27,7 @@ static char	**get_env_paths(t_global *data)
 	return (paths);
 }
 
-static char	*get_cmd_path(char*cmd, char**paths)
+char	*get_cmd_path(char*cmd, char**paths)
 {
 	int		i;
 	char	*cmd_path;
@@ -39,7 +39,7 @@ static char	*get_cmd_path(char*cmd, char**paths)
 		cmd_path = ft_strjoin(paths[i], cmd);
 		if (!cmd_path)
 		{
-			free_array(paths);
+			ft_strarr_free(paths, ft_strarr_len(paths));
 			ft_printf_fd(2, "cmd_path error\n");
 			//cleanup_n_exit(ERROR, NULL);
 		}
@@ -69,7 +69,7 @@ char	*get_cmd(char *cmd, t_global *data)
 		ft_strarr_free(env_paths, ft_strarr_len(env_paths));
 		return (NULL);
 	}	
-	free_array(env_paths);
+	ft_strarr_free(env_paths, ft_strarr_len(env_paths));
 	return (cmd_path);
 }
 
