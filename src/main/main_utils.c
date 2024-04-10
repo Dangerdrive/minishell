@@ -36,6 +36,8 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 			//printf("FREE::: %s\n", (*hashtable)[i]->content);
 			if ((*hashtable)[i]->content)
 				free((*hashtable)[i]->content);
+			if ((*hashtable)[i]->delimiter)
+				free((*hashtable)[i]->delimiter);
 			free((*hashtable)[i]);
 			(*hashtable)[i] = temp;
 		}
