@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	replace_or_add_env(char *arg, t_global *data)
+static void	replace_or_add_env(char *arg, t_global *data)
 {
 	char	*key;
 
@@ -19,40 +19,44 @@ void	replace_or_add_env(char *arg, t_global *data)
 		free(key);
 }
 
-static int	update_oldpwd(t_global *data)
+static int	update_pwds(t_global *data, int option)
 {
 	char	cwd[4096];
-	char	*oldpwd;
+	char	*pwd;
 
 	if (getcwd(cwd, 4096) == NULL)
 		return (1);
-	oldpwd = ft_strjoin("OLDPWD=", cwd);
-	if (!oldpwd)
+	if (option == 1)
+		pwd = ft_strjoin("OLDPWD=", cwd);
+	else
+		pwd = ft_strjoin("PWD=", cwd);
+	if (!pwd)
 		return (1);
-	replace_or_add_env(oldpwd, data);
-	ft_memdel(oldpwd);
+	replace_or_add_env(pwd, data);
+	ft_memdel(pwd);
 	return (0);
 }
 
-// update oldpwd acontece antes do ft_getenv
 static int	go_oldpwd(t_global *data)
 {
 	int		result;
 	char	*path;
+	char	*old_path;
+	char	*cwd;
 
+	cwd = getcwd(NULL, 0);
+	old_path = ft_strjoin("OLDPWD=", cwd);
 	path = NULL;
-	ft_printf("OLDPWD: %s\n", ft_getenv("OLDPWD", &data));
 	path = ft_getenv("OLDPWD", &data);
 	if (!path)
 	{
 		ft_printf_fd(STDERR_FILENO, "minishell : cd: OLDPWD not set\n");
 		return (0);
 	}
-	ft_printf("OLDPWD after: %s\n", ft_getenv("OLDPWD", &data));
-	ft_printf("path: %s\n", path);
 	result = chdir(path);
-	update_oldpwd(data);
-	//ft_memdel(path);
+	replace_or_add_env(old_path, data);
+	ft_memdel(old_path);
+	ft_memdel(cwd);
 	return (result);
 }
 
@@ -62,14 +66,13 @@ static int	go_home(t_global *data)
 	char	*path;
 
 	path = NULL;
-	update_oldpwd(data);
+	update_pwds(data, 1);
 	path = ft_getenv("HOME", &data);
 	if (!path)
 		ft_printf_fd(STDERR_FILENO, "minishell: cd: HOME not set\n");
 	if (!path)
 		return (0);
 	result = chdir(path);
-	//ft_memdel(path);
 	return (result);
 }
 
@@ -85,19 +88,18 @@ int	ft_cd(char **args, int args_len, t_global *data)
 	else if (args_len == 1)
 		result = go_home(data);
 	else if (ft_strcmp(args[1], "-") == 0)
-	{
-		//problema na atualização do OLDPWD
 		result = go_oldpwd(data);
-	}
 	else
 	{
-		update_oldpwd(data);
+		update_pwds(data, 1);
 		result = chdir(args[1]);
 		if (result < 0)
 			result *= -1;
 		if (result != 0)
 			ft_printf_fd(2, "minishell: cd: %s: %s\n", args[1], strerror(errno));
 	}
+	update_pwds(data, 0);
 	return (result);
 }
-//cd "" doesnt change to home
+
+	//printf("\t%s\n", data->env[ft_strarr_str(data->env, "OLDPWD")]);
