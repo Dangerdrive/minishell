@@ -79,6 +79,7 @@ typedef struct s_global
 	char			*output;
 	int				input_fd;
 	int				output_fd;
+	int				pipe[2];
 	pid_t			pid;
 	int				prev_process_status;
 	int				ret;

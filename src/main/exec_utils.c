@@ -12,7 +12,6 @@ char	**get_env_paths(t_global *data)
 	if (!env_path_str)
 		return (NULL);
 	paths = ft_split(env_path_str, ':');
-	free(env_path_str);
 	if (!paths)
 		return (NULL);
 	while (paths[i])
@@ -41,7 +40,7 @@ char	*get_cmd_path(char*cmd, char**paths)
 		{
 			ft_strarr_free(paths, ft_strarr_len(paths));
 			ft_printf_fd(2, "cmd_path error\n");
-			//cleanup_n_exit(ERROR, NULL);
+			return (NULL);
 		}
 		if (access(cmd_path, F_OK | X_OK) == 0)
 			return (cmd_path);
@@ -65,10 +64,10 @@ char	*get_cmd(char *cmd, t_global *data)
 	cmd_path = get_cmd_path(cmd, env_paths);
 	if (!cmd_path)
 	{
-		ft_printf_fd(2, "%s: command not founds\n", cmd);
+		ft_printf_fd(2, "%s: command not found\n", cmd);
 		ft_strarr_free(env_paths, ft_strarr_len(env_paths));
 		return (NULL);
-	}	
+	}
 	ft_strarr_free(env_paths, ft_strarr_len(env_paths));
 	return (cmd_path);
 }
