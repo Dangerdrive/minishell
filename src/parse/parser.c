@@ -40,6 +40,20 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 	return (1);
 }
 
+bool	is_export_var(char *content)
+{
+	int	i;
+
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] == '=' && !content[i + 1])
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 char	*get_tkn_type(t_tkn *node)
 {
 	if (!node->type)
@@ -53,6 +67,8 @@ char	*get_tkn_type(t_tkn *node)
 		else if ((node->content[0] == '$' && identifier_is_valid(node->content + 1))
 			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
+		else if (is_export_var(node->content))
+			return (EXPT_VARIABLE);
 		else if (!node->prev)
 			return (COMMAND);
 		else
@@ -168,6 +184,26 @@ void	check_pipe(t_tkn **node, int i)
 	}
 }
 
+void	check_export(t_tkn **node)
+{
+	char 	*new_content;
+	t_tkn	*temp;
+
+	if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0)
+	{
+		new_content = ft_strjoin((*node)->prev->content, (*node)->content);
+		free((*node)->content);
+		(*node)->content = ft_strdup(new_content);
+		temp = (*node)->prev->prev;
+		if (temp)
+			temp->next = *node;
+		free(new_content);
+		free((*node)->prev->content);
+		free((*node)->prev);
+		(*node)->prev = temp;
+	}
+}
+
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
@@ -183,6 +219,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
 			remove_quotes(hashtable[i], (*hashtable)[i]->content);
+			check_export(hashtable[i]);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;

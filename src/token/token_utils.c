@@ -62,11 +62,14 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	i = 0;
 	if (ft_strncmp(token, PIPE, 1) == 0)
 	{
+		(*data)->is_echo = false;
 		while ((*data)->hashtable[i])
 			i++;
 	}
 	else
 	{
+		if ((*data)->hashtable[i] && strcmp((*data)->hashtable[i]->content, "echo") == 0)
+			(*data)->is_echo = true;
 		while ((*data)->hashtable[i + 1] != NULL)
 			i++;
 	}

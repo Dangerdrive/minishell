@@ -3,16 +3,35 @@
 /**
  * It updates the token node with the variable value (*exp_value).
  */
-void	update_node(t_tkn **node, int i, int len, char **exp_value)
+void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
 {
-	int	node_len;
-	int	value_len;
 	char	*new_content;
+	int		token_len;
+	int		value_len;
+	int		i;
 
-	node_len = strlen((*node)->content) - (len - i);
 	value_len = ft_strlen(*exp_value);
-	new_content = ft_calloc((node_len + value_len + 1) * sizeof(char));
-	// TO BE CONTINUED...
+	token_len = ft_strlen((*node)->content) - var_len;
+	new_content = ft_calloc((token_len + value_len + 1), sizeof(char));
+	if (!new_content)
+		return ;
+	i = 0;
+	while ((*node)->content[i] != '$')
+	{
+		new_content[i] = (*node)->content[i];
+		i++;
+	}
+	ft_strlcpy(new_content + i, *exp_value, value_len + 1);
+	while ((*node)->content[len])
+	{
+		new_content[i + value_len] = (*node)->content[len];
+		i++;
+		len++;
+	}
+	free((*node)->content);
+	free(*exp_value);
+	(*node)->content = ft_strdup(new_content);
+	free(new_content);
 }
 
 /**
@@ -75,7 +94,7 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		return (0);
 	}
 	else
-		update_node(node, i, i + len, &value);
+		update_node(node, i + len, len, &value);
 	return (1);
 }
 

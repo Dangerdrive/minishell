@@ -66,8 +66,11 @@ int	get_token_len(char *input, int i)
 		len = check_quotes(input, i);
 	else
 	{
-		while (input[i + len] && input[i + len] != ' ' && !is_special_char(input[i + len])
-			&& input[i + len] != SIMPLE_QUOTE && input[i + len] != DOUBLE_QUOTE)
+		if (input[i + len] == '$')
+			len++;
+		while (input[i + len] && input[i + len] != ' ' && input[i + len] != '$'
+		&& !is_special_char(input[i + len]) && input[i + len] != SIMPLE_QUOTE
+		&& input[i + len] != DOUBLE_QUOTE)
 			len++;
 	}
 	return (len);
