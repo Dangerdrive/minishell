@@ -1,12 +1,5 @@
 #include "../includes/minishell.h"
 
-bool	is_heredoc(char *content)
-{
-	if (strcmp(content, DOUBLE_LESS_THAN) == 0)
-		return (true);
-	return (false);
-}
-
 bool	is_double_special_token(t_tkn *node)
 {
 	if ((!node->next || is_special_token(node->next->content)) && is_special_token(node->content))
@@ -164,52 +157,6 @@ void	check_export(t_tkn **node)
 	}
 }
 
-void	update_redir_files_list(char **redir_list, char *new_file)
-{
-	int	i;
-
-	i = 0;
-	if (redir_list[0])
-	{
-		while (redir_list[i])
-		i++;
-	}
-	redir_list[i] = ft_strdup(new_file);
-}
-
-t_bool	is_redirect(char *c)
-{
-	if (ft_strcmp(c, GREATER_THAN))
-		return (true);
-	return (false);
-}
-
-void	check_redirects(t_tkn **node)
-{
-	t_tkn	*temp_node;
-	t_tkn	*temp_tkn;
-
-	if (is_redirect((*node)->prev->content))
-	{
-		temp_node = (*node)->prev;
-		while (*node)
-		{
-			if (is_redirect((*node)->prev->content))
-			{
-				update_redir_files_list((*node)->prev->args, (*node)->content);
-				free((*node)->content);
-				temp_tkn = (*node)->prev;
-				temp_tkn->next = (*node)->next;
-				(*node)->next->prev = temp_tkn;
-				free(*node);
-				(*node) = temp_tkn;
-			}
-			*node = (*node)->next;
-		}
-		*node = temp_node;
-	}
-}
-
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
@@ -226,7 +173,6 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
 			remove_quotes(hashtable[i], (*hashtable)[i]->content);
 			check_export(hashtable[i]);
-			check_redirects(hashtable[i]);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;

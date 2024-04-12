@@ -64,7 +64,7 @@ typedef struct s_tkn
 	char			*input;
 	char			*output;
 	char			*delimiter;
-	char			*args[TABLE_SIZE];
+	char			*redir[TABLE_SIZE];
 	struct s_tkn	*prev;
 	struct s_tkn	*next;
 }	t_tkn;
@@ -101,6 +101,7 @@ int			ft_export(char **args, int args_len, t_global *data);
 int			ft_unset(char **args, int args_len, t_global *data);
 char		*ft_getenv(char *name, t_global **data);
 int			ft_env(char **args, int args_len, t_global **data);
+
 /*--------------echo----------------*/
 int			ft_echo(char **args, int args_len);
 int			ft_pwd(void);
@@ -130,6 +131,8 @@ t_bool		is_special_token(char *token);
 
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
+void		init_redir_args(char *(*args)[TABLE_SIZE]);
+t_bool		is_heredoc(char *content);
 
 /*--------------export-------------*/
 int			validate_identifier(char *str);

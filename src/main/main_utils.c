@@ -22,6 +22,21 @@ t_global	*init_data(void)
 	return (data);
 }
 
+void	free_redir_args(char *(*args)[TABLE_SIZE])
+{
+	int		i;
+
+	i = 0;
+	if ((*args)[i])
+	{
+		while ((*args)[i] != NULL)
+		{
+			free((*args)[i]);
+			i++;
+		}
+	}
+}
+
 void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 {
 	int		i;
@@ -39,6 +54,7 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 				free((*hashtable)[i]->content);
 			if ((*hashtable)[i]->delimiter)
 				free((*hashtable)[i]->delimiter);
+			free_redir_args(&(*hashtable)[i]->redir);
 			free((*hashtable)[i]);
 			(*hashtable)[i] = temp;
 		}
