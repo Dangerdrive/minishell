@@ -91,45 +91,6 @@ bool	check_there_is_var(char *content)
 	return (false);
 }
 
-void	split_token(t_tkn **node)
-{
-	t_tkn	*new_node;
-	t_tkn	*new_node2;
-	char	*temp;
-	int		i;
-	int		len;
-
-	temp = (*node)->content;
-	i = 0;
-	while (temp[i])
-	{
-		if (i > 0 && temp[i] == 39)
-		{
-			i++;
-			len = 0;
-			while (temp[i + len] != 39)
-				len++;
-			new_node = ft_calloc(1, sizeof(t_tkn));
-			new_node->content = ft_strndup((*node)->content + i, len);
-			new_node->type = STRING_STRONG;
-			new_node->next = (*node)->next;
-			new_node->prev = (*node);
-			if ((*node)->next)
-				(*node)->next->prev = new_node;
-			(*node)->next = new_node;
-			free((*node)->content);
-			(*node)->content = ft_strndup(temp, i - 1);
-			new_node2 = ft_calloc(1, sizeof(t_tkn));
-			new_node2->content = ft_strdup(temp + len);
-			new_node2->next = new_node->next;
-			new_node2->prev = new_node;
-			new_node->next = new_node2;
-			new_node2->next->prev = new_node2;
-		}
-		i++;
-	}
-}
-
 bool	is_empty_str(char *content, char quote)
 {
 	int	i;
@@ -150,6 +111,7 @@ void	remove_quotes(t_tkn **node, char *content)
 	int	len;
 	int	i;
 
+	(void)node;
 	len = ft_strlen(content) - 1;
 	if (ft_strcmp(content, PIPE)
 		&& (content[0] == 34 || content[0] == 39))
@@ -163,9 +125,6 @@ void	remove_quotes(t_tkn **node, char *content)
 		}
 		ft_strlcpy(content, new_content, len);
 		free(new_content);
-		if (ft_strcmp((*node)->type, STRING_STD)
-			&& check_there_is_var(content))
-			split_token(node);
 	}
 }
 
@@ -205,6 +164,52 @@ void	check_export(t_tkn **node)
 	}
 }
 
+void	update_redir_files_list(char **redir_list, char *new_file)
+{
+	int	i;
+
+	i = 0;
+	if (redir_list[0])
+	{
+		while (redir_list[i])
+		i++;
+	}
+	redir_list[i] = ft_strdup(new_file);
+}
+
+t_bool	is_redirect(char *c)
+{
+	if (ft_strcmp(c, GREATER_THAN))
+		return (true);
+	return (false);
+}
+
+void	check_redirects(t_tkn **node)
+{
+	t_tkn	*temp_node;
+	t_tkn	*temp_tkn;
+
+	if (is_redirect((*node)->prev->content))
+	{
+		temp_node = (*node)->prev;
+		while (*node)
+		{
+			if (is_redirect((*node)->prev->content))
+			{
+				update_redir_files_list((*node)->prev->args, (*node)->content);
+				free((*node)->content);
+				temp_tkn = (*node)->prev;
+				temp_tkn->next = (*node)->next;
+				(*node)->next->prev = temp_tkn;
+				free(*node);
+				(*node) = temp_tkn;
+			}
+			*node = (*node)->next;
+		}
+		*node = temp_node;
+	}
+}
+
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
@@ -221,6 +226,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
 			remove_quotes(hashtable[i], (*hashtable)[i]->content);
 			check_export(hashtable[i]);
+			check_redirects(hashtable[i]);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;

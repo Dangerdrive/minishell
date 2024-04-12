@@ -35,9 +35,10 @@ t_tkn	*add_node(t_tkn **tkn_node, char **content)
 	if (!new_node)
 		return (NULL);
 	new_node->content = *content;
-	new_node->input = STDIN_FILENO;
-	new_node->output = STDOUT_FILENO;
+	new_node->input = NULL;
+	new_node->output = NULL;
 	new_node->delimiter = NULL;
+	new_node->arg = NULL;
 	new_node->next = NULL;
 	if (!(*tkn_node))
 		(*tkn_node) = new_node;

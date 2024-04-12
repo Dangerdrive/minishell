@@ -61,9 +61,10 @@ typedef struct s_tkn
 {
 	char			*content;
 	char			*type;
-	int				input;
-	int				output;
+	char			*input;
+	char			*output;
 	char			*delimiter;
+	char			*args[TABLE_SIZE];
 	struct s_tkn	*prev;
 	struct s_tkn	*next;
 }	t_tkn;
