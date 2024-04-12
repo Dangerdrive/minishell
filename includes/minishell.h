@@ -13,7 +13,6 @@
 # define DOUBLE_GREATER_THAN ">>"
 # define COMMAND "command"
 # define ARGUMENT "argument"
-# define FILE_TXT "file"
 # define VARIABLE "variable"
 # define EXPT_VARIABLE "export variable"
 # define SPECIAL_CHAR "special char"

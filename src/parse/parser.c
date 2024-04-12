@@ -189,7 +189,8 @@ void	check_export(t_tkn **node)
 	char 	*new_content;
 	t_tkn	*temp;
 
-	if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0)
+	if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0
+		&& ft_strcmp((*node)->type, SPECIAL_CHAR)) // CHECAR NECESSIDADE DESSA VERIFICAÇÃO
 	{
 		new_content = ft_strjoin((*node)->prev->content, (*node)->content);
 		free((*node)->content);
