@@ -11,10 +11,10 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			if (((*hashtable)[i] && (*hashtable)[i]->next
-				&& is_special_token((*hashtable)[i]->content)
+			if (((*hashtable)[i]->next && is_special_token((*hashtable)[i]->content)
 				&& is_special_token((*hashtable)[i]->next->content))
-				|| (is_and_or((*hashtable)[i]->content)))
+				|| ((!(*hashtable)[i]->next || is_special_token((*hashtable)[i]->next->content)) && is_special_token((*hashtable)[i]->content))
+				|| is_and_or((*hashtable)[i]->content))
 			{
 				printf("Syntax error.\n");
 				(*hashtable)[i] = temp;
@@ -41,7 +41,7 @@ char	*get_tkn_type(t_tkn *node)
 		else if ((node->content[0] == '$' && identifier_is_valid(node->content + 1))
 			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
-		else if (!node->prev || !strcmp(node->prev->content, PIPE))
+		else if (!node->prev)
 			return (COMMAND);
 		else
 			return (ARGUMENT);
@@ -116,19 +116,6 @@ bool	is_empty_str(char *content, char quote)
 	return (true);
 }
 
-void	join_tokens(t_tkn **node, int len)
-{
-	char	*new_content;
-
-	if ((*node)->next && ft_strcmp((*node)->next->content, PIPE))
-	{
-		if ((*node)->next->content[0] == SIMPLE_QUOTE || (*node)->next->content[0] == DOUBLE_QUOTE)
-			(*node)->next->content++;
-		(*node)->content[len] = '\0';
-		new_content = ft_strjoin((*node)->content, (*node)->next->content);
-	}
-}
-
 void	update_content(t_tkn **node, char *content)
 {
 	char *new_content;
@@ -136,8 +123,6 @@ void	update_content(t_tkn **node, char *content)
 	int	i;
 
 	len = ft_strlen(content) - 1;
-	// if (is_empty_str(content, content[0]))
-	// 	join_tokens(node, len);
 	if (ft_strcmp(content, PIPE)
 		&& (content[0] == 34 || content[0] == 39))
 	{
@@ -156,6 +141,26 @@ void	update_content(t_tkn **node, char *content)
 	}
 }
 
+void	check_pipe(t_tkn **node, int i)
+{
+	t_tkn	*temp;
+
+	if (i > 0 && is_pipe((*node)->content))
+	{
+		temp = (*node)->next;
+		free((*node)->content);
+		free(*node);
+		*node = temp;
+		if (*node)
+			(*node)->prev = NULL;
+	}
+}
+
+// void	check_heredoc(t_tkn **node)
+// {
+// 	if (strncmp((*node)->content, DOUBLE_LESS_THAN))
+// }
+
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
@@ -165,10 +170,12 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 	i = 0;
 	while ((*hashtable)[i])
 	{
+		check_pipe(&(*hashtable)[i], i);
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
+			//check_heredoc(&(*hashtable)[i]);
 			update_content(hashtable[i], (*hashtable)[i]->content);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}

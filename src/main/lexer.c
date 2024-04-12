@@ -9,6 +9,11 @@ bool	input_starts_with_command(t_tkn	*node, int i)
 	return (true);
 }
 
+// bool	ends_with_redirect(t_tkn *node, int i)
+// {
+
+// }
+
 int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 {
 	int i;

@@ -78,7 +78,12 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		value = fetch_in_array(node, i, len, (*data)->exported[j]);
 		j++;
 	}
-	if (value)
+	if (!value)
+	{
+		printf("\n");
+		return (0);
+	}
+	else
 		update_list(node, i, i + len, &value);
 	return (1);
 }
