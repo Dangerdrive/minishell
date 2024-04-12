@@ -13,7 +13,8 @@
 //  *                     descriptors for input, output, and pipes.
 //  */
 // void	close_fds(t_global *data)
-// {
+//
+//{
 // 	int i;
 
 // 	if (data->input_fd != -1)
@@ -42,7 +43,8 @@
 //  *                     count and the array to store pipe file descriptors.
 //  */
 // static int	create_pipes(t_global *data)
-// {
+//
+//{
 // 	int	i;
 
 // 	i = 0;
@@ -76,6 +78,7 @@
 //  * @return An initialized t_data structure.
 //  */
 // t_data	init_data(int ac, char **av, char **envp)
+//
 // {
 // 	t_data	data;
 
@@ -120,7 +123,8 @@
 //  *                     other purposes.
 //  */
 // static void	redirect_io(int input, int output, t_data *data)
-// {
+//
+//{
 // 	if (input < 0 || output < 0)
 // 		cleanup_n_exit(ERROR, data);
 // 	if (dup2(input, STDIN_FILENO) == -1)
@@ -151,7 +155,8 @@
 //  *                     descriptors, command options, and environment variables.
 //  */
 // static void	execute_child_process(t_data *data)
-// {
+//
+//{
 // 	if (data->child == 0)
 // 		redirect_io(data->input_fd, data->pipe[1], data);
 // 	else if (data->child == data->cmd_count - 1)
@@ -187,7 +192,8 @@
 //  *         exit status is captured, the function defaults to returning 1.
 //  */
 // static int	execute_parent_process(t_data *data)
-// {
+//
+//{
 // 	pid_t	wpid;
 // 	int		status;
 // 	int		exit_code;
@@ -227,7 +233,8 @@
 //  * @return The exit code of the last child process in the pipeline.
 //  */
 // static int	pipex(t_global *d)
-// {
+//
+//{
 // 	int		exit_code;
 // 	char	*command;
 
@@ -269,7 +276,8 @@ int	pipecount(t_global *data)
 }
 
 // int	exec(t_global *data)
-// {
+//
+//{
 // 	char	**args;
 // 	char	*command;
 // 	int		status;
@@ -306,83 +314,99 @@ int	pipecount(t_global *data)
 
 void exec_command(t_global *data, int idx)
 {
-	// Placeholder for your command execution logic
 	char	**args;
 	char	*cmd;
 
 	args = hash_to_args(data->hashtable[idx]);
-	
 	if (is_builtin(args[0]))
 		exec_builtin(args, hashsize(data->hashtable[idx]), data);
 	else
 	{
 		cmd = get_cmd(args[0], data);
-		execve(cmd, args, data->env);  // Simplified
-		perror("execve");  // Only reached if execve fails
+		execve(cmd, args, data->env); 
+		perror("minishell: execve"); 
 	}
 	ft_strarr_free(args, ft_strarr_len(args));
 	exit(EXIT_FAILURE);
 }
 
-int	exec(t_global *data)
+void create_pipes(int pipes[][2], int n)
 {
-	int n = pipecount(data);
-	int pipes[n][2];
-	int i = 0;
-
-	// Create pipes using a while loop
-	while (i < n)
+    int i = 0;
+    while (i < n)
 	{
-		if (pipe(pipes[i]) == -1)
+        if (pipe(pipes[i]) == -1)
 		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
-		}
-		i++;
-	}
+            perror("minishell: pipe");
+            exit(EXIT_FAILURE);
+        }
+        i++;
+    }
+}
 
-	i = 0;  // Reset the index for child process creation
-	// Create child processes using a while loop
-	while (i <= n)
+void close_pipes(int pipes[][2], int n)
+{
+    int i = 0;
+    while (i < n)
 	{
-		data->pid = fork();
-		if (data->pid == -1)
+        close(pipes[i][0]);
+        close(pipes[i][1]);
+        i++;
+    }
+}
+
+void setup_dup2(int pipes[][2], int i, int n)
+{
+    if (i > 0)
+	{
+        dup2(pipes[i-1][0], STDIN_FILENO);
+    }
+    if (i < n)
+	{
+        dup2(pipes[i][1], STDOUT_FILENO);
+    }
+}
+
+void handle_child_process(t_global *data, int pipes[][2], int i, int n)
+{
+    setup_dup2(pipes, i, n);
+    close_pipes(pipes, n);
+    exec_command(data, i);
+}
+
+void fork_processes(t_global *data, int pipes[][2], int n)
+{
+    int i = 0;
+    while (i <= n)
+	{
+        data->pid = fork();
+        if (data->pid == -1)
 		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		} else if (data->pid == 0)
-		{ // Child process
-			if (i > 0)
-			{ // Not the first command
-				dup2(pipes[i-1][0], STDIN_FILENO);
-			}
-			if (i < n)
-			{ // Not the last command
-				dup2(pipes[i][1], STDOUT_FILENO);
-			}
-			// Close all pipe fds
-			int j = 0;
-			while (j < n)
-			{
-				close(pipes[j][0]);
-				close(pipes[j][1]);
-				j++;
-			}
-			exec_command(data, i);
-		}
-		i++;
-	}
-	// Parent closes all pipes using a while loop
-	i = 0;  // Reset the index for closing pipes
-	while (i < n)
-	{
-		close(pipes[i][0]);
-		close(pipes[i][1]);
-		i++;
-	}
-	// Parent waits for all child processes using a while loop
-	while (wait(NULL) > 0);
-	return 0;
+            perror("minishell: fork");
+            exit(EXIT_FAILURE);
+        } else if (data->pid == 0)
+		{
+            handle_child_process(data, pipes, i, n);
+        }
+        i++;
+    }
+}
+
+void wait_for_children()
+{
+    while (wait(NULL) > 0);
+}
+
+int exec(t_global *data)
+{
+    int n = pipecount(data);
+    int pipes[n][2];
+
+    create_pipes(pipes, n);
+    fork_processes(data, pipes, n);
+    close_pipes(pipes, n); // Close in parent after forking
+    wait_for_children();
+    return 0;
 }
 
 int	prepare_exec(t_global *data)
@@ -397,9 +421,8 @@ int	prepare_exec(t_global *data)
 	ret = 1;
 	if (pipecount(data) == 0 && is_builtin(args[0]))
 		exec_builtin(args, hashsize(data->hashtable[0]), data);
-	if (pipecount(data) > -1)
+	else if (pipecount(data) > -1)
 		exec(data);
-	
 	ft_strarr_free(args, ft_strarr_len(args));
 	// else
 	// 	return (exec(data, args));
@@ -408,7 +431,8 @@ int	prepare_exec(t_global *data)
 }
 
 // // int	exec(t_global *data, char **args)
-// // {
+// //
+//{//
 // // 	pid_t	pid;
 // // 	int		status;
 
