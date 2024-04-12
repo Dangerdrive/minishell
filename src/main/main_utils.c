@@ -16,6 +16,7 @@ t_global	*init_data(void)
 	data->is_exec = 0;
 	data->exported = NULL;
 	data->usr = ft_strdup(ft_getenv("USER", &data));
+	data->is_echo = false;
 	init_hashtable(&data->hashtable);
 	//printf("PATH %s\n", data->cur_path);
 	return (data);
@@ -59,7 +60,7 @@ void	clean_stuff(t_global **data)
 		ft_strarr_free((*data)->exported, ft_strarr_len((*data)->exported));
 	free_hashtable(&(*data)->hashtable);
 	rl_clear_history();
-	ft_memdel((*data)->usr_input);
+	//ft_memdel((*data)->usr_input);
 	ft_memdel((*data)->usr);
 	ft_memdel(*data);
 	*data = NULL;

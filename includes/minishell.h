@@ -13,8 +13,8 @@
 # define DOUBLE_GREATER_THAN ">>"
 # define COMMAND "command"
 # define ARGUMENT "argument"
-# define FILE_TXT "file"
 # define VARIABLE "variable"
+# define EXPT_VARIABLE "export variable"
 # define SPECIAL_CHAR "special char"
 # define STRING_STRONG "string strong"
 # define STRING_STD "string standard"
@@ -79,6 +79,7 @@ typedef struct s_global
 	int				is_exec;
 	int				prev_process_status;
 	int				ret;
+	t_bool			is_echo;
 	t_bool			exit;
 	struct s_global	*next;
 }	t_global;

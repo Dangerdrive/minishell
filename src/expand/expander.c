@@ -3,25 +3,35 @@
 /**
  * It updates the token node with the variable value (*exp_value).
  */
-void	update_list(t_tkn **node, int i, int len, char **exp_value)
+void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
 {
-	t_tkn 	*new_node;
+	char	*new_content;
+	int		token_len;
+	int		value_len;
+	int		i;
 
-	new_node = NULL;
-	if (i > 1)
+	value_len = ft_strlen(*exp_value);
+	token_len = ft_strlen((*node)->content) - var_len;
+	new_content = ft_calloc((token_len + value_len + 1), sizeof(char));
+	if (!new_content)
+		return ;
+	i = 0;
+	while ((*node)->content[i] != '$')
 	{
-		add_node_before(node, i);
+		new_content[i] = (*node)->content[i];
+		i++;
 	}
-	if ((*node)->content[len])
+	ft_strlcpy(new_content + i, *exp_value, value_len + 1);
+	while ((*node)->content[len])
 	{
-		new_node = add_node_after(node, len);
+		new_content[i + value_len] = (*node)->content[len];
+		i++;
+		len++;
 	}
 	free((*node)->content);
-	(*node)->content = *exp_value;
-	if (new_node)
-	{
-		(*node)->next = new_node;
-	}
+	free(*exp_value);
+	(*node)->content = ft_strdup(new_content);
+	free(new_content);
 }
 
 /**
@@ -84,7 +94,7 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		return (0);
 	}
 	else
-		update_list(node, i, i + len, &value);
+		update_node(node, i + len, len, &value);
 	return (1);
 }
 

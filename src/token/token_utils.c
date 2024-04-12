@@ -53,6 +53,14 @@ t_tkn	*add_node(t_tkn **tkn_node, char **content)
 	return (new_node);
 }
 
+// int	check_non_space_quoted_var(t_global **data, char input, int i, t_tkn **node)
+// {
+// 	int	len;
+
+// 	len = 0;
+// 	if (input[i - 1] != ' ' && (*node)->content)
+// }
+
 void	populate_hashtable(t_global **data, int idx, int len)
 {
 	char	*token;
@@ -62,13 +70,18 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	i = 0;
 	if (ft_strncmp(token, PIPE, 1) == 0)
 	{
+		(*data)->is_echo = false;
 		while ((*data)->hashtable[i])
 			i++;
 	}
 	else
 	{
+		if ((*data)->hashtable[i] && strcmp((*data)->hashtable[i]->content, "echo") == 0)
+			(*data)->is_echo = true;
 		while ((*data)->hashtable[i + 1] != NULL)
 			i++;
+		// if ((*data)->is_echo && (*data)->usr_input[idx] == '$')
+		// 	check_non_space_quoted_var(data, (*data)->usr_input, idx, (*data)->hashtable[i]);
 	}
 	add_node(&(*data)->hashtable[i], &token);
 }
