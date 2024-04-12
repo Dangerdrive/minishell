@@ -304,103 +304,68 @@ int	pipecount(t_global *data)
 // 	return (127);
 // }
 
-void exec_command(t_global *data, int idx)
-{
-	// Placeholder for your command execution logic
-	char	**args;
-	char	*cmd;
-
-	args = hash_to_args(data->hashtable[idx]);
-	
-	if (is_builtin(args[0]))
-		exec_builtin(args, hashsize(data->hashtable[idx]), data);
-	else
-	{
-		cmd = get_cmd(args[0], data);
-		execve(cmd, args, data->env);  // Simplified
-		perror("execve");  // Only reached if execve fails
-	}
-	ft_strarr_free(args, ft_strarr_len(args));
-	exit(EXIT_FAILURE);
-}
-
 int	exec(t_global *data)
 {
-	int n = pipecount(data);
-	int pipes[n][2];
-	int i = 0;
+    char **args;
+    char *command;
+    int status;
 
-	// Create pipes using a while loop
-	while (i < n)
-	{
-		if (pipe(pipes[i]) == -1)
-		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
-		}
-		i++;
-	}
-
-	i = 0;  // Reset the index for child process creation
-	// Create child processes using a while loop
-	while (i <= n)
-	{
-		data->pid = fork();
-		if (data->pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		} else if (data->pid == 0)
-		{ // Child process
-			if (i > 0)
-			{ // Not the first command
-				dup2(pipes[i-1][0], STDIN_FILENO);
-			}
-			if (i < n)
-			{ // Not the last command
-				dup2(pipes[i][1], STDOUT_FILENO);
-			}
-			// Close all pipe fds
-			int j = 0;
-			while (j < n)
-			{
-				close(pipes[j][0]);
-				close(pipes[j][1]);
-				j++;
-			}
-			exec_command(data, i);
-		}
-		i++;
-	}
-	// Parent closes all pipes using a while loop
-	i = 0;  // Reset the index for closing pipes
-	while (i < n)
-	{
-		close(pipes[i][0]);
-		close(pipes[i][1]);
-		i++;
-	}
-	// Parent waits for all child processes using a while loop
-	while (wait(NULL) > 0);
-	return 0;
+    data->pid = fork();
+    if (data->pid < 0)
+    {
+        ft_printf_fd(2, "minishell: %s\n", strerror(errno));
+        return 1; // Error in fork
+    }
+    else if (data->pid == 0) // Child process
+    {
+        args = hash_to_args(data->hashtable[0]);
+        if (!args) // Failed to convert hash to args
+        {
+            ft_printf_fd(2, "minishell: failed to parse arguments\n");
+            exit(EXIT_FAILURE);
+        }
+        if (is_builtin(args[0]))
+        {
+            exit(exec_builtin(args, hashsize(data->hashtable[0]), data));
+        }
+        else
+        {
+            command = get_cmd(args[0], data);
+            if (command)
+            {
+                execve(command, args, data->env); // Assume data->env is properly populated
+                free(command); // Assume get_cmd() allocates memory for command
+            }
+            ft_printf_fd(2, "minishell: command not found: %s\n", args[0]);
+            exit(EXIT_FAILURE); // execve failed or command was not found
+        }
+        ft_strarr_free(args, hashsize(data->hashtable[0])); // Free args if needed
+        exit(EXIT_FAILURE); // Fallback in case of error
+    }
+    else // Parent process
+    {
+        waitpid(data->pid, &status, 0);
+        if (WIFEXITED(status))
+        {
+            data->ret = WEXITSTATUS(status);
+        }
+        return data->ret; // Return the status from child process
+    }
+    return 127; // In case all else fails, return 127 (command not found)
 }
 
 int	prepare_exec(t_global *data)
 {
 	// int		i;
 	int			ret;
-	char	**args;
 
-
-	args = hash_to_args(data->hashtable[0]);
 	// i = 0;
 	ret = 1;
-	if (pipecount(data) == 0 && is_builtin(args[0]))
-		exec_builtin(args, hashsize(data->hashtable[0]), data);
+	
 	if (pipecount(data) > -1)
 		exec(data);
 	
-	ft_strarr_free(args, ft_strarr_len(args));
+		
 	// else
 	// 	return (exec(data, args));
 
