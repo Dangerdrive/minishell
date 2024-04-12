@@ -458,3 +458,14 @@ int	prepare_exec(t_global *data)
 // // 	}
 // // 	return (0);
 // // }
+
+
+/*
+- check pipe behavior
+	- echo hello | tr 'a-z' 'A-Z' segfault
+	- does it git input from previous process
+- redirects
+	- create all files
+	- set fds
+	- reset fds when needed
+*/

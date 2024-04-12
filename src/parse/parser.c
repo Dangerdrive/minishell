@@ -63,45 +63,6 @@ bool	check_there_is_var(char *content)
 	return (false);
 }
 
-void	split_token(t_tkn **node)
-{
-	t_tkn	*new_node;
-	t_tkn	*new_node2;
-	char	*temp;
-	int		i;
-	int		len;
-
-	temp = (*node)->content;
-	i = 0;
-	while (temp[i])
-	{
-		if (i > 0 && temp[i] == 39)
-		{
-			i++;
-			len = 0;
-			while (temp[i + len] != 39)
-				len++;
-			new_node = ft_calloc(1, sizeof(t_tkn));
-			new_node->content = ft_strndup((*node)->content + i, len);
-			new_node->type = STRING_STRONG;
-			new_node->next = (*node)->next;
-			new_node->prev = (*node);
-			if ((*node)->next)
-				(*node)->next->prev = new_node;
-			(*node)->next = new_node;
-			free((*node)->content);
-			(*node)->content = ft_strndup(temp, i - 1);
-			new_node2 = ft_calloc(1, sizeof(t_tkn));
-			new_node2->content = ft_strdup(temp + len);
-			new_node2->next = new_node->next;
-			new_node2->prev = new_node;
-			new_node->next = new_node2;
-			new_node2->next->prev = new_node2;
-		}
-		i++;
-	}
-}
-
 bool	is_empty_str(char *content, char quote)
 {
 	int	i;
@@ -116,7 +77,7 @@ bool	is_empty_str(char *content, char quote)
 	return (true);
 }
 
-void	update_content(t_tkn **node, char *content)
+void	update_content(char *content)
 {
 	char *new_content;
 	int	len;
@@ -135,9 +96,6 @@ void	update_content(t_tkn **node, char *content)
 		}
 		ft_strlcpy(content, new_content, len);
 		free(new_content);
-		if (ft_strcmp((*node)->type, STRING_STD)
-			&& check_there_is_var(content))
-			split_token(node);
 	}
 }
 
@@ -176,7 +134,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
 			//check_heredoc(&(*hashtable)[i]);
-			update_content(hashtable[i], (*hashtable)[i]->content);
+			update_content((*hashtable)[i]->content);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
