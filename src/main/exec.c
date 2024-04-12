@@ -275,43 +275,6 @@ int	pipecount(t_global *data)
 	return (result - 1);
 }
 
-// int	exec(t_global *data)
-//
-//{
-// 	char	**args;
-// 	char	*command;
-// 	int		status;
-	
-// 	data->pid = fork();
-// 	if (data->pid < 0)
-// 	{
-// 		ft_printf_fd(2, "minishell: %s\n", strerror(errno));
-// 		return (1);//precisa de outro retorno?
-// 	}
-// 	else if (data->pid == 0)
-// 	{
-// 		args = hash_to_args(data->hashtable[0]);
-// 		if (is_builtin(args[0]))
-// 			return (exec_builtin(args, hashsize(data->hashtable[0]), data));
-// 		else
-// 		{
-// 			command = get_cmd(args[0], data);
-// 			if (command)
-// 				return (execve(command, args, data->env));//maybe we need export here as well.
-// 		}
-// 		if (args)
-// 			ft_strarr_free(args, hashsize(data->hashtable[0]));
-// 	else
-// 	{
-// 		waitpid(data->pid, &status, 0);
-// 		if (WIFEXITED(status))
-// 		data->ret = WEXITSTATUS(status);
-// 	}
-// 	}
-	
-// 	return (127);
-// }
-
 void exec_command(t_global *data, int idx)
 {
 	char	**args;
@@ -404,7 +367,7 @@ int exec(t_global *data)
 
     create_pipes(pipes, n);
     fork_processes(data, pipes, n);
-    close_pipes(pipes, n); // Close in parent after forking
+    close_pipes(pipes, n);
     wait_for_children();
     return 0;
 }
@@ -414,7 +377,6 @@ int	prepare_exec(t_global *data)
 	// int		i;
 	int			ret;
 	char	**args;
-
 
 	args = hash_to_args(data->hashtable[0]);
 	// i = 0;
