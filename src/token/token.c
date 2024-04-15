@@ -44,7 +44,7 @@ int	check_quotes(char *input, int i)
 	return (0);
 }
 
-bool	is_special_char(char c)
+t_bool	is_special_char(char c)
 {
 	if (c == '|' || c == '&' || c == '<' || c == '>')
 		return (true);

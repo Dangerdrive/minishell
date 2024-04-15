@@ -95,6 +95,12 @@ void		handle_signals_exec(t_global **data);
 
 /*--------------exec---------------*/
 int		prepare_exec(t_global *data);
+char	**get_env_paths(t_global *data);
+char	*get_cmd_path(char*cmd, char**paths);
+char	*get_cmd(char *cmd, t_global *data);
+int		hashsize(t_tkn *hashtable);
+char	**hash_to_args(t_tkn *hashtable);
+
 
 
 #endif
