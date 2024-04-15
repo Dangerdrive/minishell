@@ -12,19 +12,6 @@ int	g_signal;
 // 		tcsetattr(STDIN_FILENO, TCSANOW, &term);
 // }
 
-void	handle_sigquit(int signal)
-{
-	if (signal == 131)
-	{
-		g_signal = signal;
-		ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-		//term_properties(1);
-	}
-	else
-		//term_properties(0);
-	exit(EXIT_FAILURE);
-}
-
 void	handle_sigint(int signal)
 {
 	g_signal = signal;
@@ -46,20 +33,6 @@ void	handle_signals(t_global **data)
 		}
 	}
 	else
-	{
-		if (signal(SIGQUIT, handle_sigquit) == SIG_ERR
-			|| signal(SIGINT, handle_sigint) == SIG_ERR)
-		{
-			ft_putendl_fd("fail to set signals", 2);
-			exit(EXIT_FAILURE);
-		}
-	}
+		handle_signals_exec(data);
 	(*data)->prev_process_status = g_signal;
-	//IN EXECUTION MODE THE SIGNALS MUST BEHAVE LIKE IN BASH (to be implemented).
 }
-
-// FUNCIONAMENTO PADRÃO:::
-
-// CTRL-C = INTERUPTS EXECUTION
-// CTRL-D = EOF (end-of-file) SIGNAL
-// CTRL-\ = SIGQUIT - FORCED EXIT

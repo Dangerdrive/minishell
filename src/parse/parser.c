@@ -1,33 +1,5 @@
 #include "../includes/minishell.h"
 
-int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
-{
-	int 	i;
-	t_tkn *temp;
-
-	i = 0;
-	while ((*hashtable)[i])
-	{
-		temp = (*hashtable)[i];
-		while ((*hashtable)[i])
-		{
-			if (((*hashtable)[i]->next && is_special_token((*hashtable)[i]->content)
-				&& is_special_token((*hashtable)[i]->next->content))
-				|| ((!(*hashtable)[i]->next || is_special_token((*hashtable)[i]->next->content)) && is_special_token((*hashtable)[i]->content))
-				|| is_and_or((*hashtable)[i]->content))
-			{
-				printf("Syntax error.\n");
-				(*hashtable)[i] = temp;
-				return (0);
-			}
-			(*hashtable)[i] = (*hashtable)[i]->next;
-		}
-		(*hashtable)[i] = temp;
-		i++;
-	}
-	return (1);
-}
-
 char	*get_tkn_type(t_tkn *node)
 {
 	if (!node->type)
@@ -41,6 +13,8 @@ char	*get_tkn_type(t_tkn *node)
 		else if ((node->content[0] == '$' && identifier_is_valid(node->content + 1))
 			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
+		else if (is_export_var(node->content))
+			return (EXPT_VARIABLE);
 		else if (!node->prev)
 			return (COMMAND);
 		else
@@ -49,40 +23,13 @@ char	*get_tkn_type(t_tkn *node)
 	return (node->type);
 }
 
-bool	check_there_is_var(char *content)
-{
-	int	i;
-
-	i = 0;
-	while (content[i])
-	{
-		if (content[i] == '$' && (ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-bool	is_empty_str(char *content, char quote)
-{
-	int	i;
-
-	i = 1;
-	while (content[i] && content[i] != quote)
-	{
-		if (content[i] != 32)
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-void	update_content(char *content)
+void	remove_quotes(t_tkn **node, char *content)
 {
 	char *new_content;
 	int	len;
 	int	i;
 
+	(void)node;
 	len = ft_strlen(content) - 1;
 	if (ft_strcmp(content, PIPE)
 		&& (content[0] == 34 || content[0] == 39))
@@ -114,10 +61,26 @@ void	check_pipe(t_tkn **node, int i)
 	}
 }
 
-// void	check_heredoc(t_tkn **node)
-// {
-// 	if (strncmp((*node)->content, DOUBLE_LESS_THAN))
-// }
+void	check_export(t_tkn **node)
+{
+	char 	*new_content;
+	t_tkn	*temp;
+
+	if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0
+		&& ft_strcmp((*node)->type, SPECIAL_CHAR)) // CHECAR NECESSIDADE DESSA VERIFICAÇÃO
+	{
+		new_content = ft_strjoin((*node)->prev->content, (*node)->content);
+		free((*node)->content);
+		(*node)->content = ft_strdup(new_content);
+		temp = (*node)->prev->prev;
+		if (temp)
+			temp->next = *node;
+		free(new_content);
+		free((*node)->prev->content);
+		free((*node)->prev);
+		(*node)->prev = temp;
+	}
+}
 
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
@@ -133,15 +96,15 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		while ((*hashtable)[i])
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
-			//check_heredoc(&(*hashtable)[i]);
-			update_content((*hashtable)[i]->content);
+			remove_quotes(hashtable[i], (*hashtable)[i]->content);
+			check_export(hashtable[i]);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
 		i++;
 	}
 	syntax = 0;
-	if (expand(hashtable, data) == 1 && check_syntax(hashtable) == 1)
+	if (expand(hashtable, data) == 1)
 		syntax = lexer(hashtable);
 	return (syntax);
 }

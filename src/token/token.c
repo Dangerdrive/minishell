@@ -44,23 +44,33 @@ int	check_quotes(char *input, int i)
 	return (0);
 }
 
+bool	is_special_char(char c)
+{
+	if (c == '|' || c == '&' || c == '<' || c == '>')
+		return (true);
+	return (false);
+}
+
 int	get_token_len(char *input, int i)
 {
 	int	len;
 
 	len = 0;
-	if (input[i] == '|' || input[i] == '&' || input[i] == '<' || input[i] == '>')
+	if (is_special_char(input[i]))
 	{
 		len++;
-		if (input[i + 1] == input[i])
+		if (input[i + 1] && input[i + 1] == input[i])
 			len++;
 	}
 	else if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
 		len = check_quotes(input, i);
 	else
 	{
-		while (input[i + len] && input[i + len] != ' '
-			&& input[i + len] != SIMPLE_QUOTE && input[i + len] != DOUBLE_QUOTE)
+		if (input[i + len] == '$')
+			len++;
+		while (input[i + len] && input[i + len] != ' ' && input[i + len] != '$'
+		&& !is_special_char(input[i + len]) && input[i + len] != SIMPLE_QUOTE
+		&& input[i + len] != DOUBLE_QUOTE)
 			len++;
 	}
 	return (len);
@@ -74,8 +84,10 @@ int	handle_input(t_global **data)
 	if (check_exit_input(&(*data)->usr_input, *data)) // só deve ser chamado se não houver pipe
 		return (-1);
 	i = 0;
-	while ((*data)->usr_input[i])
+	len = 1;
+	while ((*data)->usr_input[i] && len > 0)
 	{
+		len = 0;
 		while ((*data)->usr_input[i] == ' ')
 			i++;
 		len = get_token_len((*data)->usr_input, i);
@@ -108,9 +120,11 @@ int	readline_and_handle_input(t_global **data)
 	if (input == 1)
 	{
 		input = parse(&(*data)->hashtable, data);
-		(*data)->ret = prepare_exec(*data);
-		// if (input == 1)
-		// 	prt_hashtable((*data)->hashtable);
+		 if (input == 1)
+		 {
+			prepare_exec(*data);
+			// 	prt_hashtable((*data)->hashtable);
+		 }
 	}
 	return (1);
 }
