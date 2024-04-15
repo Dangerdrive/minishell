@@ -51,7 +51,7 @@ t_tkn	*add_node(t_tkn **tkn_node, char **content)
 	new_node->input = NULL;
 	new_node->output = NULL;
 	new_node->delimiter = NULL;
-	new_node->space_after = true;
+	new_node->space_after = TRUE;
 	new_node->next = NULL;
 	if (!(*tkn_node))
 		(*tkn_node) = new_node;
@@ -71,15 +71,15 @@ void	check_non_spaced_var(char *input, int i, t_tkn **node)
 {
 	t_tkn	*temp;
 
-	temp = *node;
-	while ((*node)->next != NULL)
-		*node = (*node)->next;
-	if ((*node) && strcmp((*node)->content, "echo")
+	if ((*node) && !strcmp((*node)->content, "echo")
 		&& input[i - 1] != ' ')
 	{
-		(*node)->space_after = false;
+		temp = *node;
+		while ((*node)->next != NULL)
+			*node = (*node)->next;
+		(*node)->space_after = FALSE;
+		*node = temp;
 	}
-	*node = temp;
 }
 
 void	populate_hashtable(t_global **data, int idx, int len)
