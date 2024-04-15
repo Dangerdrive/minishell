@@ -1,38 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define TABLE_SIZE 50
-
-# define SIMPLE_QUOTE 39
-# define DOUBLE_QUOTE 34
-# define PIPE "|"
-# define AMPERSAND "&"
-# define LESS_THAN "<"
-# define GREATER_THAN ">"
-# define DOUBLE_LESS_THAN "<<"
-# define DOUBLE_GREATER_THAN ">>"
-# define COMMAND "command"
-# define ARGUMENT "argument"
-# define VARIABLE "variable"
-# define EXPT_VARIABLE "export variable"
-# define SPECIAL_CHAR "special char"
-# define STRING_STRONG "string strong"
-# define STRING_STD "string standard"
-
-//colors
-# define RED     		"\033[1;31m"
-# define GREEN   		"\033[1;32m"
-# define YELLOW 		"\033[1;33m"
-# define BLUE   	 	"\033[1;34m"
-# define MAGENTA    	"\033[1;35m"
-# define CYAN    		"\033[1;36m"
-# define WHITE    		"\033[1;37m"
-# define END   			"\033[0m"
-
-//for readline
-# include <readline/readline.h>
-# include <readline/history.h>
-
 //
 # include <stdio.h>
 # include <unistd.h>
@@ -47,44 +15,15 @@
 # include <sys/wait.h>
 # include <signal.h>
 
+//for readline
+# include <readline/readline.h>
+# include <readline/history.h>
+
 //my libs
 # include "../libs/libft/libft.h"
 # include "../libs/ft_printf/ft_printf.h"
-
-typedef enum e_bool
-{
-	FALSE = 0,
-	TRUE = 1
-}	t_bool;
-
-typedef struct s_tkn
-{
-	char			*content;
-	char			*type;
-	char			*input;
-	char			*output;
-	char			*delimiter;
-	char			*redir[TABLE_SIZE];
-	t_bool			space_after;
-	struct s_tkn	*prev;
-	struct s_tkn	*next;
-}	t_tkn;
-
-typedef struct s_global
-{
-	char			**env;
-	char			**exported;
-	t_tkn			*hashtable[TABLE_SIZE];
-	char			*usr;
-	char			*usr_input;
-	char			*cur_path;
-	int				is_exec;
-	int				prev_process_status;
-	int				ret;
-	t_bool			is_echo;
-	t_bool			exit;
-	struct s_global	*next;
-}	t_global;
+# include "./structs.h"
+# include "./macros.h"
 
 t_global	*init_data(void);
 void		clean_stuff(t_global **data);
@@ -155,7 +94,6 @@ void		handle_signals_exec(t_global **data);
 
 /*--------------exec---------------*/
 int		prepare_exec(t_global *data);
-
 
 
 #endif
