@@ -15,6 +15,8 @@ typedef struct s_tkn
 	char			*type;
 	char			*input;
 	char			*output;
+	int				input_fd;
+	int				output_fd;
 	char			*delimiter;
 	char			*redir[TABLE_SIZE];
 	t_bool			space_after;
