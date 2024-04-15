@@ -100,7 +100,7 @@ char		**hash_to_args(t_tkn *hashtable);
 char		*get_cmd(char *cmd, t_global *data);
 char		*get_cmd_path(char*cmd, char**paths);
 
-int 		parse_redirections(t_global *data, t_tkn *node);
+int			parse_redirections(t_tkn *node);
 
 
 

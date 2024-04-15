@@ -381,7 +381,7 @@ int	prepare_exec(t_global *data)
 	args = hash_to_args(data->hashtable[0]);
 	// i = 0;
 	ret = 1;
-	if (parse_redirections(data, data->hashtable[0]) == -1)
+	if (parse_redirections(data->hashtable[0]) == -1)
 		return (1);
 	if (pipecount(data) == 0 && is_builtin(args[0]))
 		exec_builtin(args, hashsize(data->hashtable[0]), data);

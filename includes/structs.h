@@ -15,6 +15,8 @@ typedef struct s_tkn
 	char			*type;
 	char			*input;
 	char			*output;
+	int				input_fd;
+	int				output_fd;
 	char			*delimiter;
 	char			*redir[TABLE_SIZE];
 	t_bool			space_after;
@@ -30,6 +32,7 @@ typedef struct s_global
 	char			*usr;
 	char			*usr_input;
 	char			*cur_path;
+	int				pid;
 	int				is_exec;
 	int				prev_process_status;
 	int				ret;

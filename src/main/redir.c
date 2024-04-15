@@ -19,34 +19,34 @@
 //  *                     about the pipeline execution, including the heredoc flag
 //  *                     and file descriptors for input and output files.
 //  */
-static void	handle_heredoc(t_data *data)
-{
-	int		tmp_fd;
-	int		stdin_fd;
-	char	*line;
+// static void	handle_heredoc(t_data *data)
+// {
+// 	int		tmp_fd;
+// 	int		stdin_fd;
+// 	char	*line;
 
-	tmp_fd = open(".heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	stdin_fd = dup(STDIN_FILENO);
-	if (tmp_fd == -1)
-		cleanup_n_exit(ft_printf_fd(2, "here_doc: %s\n", strerror(errno)), data);
-	while (1)
-	{
-		ft_printf_fd(1, "> ");
-		line = get_next_line(stdin_fd);
-		if (line == NULL)
-			break ;
-		if (ft_strlen(data->here_doc) + 1 == ft_strlen(line)
-			&& !ft_strncmp(line, data->here_doc, ft_strlen(data->here_doc))) //checar se essa logica faz sentido
-		{
-			close(stdin_fd);
-			break ;
-		}
-		else
-			ft_printf_fd(tmp_fd, line);
-		free(line);
-	}
-	close(tmp_fd);
-}
+// 	tmp_fd = open(".heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+// 	stdin_fd = dup(STDIN_FILENO);
+// 	if (tmp_fd == -1)
+// 		cleanup_n_exit(ft_printf_fd(2, "here_doc: %s\n", strerror(errno)), data);
+// 	while (1)
+// 	{
+// 		ft_printf_fd(1, "> ");
+// 		line = get_next_line(stdin_fd);
+// 		if (line == NULL)
+// 			break ;
+// 		if (ft_strlen(data->here_doc) + 1 == ft_strlen(line)
+// 			&& !ft_strncmp(line, data->here_doc, ft_strlen(data->here_doc))) //checar se essa logica faz sentido
+// 		{
+// 			close(stdin_fd);
+// 			break ;
+// 		}
+// 		else
+// 			ft_printf_fd(tmp_fd, line);
+// 		free(line);
+// 	}
+// 	close(tmp_fd);
+// }
 
 // /**
 //  * Retrieves and opens the input file for the pipex program.
@@ -142,7 +142,7 @@ static void	handle_heredoc(t_data *data)
 // 	}
 // }
 
-int	redir_input(t_global *data, t_tkn *node, char *input)
+int	redir_input(t_tkn *node, char *input)
 {
 	int	fd;
 
@@ -153,12 +153,12 @@ int	redir_input(t_global *data, t_tkn *node, char *input)
 	if (fd == -1) 
 		return -1;
 	close(node->input_fd);
-	data->input_fd = fd;
-	data->input = &input[2];
+	node->input_fd = fd;
+	node->input = &input[2];
 	return (0);
 }
 
-int	redir_output(t_global *data, t_tkn *node, char *output)
+int	redir_output(t_tkn *node, char *output)
 {
 	int fd;
 
@@ -169,27 +169,26 @@ int	redir_output(t_global *data, t_tkn *node, char *output)
 	if (fd == -1) 
 		return 1;
 	close(node->output_fd);
-	data->output_fd = fd;
-	data->output = &output[2];
+	node->output_fd = fd;
+	node->output = &output[2];
 	return (0);
 }
 
-int parse_redirections(t_global *data, t_tkn *node)
+int parse_redirections(t_tkn *node)
 {
 	int i;
-	int fd;
 
 	i = 0;
-	while (node->redir && node->redir[i])
+	while (node->redir[i])
 	{
 		if (node->redir[i][0] == '>')
 		{
-			if(!redir_output(data, node, &(node->redir[i][2])));
+			if(!redir_output( node, &(node->redir[i][2])))
 				return 1;
 		}
 		else if (node->redir[i][0] == '<')
 		{
-			if (redir_input(data, node, &(node->redir[i][2])));
+			if (redir_input(node, &(node->redir[i][2])))
 			return 1;
 		}
 		i++;
