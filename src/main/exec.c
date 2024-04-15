@@ -280,14 +280,17 @@ void exec_command(t_global *data, int idx)
 	char	**args;
 	char	*cmd;
 
+	parse_redirections(data->hashtable[idx]);
 	args = hash_to_args(data->hashtable[idx]);
 	if (is_builtin(args[0]))
-		exec_builtin(args, hashsize(data->hashtable[idx]), data);
+		data->ret = exec_builtin(args, hashsize(data->hashtable[idx]), data);
 	else
 	{
+		data->ret = 127; //arrumar valor de retorno para comandos que nao existem
 		cmd = get_cmd(args[0], data);
-		execve(cmd, args, data->env); 
-		perror("minishell: execve"); 
+		if (cmd)
+			data->ret = execve(cmd, args, data->env); 
+		//perror("minishell: execve"); 
 	}
 	ft_strarr_free(args, ft_strarr_len(args));
 	exit(EXIT_FAILURE);
@@ -300,7 +303,7 @@ void create_pipes(int pipes[][2], int n)
 	{
         if (pipe(pipes[i]) == -1)
 		{
-            perror("minishell: pipe");
+            perror("minishell: pipe:");
             exit(EXIT_FAILURE);
         }
         i++;

@@ -19,24 +19,28 @@
 //  *                     about the pipeline execution, including the heredoc flag
 //  *                     and file descriptors for input and output files.
 //  */
-// static void	handle_heredoc(t_data *data)
+// int	handle_heredoc(t_tkn *node, char *)
 // {
 // 	int		tmp_fd;
 // 	int		stdin_fd;
 // 	char	*line;
 
+
 // 	tmp_fd = open(".heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 // 	stdin_fd = dup(STDIN_FILENO);
 // 	if (tmp_fd == -1)
-// 		cleanup_n_exit(ft_printf_fd(2, "here_doc: %s\n", strerror(errno)), data);
+// 	{
+// 		ft_printf_fd(2, "minishell: here_doc: %s\n", strerror(errno));
+// 		return (1);
+// 	}
 // 	while (1)
 // 	{
 // 		ft_printf_fd(1, "> ");
 // 		line = get_next_line(stdin_fd);
 // 		if (line == NULL)
 // 			break ;
-// 		if (ft_strlen(data->here_doc) + 1 == ft_strlen(line)
-// 			&& !ft_strncmp(line, data->here_doc, ft_strlen(data->here_doc))) //checar se essa logica faz sentido
+// 		if (ft_strlen(node->here_doc) + 1 == ft_strlen(line)
+// 			&& !ft_strncmp(line, node->here_doc, ft_strlen(node->here_doc))) //checar se essa logica faz sentido
 // 		{
 // 			close(stdin_fd);
 // 			break ;
@@ -46,7 +50,52 @@
 // 		free(line);
 // 	}
 // 	close(tmp_fd);
+// 	return (0);
 // }
+
+
+//como fica a questão do nome do arquivo temporário? precisa salvar?
+int handle_heredoc(t_tkn *node, char *delimiter, int index)
+{
+    int     tmp_fd;
+	int		stdin_fd;
+    char    *line;
+	char	*heredoc_tmp;
+
+	heredoc_tmp = ft_strjoin(delimiter, index);
+    tmp_fd = open(heredoc_tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+    stdin_fd = dup(STDIN_FILENO);
+    if (tmp_fd == -1)
+	{
+        perror("Error creating temp file for heredoc");
+        return -1;
+    }
+    while (1)
+	{
+        ft_printf_fd(1, "> ");
+        line = get_next_line(stdin_fd);
+        if (line == NULL)
+            break;
+        if (!ft_strncmp(line, delimiter, ft_strlen(delimiter)))
+		{
+            close(stdin_fd);
+            free(line);
+            break;
+        }
+		else
+            ft_printf_fd(tmp_fd, "%s", line);
+        free(line);
+    }
+    close(tmp_fd);
+    close(stdin_fd);
+    node->input_fd = open(".heredoc.tmp", O_RDONLY);
+    if (node->input_fd == -1)
+	{
+        perror("Error opening heredoc temp file for reading");
+        return -1;
+    }
+    return 0;
+}
 
 // /**
 //  * Retrieves and opens the input file for the pipex program.
@@ -142,20 +191,51 @@
 // 	}
 // }
 
-int	redir_input(t_tkn *node, char *input)
-{
-	int	fd;
+// int	redir_input(t_tkn *node, char *input, int index)
+// {
+// 	int		fd;
+// 	char 	*file;
 
-	if (input[1] == '<')
-		fd = open(&(input[2]), O_WRONLY | O_CREAT, 0644);
+// 	if (input[1] == '<')
+// 	{
+// 		file = ft_strjoin(input, index);
+// 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);		
+// 	}
+// 	else
+// 	{
+// 		file = ft_strdup(input);
+// 		fd = open(file, O_RDONLY);
+// 	}	
+// 	if (fd == -1) 
+// 		return -1;
+// 	close(node->input_fd);
+// 	node->input_fd = fd;
+// 	node->input = ft_strdup(input);//
+// 	free(file);//
+// 	return (0);
+// }
+
+int redir_input(t_tkn *node, char *input, int index)
+{
+    int     fd;
+
+    if (input[1] == '<')
+	{
+        return handle_heredoc(node, input);
+    } 
 	else
-		fd = open(&(input[2]), O_RDONLY);
-	if (fd == -1) 
-		return -1;
-	close(node->input_fd);
-	node->input_fd = fd;
-	node->input = &input[2];
-	return (0);
+	{
+        fd = open(input, O_RDONLY);
+        if (fd == -1)
+		{
+            perror("Error opening file");
+            return -1;
+        }
+        close(node->input_fd);
+        node->input_fd = fd;
+        node->input = input;
+    }
+    return 0;
 }
 
 int	redir_output(t_tkn *node, char *output)
@@ -163,14 +243,14 @@ int	redir_output(t_tkn *node, char *output)
 	int fd;
 
 	if (output[1] == '>')
-		fd = open(&output[2], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		fd = open(&output[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1) 
 		return 1;
 	close(node->output_fd);
 	node->output_fd = fd;
-	node->output = &output[2];
+	node->output = output;
 	return (0);
 }
 
@@ -182,15 +262,11 @@ int parse_redirections(t_tkn *node)
 	while (node->redir[i])
 	{
 		if (node->redir[i][0] == '>')
-		{
-			if(!redir_output( node, &(node->redir[i][2])))
+			if(!redir_output(node, &(node->redir[i][2])), i)
 				return 1;
-		}
 		else if (node->redir[i][0] == '<')
-		{
 			if (redir_input(node, &(node->redir[i][2])))
-			return 1;
-		}
+				return 1;
 		i++;
 	}
 	return 0;
