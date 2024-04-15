@@ -61,9 +61,11 @@ typedef struct s_tkn
 {
 	char			*content;
 	char			*type;
-	int				input;
-	int				output;
+	char			*input;
+	char			*output;
 	char			*delimiter;
+	char			*redir[TABLE_SIZE];
+	t_bool			space_after;
 	struct s_tkn	*prev;
 	struct s_tkn	*next;
 }	t_tkn;
@@ -85,13 +87,13 @@ typedef struct s_global
 }	t_global;
 
 t_global	*init_data(void);
-int			handle_signal(t_global **data);
 void		clean_stuff(t_global **data);
 void		clean_input_and_hashtable(t_global **data);
 
 /*------------BUILTINS-------------*/
 int			exec_builtin(char **args, int args_len, t_global *data);
 t_bool		is_builtin(char *command);
+
 /*---------------env----------------*/
 int			init_env(t_global **data);
 t_bool		identifier_is_valid(char *str);
@@ -100,6 +102,7 @@ int			ft_export(char **args, int args_len, t_global *data);
 int			ft_unset(char **args, int args_len, t_global *data);
 char		*ft_getenv(char *name, t_global **data);
 int			ft_env(char **args, int args_len, t_global **data);
+
 /*--------------echo----------------*/
 int			ft_echo(char **args, int args_len);
 int			ft_pwd(void);
@@ -126,16 +129,29 @@ int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
 t_bool		is_pipe(char *token);
 t_bool		is_and_or(char *token);
 t_bool		is_special_token(char *token);
+t_bool		is_double_special_token(t_tkn *node);
+t_bool		check_there_is_var(char *content);
+t_bool		is_export_var(char *content);
 
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
+void		init_redir_args(char *(*args)[TABLE_SIZE]);
+void		update_redir_files_list(t_tkn **node, char *new_arg, char *sig);
+t_bool		is_redir_in(char *c);
+t_bool		is_redir_out(char *c);
+t_bool		is_append(char *c);
+t_bool		is_heredoc(char *content);
+t_bool		is_redir(char *sig);
 
 /*--------------export-------------*/
 int			validate_identifier(char *str);
 
 /*--------------lexer--------------*/
-void		handle_signals(t_global **data);
 void		interrupt_handler(int signal);
+
+/*--------------signals--------------*/
+void		handle_signals(t_global **data);
+void		handle_signals_exec(t_global **data);
 
 /*--------------exec---------------*/
 int		prepare_exec(t_global *data);
