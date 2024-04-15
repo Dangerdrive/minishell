@@ -120,9 +120,11 @@ int	readline_and_handle_input(t_global **data)
 	if (input == 1)
 	{
 		input = parse(&(*data)->hashtable, data);
-		prepare_exec(*data);
-		// if (input == 1)
-		// 	prt_hashtable((*data)->hashtable);
+		 if (input == 1)
+		 {
+			prepare_exec(*data);
+			// 	prt_hashtable((*data)->hashtable);
+		 }
 	}
 	return (1);
 }

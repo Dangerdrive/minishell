@@ -1,40 +1,38 @@
 #include "../includes/minishell.h"
 
-bool	input_starts_with_command(t_tkn	*node, int i)
+int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
+{
+	int 	i;
+	t_tkn *temp;
+
+	i = 0;
+	while ((*hashtable)[i])
+	{
+		temp = (*hashtable)[i];
+		while ((*hashtable)[i])
+		{
+			if ((is_double_special_token((*hashtable)[i]) && !(*hashtable)[i]->delimiter)
+				|| is_and_or((*hashtable)[i]->content))
+			{
+				printf("Syntax error.\n");
+				(*hashtable)[i] = temp;
+				return (0);
+			}
+			(*hashtable)[i] = (*hashtable)[i]->next;
+		}
+		(*hashtable)[i] = temp;
+		i++;
+	}
+	return (1);
+}
+
+t_bool	input_starts_with_command(t_tkn	*node, int i)
 {
 	if ((i == 0 && !node->prev && ft_strcmp(node->type, COMMAND))
 		|| (i > 0 && node->prev && ft_strcmp(node->type, COMMAND)
 			&& is_pipe(node->prev->content)))
 		return (false);
 	return (true);
-}
-
-t_bool	is_redir_out(char *c)
-{
-	if (!ft_strcmp(c, GREATER_THAN))
-		return (true);
-	return (false);
-}
-
-t_bool	is_redir_in(char *c)
-{
-	if (!ft_strcmp(c, LESS_THAN))
-		return (true);
-	return (false);
-}
-
-t_bool	is_append(char *c)
-{
-	if (!ft_strcmp(c, DOUBLE_GREATER_THAN))
-		return (true);
-	return (false);
-}
-
-t_bool	is_heredoc(char *content)
-{
-	if (strcmp(content, DOUBLE_LESS_THAN) == 0)
-		return (true);
-	return (false);
 }
 
 void	update_redir_files_list(t_tkn **node, char *new_arg, char *sig)
@@ -56,14 +54,6 @@ void	update_redir_files_list(t_tkn **node, char *new_arg, char *sig)
 		i++;
 	(*node)->redir[i] = ft_strjoin(new_sig, new_arg);
 	//free(new_sig);
-}
-
-t_bool	is_redir(char *sig)
-{
-	if (is_redir_in(sig) || is_redir_out(sig)
-		|| is_heredoc(sig) || is_append(sig))
-		return (true);
-	return (false);
 }
 
 void	check_redirects(t_tkn **node)
@@ -102,6 +92,8 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 	t_tkn	*temp;
 
 	i = 0;
+	if (check_syntax(hashtable) != 1)
+		return (0);
 	while ((*hashtable)[i])
 	{
 		temp = (*hashtable)[i];

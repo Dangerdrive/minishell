@@ -1,52 +1,5 @@
 #include "../includes/minishell.h"
 
-bool	is_double_special_token(t_tkn *node)
-{
-	if ((!node->next || is_special_token(node->next->content)) && is_special_token(node->content))
-		return (true);
-	return (false);
-}
-
-int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
-{
-	int 	i;
-	t_tkn *temp;
-
-	i = 0;
-	while ((*hashtable)[i])
-	{
-		temp = (*hashtable)[i];
-		while ((*hashtable)[i])
-		{
-			if ((is_double_special_token((*hashtable)[i]) && !(*hashtable)[i]->delimiter)
-				|| is_and_or((*hashtable)[i]->content))
-			{
-				printf("Syntax error.\n");
-				(*hashtable)[i] = temp;
-				return (0);
-			}
-			(*hashtable)[i] = (*hashtable)[i]->next;
-		}
-		(*hashtable)[i] = temp;
-		i++;
-	}
-	return (1);
-}
-
-bool	is_export_var(char *content)
-{
-	int	i;
-
-	i = 0;
-	while (content[i])
-	{
-		if (content[i] == '=' && !content[i + 1])
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
 char	*get_tkn_type(t_tkn *node)
 {
 	if (!node->type)
@@ -68,34 +21,6 @@ char	*get_tkn_type(t_tkn *node)
 			return (ARGUMENT);
 	}
 	return (node->type);
-}
-
-bool	check_there_is_var(char *content)
-{
-	int	i;
-
-	i = 0;
-	while (content[i])
-	{
-		if (content[i] == '$' && (ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-bool	is_empty_str(char *content, char quote)
-{
-	int	i;
-
-	i = 1;
-	while (content[i] && content[i] != quote)
-	{
-		if (content[i] != 32)
-			return (false);
-		i++;
-	}
-	return (true);
 }
 
 void	remove_quotes(t_tkn **node, char *content)
@@ -179,7 +104,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		i++;
 	}
 	syntax = 0;
-	if (expand(hashtable, data) == 1 && check_syntax(hashtable) == 1)
+	if (expand(hashtable, data) == 1)
 		syntax = lexer(hashtable);
 	return (syntax);
 }
