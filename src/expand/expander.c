@@ -73,7 +73,7 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		value = ft_itoa((*data)->prev_process_status);
 	if (is_special_variable((*node)->content))
 	{
-		printf("%s\nThis functionality is beyond Minishell's scope, M0therF@ck&r.\n\n%s", RED, END);
+		printf("%s\nThis functionality is beyond Minishell's scope, ****@#$@***.\n\n%s", RED, END);
 		return (0);
 	}
 	j = 0;

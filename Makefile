@@ -34,6 +34,8 @@ SRC = 	./src/builtins/cd.c \
 		./src/signals/signals.c \
 		./src/signals/signals_exec.c \
 		./src/main/exec.c \
+		./src/main/exec_utils.c \
+		./src/main/lexer.c \
 		./src/main/main.c \
 		./src/main/main_utils.c
 

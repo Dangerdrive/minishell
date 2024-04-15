@@ -43,9 +43,10 @@ char		*ft_getenv(char *name, t_global **data);
 int			ft_env(char **args, int args_len, t_global **data);
 
 /*--------------echo----------------*/
+int			ft_cd(char **args, int args_len, t_global *data);
 int			ft_echo(char **args, int args_len);
 int			ft_pwd(void);
-void		ft_exit(char **args, int args_len, t_global *data);
+int			ft_exit(char **args, int args_len, t_global *data);
 
 /*--------------expand--------------*/
 int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);

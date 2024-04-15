@@ -93,7 +93,9 @@ void	replace_or_add(char *arg, t_global *data)
 int	ft_export(char **args, int args_len, t_global *data)
 {
 	int		i;
+	int		ret;
 
+	ret = 0;
 	if (args_len <= 1)
 		export_no_args(data);
 	else if (args_len > 1)
@@ -102,14 +104,17 @@ int	ft_export(char **args, int args_len, t_global *data)
 		while (i < args_len)
 		{
 			if (!identifier_is_valid(args[i]))
-				ft_printf_fd(2, "export: '%s': not a valid identifier\n",
+			{
+				ft_printf_fd(2, "export: `%s': not a valid identifier\n",
 					args[i]);
+				ret = 1;
+			}	
 			else if (identifier_is_valid(args[i]))
 				replace_or_add(args[i], data);
 		i++;
 		}
 	}
-	return (0);
+	return (ret);
 }
 
 // ~/Documents/Projects/minishell/minishell (develop*) » export ""
