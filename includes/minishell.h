@@ -94,12 +94,13 @@ void		handle_signals(t_global **data);
 void		handle_signals_exec(t_global **data);
 
 /*--------------exec---------------*/
-int		prepare_exec(t_global *data);
-char	**get_env_paths(t_global *data);
-char	*get_cmd_path(char*cmd, char**paths);
-char	*get_cmd(char *cmd, t_global *data);
-int		hashsize(t_tkn *hashtable);
-char	**hash_to_args(t_tkn *hashtable);
+int			prepare_exec(t_global *data);
+int			hashsize(t_tkn *hashtable);
+char		**hash_to_args(t_tkn *hashtable);
+char		*get_cmd(char *cmd, t_global *data);
+char		*get_cmd_path(char*cmd, char**paths);
+
+int			parse_redirections(t_tkn *node);
 
 
 

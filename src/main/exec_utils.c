@@ -102,7 +102,13 @@ char	**hash_to_args(t_tkn *hashtable)
 	temp = hashtable;
 	while (temp)
 	{
-		args[++i] = ft_strdup(temp->content);
+		if (temp->space_after == false)
+		{
+			args[++i] = ft_strjoin(temp->content, temp->next->content);
+			temp = temp->next;
+		}
+		else
+			args[++i] = ft_strdup(temp->content);
 		temp = temp->next;
 	}
 	args[++i] = NULL;

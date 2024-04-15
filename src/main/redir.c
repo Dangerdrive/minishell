@@ -1,4 +1,4 @@
-// #include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 // /**
 //  * Opens the output file and sets its file descriptor in the data structure.
@@ -113,4 +113,124 @@
 // 		ft_printf_fd(2, "%s: %s\n",	data->output, strerror(errno));
 // 		return (0);
 // 	}
+// }
+
+// int parse_redirections(t_global *data, t_tkn *node)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	while (node->redir && node->redir[i])
+// 	{
+// 		if (node->redir[i][0] == '>')
+// 		{
+// 			if (node->redir[i][1] == '>')
+// 				node->output_fd = open(&(node->redir[i][2]), O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 			else
+// 				node->output_fd = open(node->redir[i][2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 			data->output = node->redir[i];
+// 		}
+// 		if (node->redir[i][0] == '<')
+// 		{
+// 			if (node->redir[i][1] == '<')
+// 				node->input_fd = open(node->redir[i], O_WRONLY | O_CREAT, 644);//mudar para uma pasta temp
+// 			else
+// 				node->input_fd = open(node->redir[i], O_RDONLY, 644);
+// 			data->input = node->redir[i];
+// 		}
+// 		i++;
+// 	}
+// }
+
+int	redir_input(t_tkn *node, char *input)
+{
+	int	fd;
+
+	if (input[1] == '<')
+		fd = open(&(input[2]), O_WRONLY | O_CREAT, 0644);
+	else
+		fd = open(&(input[2]), O_RDONLY);
+	if (fd == -1) 
+		return -1;
+	close(node->input_fd);
+	node->input_fd = fd;
+	node->input = &input[2];
+	return (0);
+}
+
+int	redir_output(t_tkn *node, char *output)
+{
+	int fd;
+
+	if (output[1] == '>')
+		fd = open(&output[2], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		fd = open(&output[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1) 
+		return 1;
+	close(node->output_fd);
+	node->output_fd = fd;
+	node->output = &output[2];
+	return (0);
+}
+
+int parse_redirections(t_tkn *node)
+{
+	int i;
+
+	i = 0;
+	while (node->redir[i])
+	{
+		if (node->redir[i][0] == '>')
+		{
+			if(!redir_output( node, &(node->redir[i][2])))
+				return 1;
+		}
+		else if (node->redir[i][0] == '<')
+		{
+			if (redir_input(node, &(node->redir[i][2])))
+			return 1;
+		}
+		i++;
+	}
+	return 0;
+}
+
+// int parse_redirections(t_global *data, t_tkn *node)
+// {
+// 	int i;
+// 	int fd;
+
+// 	i = 0;
+// 	while (node->redir && node->redir[i])
+// 	{
+// 		if (node->redir[i][0] == '>')
+// 		{
+// 			redir_output(data, node, &(node->redir[i][2]));
+// 			// if (node->redir[i][1] == '>')
+// 			// 	fd = open(&(node->redir[i][2]), O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 			// else
+// 			// 	fd = open(&(node->redir[i][1]), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 			// if (fd == -1) 
+// 			// 	return -1;
+// 			// close(node->output_fd);
+// 			// node->output_fd = fd;
+// 			// data->output = node->redir[i];
+// 		}
+// 		else if (node->redir[i][0] == '<')
+// 		{
+// 			redir_input(data, node);
+// 			// if (node->redir[i][1] == '<')
+// 			// 	fd = open(&(node->redir[i][2]), O_WRONLY | O_CREAT, 0644);
+// 			// else
+// 			// 	fd = open(&(node->redir[i][1]), O_RDONLY);
+// 			// if (fd == -1) 
+// 			// 	return -1;
+// 			// close(node->input_fd);
+// 			// node->input_fd = fd;
+// 			// data->input = node->redir[i];
+// 		}
+// 		i++;
+// 	}
+// 	return 0;
 // }
