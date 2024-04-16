@@ -10,7 +10,7 @@
 //  * `close_pipe_fds` to close all pipe file descriptors.
 //  *
 //  * @param[in,out] data Pointer to a t_data structure that contains the file
-//  *                     descriptors for input, output, and pipes.
+//  *				     descriptors for input, output, and pipes.
 //  */
 // void	close_fds(t_global *data)
 //
@@ -52,7 +52,7 @@
 // 	{
 // 		if (pipe(data->pipe + 2 * i) == -1)
 // 		{
-// 			ft_printf_fd(2, "pipex: Could not create pipe: %s\n",
+// 			ft_dprintf(2, "pipex: Could not create pipe: %s\n",
 // 				strerror(errno));
 // 			return (1);
 // 			//cleanup_n_exit(ERROR, data);
@@ -90,13 +90,13 @@
 // 	data.pids = malloc(sizeof(*data.pids) * hashsize());
 // 	if (!data.pids)
 // 	{
-// 		ft_printf_fd(2, "pipex: PID error: %s\n", strerror(errno));
+// 		ft_dprintf(2, "pipex: PID error: %s\n", strerror(errno));
 // 		cleanup_n_exit(ERROR, &data);
 // 	}
 // 	data.pipe = malloc(sizeof(*data.pipe) * 2 * (hashsize() - 1));
 // 	if (!data.pipe)
 // 	{
-// 		ft_printf_fd(2, "pipex: Pipe error: %s\n", strerror(errno));
+// 		ft_dprintf(2, "pipex: Pipe error: %s\n", strerror(errno));
 // 		cleanup_n_exit(ERROR, &data);
 // 	}
 // 	create_pipes(&data);
@@ -240,7 +240,7 @@
 
 // 	if (pipe(d->pipe) == -1)
 // 	{
-// 		ft_printf_fd("minishell: %s\n", strerror(errno));
+// 		ft_dprintf("minishell: %s\n", strerror(errno));
 // 		return (1);//ou outro erro
 // 	}
 // 	d->child = 0;
@@ -275,7 +275,7 @@ int	pipecount(t_global *data)
 	return (result - 1);
 }
 
-void exec_command(t_global *data, int idx)
+void	exec_command(t_global *data, int idx)
 {
 	char	**args;
 	char	*cmd;
@@ -296,89 +296,127 @@ void exec_command(t_global *data, int idx)
 	exit(EXIT_FAILURE);
 }
 
-void create_pipes(int pipes[][2], int n)
+void	create_pipes(int pipes[][2], int n)
 {
-    int i = 0;
-    while (i < n)
+	int	i;
+
+	i = 0;
+	while (i < n)
 	{
-        if (pipe(pipes[i]) == -1)
+		if (pipe(pipes[i]) == -1)
 		{
-            perror("minishell: pipe:");
-            exit(EXIT_FAILURE);
-        }
-        i++;
-    }
+			perror("minishell: pipe:");
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
 }
 
-void close_pipes(int pipes[][2], int n)
+void	close_pipes(int pipes[][2], int n)
 {
-    int i = 0;
-    while (i < n)
+	int	i;
+
+	i = 0;
+	while (i < n)
 	{
-        close(pipes[i][0]);
-        close(pipes[i][1]);
-        i++;
-    }
+		close(pipes[i][0]);
+		close(pipes[i][1]);
+		i++;
+	}
 }
 
-void setup_dup2(int pipes[][2], int i, int n)
-{
-    if (i > 0)
-	{
-        dup2(pipes[i-1][0], STDIN_FILENO);
-    }
-    if (i < n)
-	{
-        dup2(pipes[i][1], STDOUT_FILENO);
-    }
-}
+// void	setup_dup2(int pipes[][2], int i, int n)
+// {
+// 	if (i > 0)
+// 	{
+// 		dup2(pipes[i-1][0], STDIN_FILENO);
+// 	}
+// 	if (i < n)
+// 	{
+// 		dup2(pipes[i][1], STDOUT_FILENO);
+// 	}
+// }
 
-void handle_child_process(t_global *data, int pipes[][2], int i, int n)
-{
-    setup_dup2(pipes, i, n);
-    close_pipes(pipes, n);
-    exec_command(data, i);
-}
+// void	handle_child_process(t_global *data, int pipes[][2], int i, int n)
+// {
+// 	if (i > 0)
+// 		dup2(pipes[i - 1][0], STDIN_FILENO);
+// 	if (i < n)
+// 		dup2(pipes[i][1], STDOUT_FILENO);
+// 	close_pipes(pipes, n);
+// 	exec_command(data, i);
+// }
 
-void fork_processes(t_global *data, int pipes[][2], int n)
+void	fork_processes(t_global *data, int pipes[][2], int n)
 {
-    int i = 0;
-    while (i <= n)
+	int	i;
+
+	i = 0;
+	while (i <= n)
 	{
-        data->pid = fork();
-        if (data->pid == -1)
+		data->pid = fork();
+		if (data->pid == -1)
 		{
-            perror("minishell: fork");
-            exit(EXIT_FAILURE);
-        } else if (data->pid == 0)
+			perror("minishell: fork");
+			exit(EXIT_FAILURE);
+		}
+		else if (data->pid == 0)
 		{
-            handle_child_process(data, pipes, i, n);
-        }
-        i++;
-    }
+			if (i > 0)
+				dup2(pipes[i - 1][0], STDIN_FILENO);
+			if (i < n)
+				dup2(pipes[i][1], STDOUT_FILENO);
+			close_pipes(pipes, n);
+			exec_command(data, i);
+		}
+		i++;
+	}
 }
 
-void wait_for_children()
-{
-    while (wait(NULL) > 0);
-}
+// void	wait_for_children()
+// {
+// 	while (wait(NULL) > 0);
+// }
 
-int exec(t_global *data)
-{
-    int n = pipecount(data);
-    int pipes[n][2];
+// int	exec(t_global *data)
+// {
+// 	int	n;
 
-    create_pipes(pipes, n);
-    fork_processes(data, pipes, n);
-    close_pipes(pipes, n);
-    wait_for_children();
-    return 0;
+// 	n = pipecount(data);
+// 	int	pipes[n][2];
+
+// 	create_pipes(pipes, n);
+// 	fork_processes(data, pipes, n);
+// 	close_pipes(pipes, n);
+// 	wait_for_children();
+// 	return (0);
+// }
+
+int	exec(t_global *data)
+{
+	int	n;
+	int	(*pipes)[2];
+
+	n = pipecount(data);
+	pipes = malloc(n * sizeof(*pipes));
+	if (pipes == NULL)
+	{
+		perror("minishell: pipes: malloc failed");
+		return (-1);
+	}
+	create_pipes(pipes, n);
+	fork_processes(data, pipes, n);
+	close_pipes(pipes, n);
+	while (wait(NULL) > 0)
+
+	free(pipes);
+	return (0);
 }
 
 int	prepare_exec(t_global *data)
 {
 	// int		i;
-	int			ret;
+	int		ret;
 	char	**args;
 
 	args = hash_to_args(data->hashtable[0]);
@@ -408,13 +446,13 @@ int	prepare_exec(t_global *data)
 // // 	{
 // // 		if (execve(args[0], args, data->env) == -1)
 // // 		{
-// // 			ft_printf_fd(2, "minishell: %s: %s\n", args[0], strerror(errno));
+// // 			ft_dprintf(2, "minishell: %s: %s\n", args[0], strerror(errno));
 // // 			exit(1);
 // // 		}
 // // 	}
 // // 	else if (pid < 0)
 // // 	{
-// // 		ft_printf_fd(2, "minishell: %s\n", strerror(errno));
+// // 		ft_dprintf(2, "minishell: %s\n", strerror(errno));
 // // 		return (1);
 // // 	}
 // // 	else
