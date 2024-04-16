@@ -20,6 +20,13 @@ void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
 	}
 }
 
+/**
+ * Check if the 'input' parameter is validly quoted (starts and ends with quotes).
+ *
+ * Returns the input length (with quotes) if it is validly quoted.
+ * Returns (-1) if it is NOT validly quoted.
+ * Otherwise, returns (0).
+ */
 int	check_quotes(char *input, int i)
 {
 	int		len;
@@ -44,6 +51,11 @@ int	check_quotes(char *input, int i)
 	return (0);
 }
 
+/**
+ * Check if the 'c' parameter is a special bash char (|, &, <, >).
+ *
+ * Returns true or false.
+ */
 t_bool	is_special_char(char c)
 {
 	if (c == '|' || c == '&' || c == '<' || c == '>')
@@ -51,6 +63,11 @@ t_bool	is_special_char(char c)
 	return (false);
 }
 
+/**
+ * Counts the length of the 'input'(char *) parameter, starting on the 'i'(index).
+ *
+ * Returns the lenght of the token started in the position 'input[i]'.
+ */
 int	get_token_len(char *input, int i)
 {
 	int	len;
@@ -76,13 +93,18 @@ int	get_token_len(char *input, int i)
 	return (len);
 }
 
+/**
+ * Handles the usr_input, tokenizing them in a hashtable.
+ *
+ * Returns (1) if there is no problem during tokenization.
+ * Returns (0) if an open quote is identified.
+ * Returns (-1) if usr_input == "exit".
+ */
 int	handle_input(t_global **data)
 {
 	int		i;
 	int		len;
 
-	if (check_exit_input(&(*data)->usr_input, *data)) // só deve ser chamado se não houver pipe
-		return (-1);
 	i = 0;
 	len = 1;
 	while ((*data)->usr_input[i] && len > 0)
@@ -108,7 +130,6 @@ int	readline_and_handle_input(t_global **data)
 	int	input;
 
 	input = 0;
-	handle_signals(data);
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
 	if (!(*data)->usr_input) // EOF CATCHER (CTRL-D)

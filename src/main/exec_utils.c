@@ -26,7 +26,7 @@ char	**get_env_paths(t_global *data)
 	return (paths);
 }
 
-char	*get_cmd_path(char*cmd, char**paths)
+char	*get_cmd_path(char *cmd, char **paths)
 {
 	int		i;
 	char	*cmd_path;
@@ -104,7 +104,7 @@ char	**hash_to_args(t_tkn *hashtable)
 	while (temp)
 	{
 		arg_tmp = NULL;
-		if (temp->space_after == TRUE)
+		if (temp->space_after == TRUE && temp->content)
 			args[++i] = ft_strdup(temp->content);
 		while (temp->space_after == FALSE && temp->next)
 		{
