@@ -92,6 +92,7 @@ int	hashsize(t_tkn *hashtable)
 char	**hash_to_args(t_tkn *hashtable)
 {
 	char	**args;
+	char	*arg_tmp;
 	t_tkn	*temp;
 	int		i;
 	int		args_count;
@@ -102,13 +103,18 @@ char	**hash_to_args(t_tkn *hashtable)
 	temp = hashtable;
 	while (temp)
 	{
-		if (temp->space_after == false)
+		arg_tmp = NULL;
+		if (temp->space_after == TRUE)
+			args[++i] = ft_strdup(temp->content);
+		while (temp->space_after == FALSE && temp->next)
 		{
-			args[++i] = ft_strjoin(temp->content, temp->next->content);
+			if (temp->prev->space_after == TRUE)
+				args[++i] = ft_strdup(temp->content);
+			arg_tmp = ft_strjoin(args[i], temp->next->content);
+			free(args[i]);
+			args[i] = arg_tmp;
 			temp = temp->next;
 		}
-		else
-			args[++i] = ft_strdup(temp->content);
 		temp = temp->next;
 	}
 	args[++i] = NULL;

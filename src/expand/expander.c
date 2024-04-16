@@ -52,6 +52,30 @@ char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
 	return (NULL);
 }
 
+char	*search_value(t_global **data, t_tkn **node, int i, int len)
+{
+	char	*value;
+	int		j;
+
+	value = NULL;
+	j = 0;
+	while (!value && (*data)->env[j])
+	{
+		value = fetch_in_array(node, i, len, (*data)->env[j]);
+		j++;
+	}
+	j = 0;
+	if ((*data)->exported)
+	{
+		while (!value && (*data)->exported[j])
+		{
+			value = fetch_in_array(node, i, len, (*data)->exported[j]);
+			j++;
+		}
+	}
+	return (value);
+}
+
 /**
  * Searches for the variable value in the arrays (*data)->env and (*data)->exported.
  * Then, it updates the token hashtable with the founded value.
@@ -61,7 +85,6 @@ char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
  */
 int	get_var_value(t_tkn **node, int i, t_global **data)
 {
-	int		j;
 	int		len;
 	char	*value;
 
@@ -76,18 +99,7 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		printf("%s\nThis functionality is beyond Minishell's scope, ****@#$@***.\n\n%s", RED, END);
 		return (0);
 	}
-	j = 0;
-	while (!value && (*data)->env[j])
-	{
-		value = fetch_in_array(node, i, len, (*data)->env[j]);
-		j++;
-	}
-	j = 0;
-	while (!value && (*data)->exported[j])
-	{
-		value = fetch_in_array(node, i, len, (*data)->exported[j]);
-		j++;
-	}
+	value = search_value(data, node, i, len);
 	if (!value)
 	{
 		printf("\n");
