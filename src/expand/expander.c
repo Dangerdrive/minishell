@@ -125,7 +125,9 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 	if (!value)
 	{
 		handle_expand_fail(node);
-		//return (0);
+		if ((*node)->prev && (ft_strcmp((*node)->prev->content, ">") == 0
+			|| ft_strcmp((*node)->prev->content, "<") == 0))
+			return (0);
 	}
 	else
 		update_node(node, i + len, len, &value);
