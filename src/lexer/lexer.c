@@ -26,11 +26,10 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 	return (1);
 }
 
-t_bool	input_starts_with_command(t_tkn	*node, int i)
+t_bool	input_starts_with_command(t_tkn	*node)
 {
-	if ((i == 0 && !node->prev && ft_strcmp(node->type, COMMAND))
-		|| (i > 0 && node->prev && ft_strcmp(node->type, COMMAND)
-			&& is_pipe(node->prev->content)))
+	if (!node->prev
+		&& ft_strcmp(node->type, COMMAND) && !is_redir(node->content))
 		return (false);
 	return (true);
 }
@@ -61,23 +60,31 @@ void	check_redirects(t_tkn **node)
 	t_tkn	*temp_node;
 	t_tkn	*temp_tkn;
 
-	if ((*node)->prev && is_redir((*node)->prev->content))
+	if ((*node)->prev && (*node)->prev->content && is_redir((*node)->prev->content))
 	{
-		temp_node = (*node)->prev->prev;
-		init_redir_args(&(*node)->redir);
+		if ((*node)->prev->prev)
+			temp_node = (*node)->prev->prev;
+		else
+			temp_node = (*node)->prev;
+		init_redir_args(&temp_node->redir);
 		while (*node)
 		{
 			if ((ft_strcmp((*node)->type, SPECIAL_CHAR)) && is_redir((*node)->prev->content))
 			{
 				update_redir_files_list(&temp_node, (*node)->content, (*node)->prev->content);
 				free((*node)->content);
-				temp_tkn = (*node)->prev;
+				if ((*node)->prev->prev)
+					temp_tkn = (*node)->prev->prev;
+				else
+					temp_tkn = (*node)->prev;
 				temp_tkn->next = (*node)->next;
 				if ((*node)->next)
 					(*node)->next->prev = temp_tkn;
 				free(*node);
 				free((*node)->prev->content);
-				free((*node)->prev);
+				(*node)->prev->content = NULL;
+				if ((*node)->prev->prev)
+					free((*node)->prev);
 				(*node) = temp_tkn;
 			}
 			*node = (*node)->next;
@@ -99,7 +106,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			if (!input_starts_with_command((*hashtable)[i], i))
+			if (!input_starts_with_command((*hashtable)[i]))
 			{
 				printf("%s: command not found\n", (*hashtable)[i]->content);
 				(*hashtable)[i] = temp;

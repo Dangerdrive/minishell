@@ -76,6 +76,28 @@ char	*search_value(t_global **data, t_tkn **node, int i, int len)
 	return (value);
 }
 
+void	handle_expand_fail(t_tkn **node)
+{
+	t_tkn	*temp;
+
+	temp = *node;
+	while (temp->prev)
+		temp = temp->prev;
+	if (ft_strcmp(temp->content, "echo") == 0)
+	{
+		free((*node)->content);
+		temp  = (*node)->prev;
+		temp->next = (*node)->next;
+		if ((*node)->next)
+			(*node)->next->prev = temp;
+		free(*node);
+		*node = temp;
+	}
+	if ((*node)->prev && (ft_strcmp((*node)->prev->content, ">") == 0
+		|| ft_strcmp((*node)->prev->content, "<") == 0))
+		ft_printf("\n%sminishell: %s: ambiguous redirect%s\n", RED, (*node)->content, END);
+}
+
 /**
  * Searches for the variable value in the arrays (*data)->env and (*data)->exported.
  * Then, it updates the token hashtable with the founded value.
@@ -102,8 +124,8 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 	value = search_value(data, node, i, len);
 	if (!value)
 	{
-		printf("\n");
-		return (0);
+		handle_expand_fail(node);
+		//return (0);
 	}
 	else
 		update_node(node, i + len, len, &value);

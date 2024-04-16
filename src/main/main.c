@@ -32,6 +32,7 @@ int	main(void)
 	{
 		// printf("%s$ ", data->cur_path);
 		print_cwd(&data);
+		define_prompt_signals();
 		if (!data->exit && readline_and_handle_input(&data) == -1)
 			break ;
 		clean_input_and_hashtable(&data);

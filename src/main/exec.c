@@ -281,13 +281,13 @@ void exec_command(t_global *data, int idx)
 	char	*cmd;
 
 	args = hash_to_args(data->hashtable[idx]);
-	if (is_builtin(args[0]))
+	if (args[0] && is_builtin(args[0]))
 		exec_builtin(args, hashsize(data->hashtable[idx]), data);
-	else
+	else if (args[0])
 	{
 		cmd = get_cmd(args[0], data);
-		execve(cmd, args, data->env); 
-		perror("minishell: execve"); 
+		execve(cmd, args, data->env);
+		perror("minishell: execve");
 	}
 	ft_strarr_free(args, ft_strarr_len(args));
 	exit(EXIT_FAILURE);
@@ -383,7 +383,7 @@ int	prepare_exec(t_global *data)
 	ret = 1;
 	if (parse_redirections(data->hashtable[0]) == -1)
 		return (1);
-	if (pipecount(data) == 0 && is_builtin(args[0]))
+	if (pipecount(data) == 0 && args[0] && is_builtin(args[0]))
 		exec_builtin(args, hashsize(data->hashtable[0]), data);
 	else if (pipecount(data) > -1)
 		exec(data);

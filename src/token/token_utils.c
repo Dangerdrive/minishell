@@ -91,6 +91,7 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	i = 0;
 	if (ft_strncmp(token, PIPE, 1) == 0)
 	{
+		
 		while ((*data)->hashtable[i])
 			i++;
 	}
@@ -103,15 +104,4 @@ void	populate_hashtable(t_global **data, int idx, int len)
 			check_non_spaced_var((*data)->usr_input, idx, &(*data)->hashtable[i]);
 	}
 	add_node(&(*data)->hashtable[i], &token);
-}
-
-int			check_exit_input(char **input, t_global *data)
-{
-	if (*input && ft_strncmp(*input, "exit", 5) == 0)
-	{
-		//*exit = 1;
-		ft_exit(NULL, 1, data);
-		return (TRUE);
-	}
-	return (FALSE);
 }

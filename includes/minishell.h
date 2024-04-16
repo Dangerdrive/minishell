@@ -92,6 +92,9 @@ void		interrupt_handler(int signal);
 /*--------------signals--------------*/
 void		handle_signals(t_global **data);
 void		handle_signals_exec(t_global **data);
+void		define_prompt_signals(void);
+void		define_exec_signals(int child_pid);
+void		define_heredoc_signals(int child_pid);
 
 /*--------------exec---------------*/
 int			prepare_exec(t_global *data);
