@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strarr_len.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:38:40 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/28 14:17:25 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/09 15:33:07 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_strarr_len(char **tab)
 	int	i;
 
 	if (!tab)
-		return (-1);
+		return (0);
 	i = 0;
 	while (tab[i])
 		i++;

@@ -16,9 +16,25 @@ t_global	*init_data(void)
 	data->is_exec = 0;
 	data->exported = NULL;
 	data->usr = ft_strdup(ft_getenv("USER", &data));
+	data->is_echo = false;
 	init_hashtable(&data->hashtable);
 	//printf("PATH %s\n", data->cur_path);
 	return (data);
+}
+
+void	free_redir_args(char *(*args)[TABLE_SIZE])
+{
+	int		i;
+
+	i = 0;
+	if ((*args)[i])
+	{
+		while ((*args)[i] != NULL)
+		{
+			free((*args)[i]);
+			i++;
+		}
+	}
 }
 
 void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
@@ -36,6 +52,9 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 			//printf("FREE::: %s\n", (*hashtable)[i]->content);
 			if ((*hashtable)[i]->content)
 				free((*hashtable)[i]->content);
+			if ((*hashtable)[i]->delimiter)
+				free((*hashtable)[i]->delimiter);
+			free_redir_args(&(*hashtable)[i]->redir);
 			free((*hashtable)[i]);
 			(*hashtable)[i] = temp;
 		}

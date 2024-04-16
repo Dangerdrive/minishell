@@ -13,6 +13,19 @@ void	init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 	return ;
 }
 
+void	init_redir_args(char *(*args)[TABLE_SIZE])
+{
+	int	i;
+
+	i = 0;
+	while (i < TABLE_SIZE)
+	{
+		(*args)[i] = NULL;
+		i++;
+	}
+	return ;
+}
+
 char	*get_token(char *input, int i, int len)
 {
 	char	*token;
@@ -35,6 +48,10 @@ t_tkn	*add_node(t_tkn **tkn_node, char **content)
 	if (!new_node)
 		return (NULL);
 	new_node->content = *content;
+	new_node->input = NULL;
+	new_node->output = NULL;
+	new_node->delimiter = NULL;
+	new_node->space_after = TRUE;
 	new_node->next = NULL;
 	if (!(*tkn_node))
 		(*tkn_node) = new_node;
@@ -50,6 +67,21 @@ t_tkn	*add_node(t_tkn **tkn_node, char **content)
 	return (new_node);
 }
 
+void	check_non_spaced_var(char *input, int i, t_tkn **node)
+{
+	t_tkn	*temp;
+
+	if ((*node) && !strcmp((*node)->content, "echo")
+		&& input[i - 1] != ' ')
+	{
+		temp = *node;
+		while ((*node)->next != NULL)
+			*node = (*node)->next;
+		(*node)->space_after = FALSE;
+		*node = temp;
+	}
+}
+
 void	populate_hashtable(t_global **data, int idx, int len)
 {
 	char	*token;
@@ -59,6 +91,7 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	i = 0;
 	if (ft_strncmp(token, PIPE, 1) == 0)
 	{
+		
 		while ((*data)->hashtable[i])
 			i++;
 	}
@@ -66,18 +99,9 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	{
 		while ((*data)->hashtable[i + 1] != NULL)
 			i++;
+		if ((*data)->hashtable[i]
+			&& strcmp((*data)->hashtable[i]->content, "echo") == 0)
+			check_non_spaced_var((*data)->usr_input, idx, &(*data)->hashtable[i]);
 	}
 	add_node(&(*data)->hashtable[i], &token);
-}
-
-// int	check_exit_input(char **input, int *exit)
-int			check_exit_input(char **input, t_global *data)
-{
-	if (ft_strncmp(*input, "exit", 5) == 0)
-	{
-		//*exit = 1;
-		ft_exit(NULL, 1, data); //
-		return (TRUE);
-	}
-	return (FALSE);
 }

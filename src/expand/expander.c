@@ -3,25 +3,35 @@
 /**
  * It updates the token node with the variable value (*exp_value).
  */
-void	update_list(t_tkn **node, int i, int len, char **exp_value)
+void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
 {
-	t_tkn 	*new_node;
+	char	*new_content;
+	int		token_len;
+	int		value_len;
+	int		i;
 
-	new_node = NULL;
-	if (i > 1)
+	value_len = ft_strlen(*exp_value);
+	token_len = ft_strlen((*node)->content) - var_len;
+	new_content = ft_calloc((token_len + value_len + 1), sizeof(char));
+	if (!new_content)
+		return ;
+	i = 0;
+	while ((*node)->content[i] != '$')
 	{
-		add_node_before(node, i);
+		new_content[i] = (*node)->content[i];
+		i++;
 	}
-	if ((*node)->content[len])
+	ft_strlcpy(new_content + i, *exp_value, value_len + 1);
+	while ((*node)->content[len])
 	{
-		new_node = add_node_after(node, len);
+		new_content[i + value_len] = (*node)->content[len];
+		i++;
+		len++;
 	}
 	free((*node)->content);
-	(*node)->content = *exp_value;
-	if (new_node)
-	{
-		(*node)->next = new_node;
-	}
+	free(*exp_value);
+	(*node)->content = ft_strdup(new_content);
+	free(new_content);
 }
 
 /**
@@ -42,6 +52,52 @@ char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
 	return (NULL);
 }
 
+char	*search_value(t_global **data, t_tkn **node, int i, int len)
+{
+	char	*value;
+	int		j;
+
+	value = NULL;
+	j = 0;
+	while (!value && (*data)->env[j])
+	{
+		value = fetch_in_array(node, i, len, (*data)->env[j]);
+		j++;
+	}
+	j = 0;
+	if ((*data)->exported)
+	{
+		while (!value && (*data)->exported[j])
+		{
+			value = fetch_in_array(node, i, len, (*data)->exported[j]);
+			j++;
+		}
+	}
+	return (value);
+}
+
+void	handle_expand_fail(t_tkn **node)
+{
+	t_tkn	*temp;
+
+	temp = *node;
+	while (temp->prev)
+		temp = temp->prev;
+	if (ft_strcmp(temp->content, "echo") == 0)
+	{
+		free((*node)->content);
+		temp  = (*node)->prev;
+		temp->next = (*node)->next;
+		if ((*node)->next)
+			(*node)->next->prev = temp;
+		free(*node);
+		*node = temp;
+	}
+	if ((*node)->prev && (ft_strcmp((*node)->prev->content, ">") == 0
+		|| ft_strcmp((*node)->prev->content, "<") == 0))
+		ft_printf("\n%sminishell: %s: ambiguous redirect%s\n", RED, (*node)->content, END);
+}
+
 /**
  * Searches for the variable value in the arrays (*data)->env and (*data)->exported.
  * Then, it updates the token hashtable with the founded value.
@@ -51,7 +107,6 @@ char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
  */
 int	get_var_value(t_tkn **node, int i, t_global **data)
 {
-	int		j;
 	int		len;
 	char	*value;
 
@@ -66,20 +121,16 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		printf("%s\nThis functionality is beyond Minishell's scope, ****@#$@***.\n\n%s", RED, END);
 		return (0);
 	}
-	j = 0;
-	while (!value && (*data)->env[j])
+	value = search_value(data, node, i, len);
+	if (!value)
 	{
-		value = fetch_in_array(node, i, len, (*data)->env[j]);
-		j++;
+		handle_expand_fail(node);
+		if ((*node)->prev && (ft_strcmp((*node)->prev->content, ">") == 0
+			|| ft_strcmp((*node)->prev->content, "<") == 0))
+			return (0);
 	}
-	j = 0;
-	while (!value && (*data)->exported[j])
-	{
-		value = fetch_in_array(node, i, len, (*data)->exported[j]);
-		j++;
-	}
-	if (value)
-		update_list(node, i, i + len, &value);
+	else
+		update_node(node, i + len, len, &value);
 	return (1);
 }
 
@@ -112,6 +163,24 @@ int	check_if_expandable(t_tkn **node, t_global **data)
 	return (result);
 }
 
+void	check_heredoc(t_tkn **node)
+{
+	t_tkn	*temp;
+
+	temp = NULL;
+	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
+		&& (*node)->next && !is_special_token((*node)->next->content))
+	{
+		temp = (*node)->next->next;
+		(*node)->delimiter = ft_strdup((*node)->next->content);
+		free((*node)->next->content);
+		free((*node)->next);
+		(*node)->next = temp;
+		if (temp)
+			temp->prev = *node;
+	}
+}
+
 /**
  * Handles variable expansion.
  *
@@ -131,6 +200,7 @@ int	expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
+			check_heredoc(&(*hashtable)[i]);
 			result = check_if_expandable(&(*hashtable)[i], data);
 			if (result == 0)
 			{
