@@ -39,7 +39,7 @@ char	*get_cmd_path(char *cmd, char **paths)
 		if (!cmd_path)
 		{
 			ft_strarr_free(paths, ft_strarr_len(paths));
-			ft_printf_fd(2, "cmd_path error\n");
+			ft_dprintf(2, "cmd_path error\n");
 			return (NULL);
 		}
 		if (access(cmd_path, F_OK | X_OK) == 0)
@@ -64,7 +64,7 @@ char	*get_cmd(char *cmd, t_global *data)
 	cmd_path = get_cmd_path(cmd, env_paths);
 	if (!cmd_path)
 	{
-		ft_printf_fd(2, "%s: command not found\n", cmd);
+		ft_dprintf(2, "%s: command not found\n", cmd);
 		ft_strarr_free(env_paths, ft_strarr_len(env_paths));
 		return (NULL);
 	}
