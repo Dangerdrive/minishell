@@ -90,6 +90,8 @@ void	handle_expand_fail(t_tkn **node)
 		temp->next = (*node)->next;
 		if ((*node)->next)
 			(*node)->next->prev = temp;
+		if (temp->space_after != (*node)->space_after)
+			temp->space_after = (*node)->space_after;
 		free(*node);
 		*node = temp;
 	}

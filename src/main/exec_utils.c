@@ -89,35 +89,42 @@ int	hashsize(t_tkn *hashtable)
 	return (i);
 }
 
+void	fill_args(t_tkn	**node, char **args, int i)
+{
+	char	*arg_tmp;
+
+	arg_tmp = NULL;
+	if ((*node)->space_after == TRUE && (*node)->content)
+		args[i] = ft_strdup((*node)->content);
+	while ((*node)->space_after == FALSE && (*node)->next)
+	{
+		if ((*node)->prev->space_after == TRUE)
+			args[i] = ft_strdup((*node)->content);
+		arg_tmp = ft_strjoin(args[i], (*node)->next->content);
+		free(args[i]);
+		args[i] = arg_tmp;
+		(*node) = (*node)->next;
+	}
+}
+
 char	**hash_to_args(t_tkn *hashtable)
 {
 	char	**args;
-	char	*arg_tmp;
 	t_tkn	*temp;
 	int		i;
 	int		args_count;
 
 	args_count = hashsize(hashtable);
 	args = malloc(sizeof(char *) * (args_count + 1));
-	i = -1;
 	temp = hashtable;
+	i = 0;
 	while (temp)
 	{
-		arg_tmp = NULL;
-		if (temp->space_after == TRUE && temp->content)
-			args[++i] = ft_strdup(temp->content);
-		while (temp->space_after == FALSE && temp->next)
-		{
-			if (temp->prev->space_after == TRUE)
-				args[++i] = ft_strdup(temp->content);
-			arg_tmp = ft_strjoin(args[i], temp->next->content);
-			free(args[i]);
-			args[i] = arg_tmp;
-			temp = temp->next;
-		}
+		fill_args(&temp, args, i);
 		temp = temp->next;
+		i++;
 	}
-	args[++i] = NULL;
+	args[args_count] = NULL;
 	// //debug
 	// while (i >= 0)
 	// {
