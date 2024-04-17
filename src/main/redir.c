@@ -318,7 +318,7 @@ int parse_redirections(t_tkn *node)
 	{
 		if (node->redir[i][0] == '>')
         {
-			if(!redir_output(node, &(node->redir[i][2])))
+			if(redir_output(node, &(node->redir[i][2])))
 				return 1;
         }
 		else if (node->redir[i][0] == '<')

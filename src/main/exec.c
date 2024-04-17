@@ -280,7 +280,9 @@ void	exec_command(t_global *data, int idx)
 	char	**args;
 	char	*cmd;
 
-	parse_redirections(data->hashtable[idx]);
+	//parse_redirections(data->hashtable[idx]);
+	// if (data->hashtable[idx]->content == NULL)
+	// 	exit(EXIT_SUCCESS);
 	args = hash_to_args(data->hashtable[idx]);
 	if (is_builtin(args[0]))
 		data->ret = exec_builtin(args, hashsize(data->hashtable[idx]), data);
@@ -289,7 +291,7 @@ void	exec_command(t_global *data, int idx)
 		data->ret = 127; //arrumar valor de retorno para comandos que nao existem
 		cmd = get_cmd(args[0], data);
 		if (cmd)
-			data->ret = execve(cmd, args, data->env); 
+			data->ret = execve(cmd, args, data->env); //consolidar env talvez
 		//perror("minishell: execve"); 
 	}
 	ft_strarr_free(args, ft_strarr_len(args));
@@ -367,6 +369,10 @@ void	fork_processes(t_global *data, int pipes[][2], int n)
 			if (i < n)
 				dup2(pipes[i][1], STDOUT_FILENO);
 			close_pipes(pipes, n);
+			if (parse_redirections(data->hashtable[i]) == 1)
+				return;
+			if (data->hashtable[i]->content == NULL)
+				return ;
 			exec_command(data, i);
 		}
 		i++;
@@ -415,14 +421,12 @@ int	exec(t_global *data)
 
 int	prepare_exec(t_global *data)
 {
-	// int		i;
 	int		ret;
 	char	**args;
 
 	args = hash_to_args(data->hashtable[0]);
-	// i = 0;
 	ret = 1;
-	if (parse_redirections(data->hashtable[0]) == -1)
+	if (parse_redirections(data->hashtable[0]) == 1)
 		return (1);
 	if (pipecount(data) == 0 && args[0] && is_builtin(args[0]))
 		exec_builtin(args, hashsize(data->hashtable[0]), data);
@@ -472,5 +476,5 @@ int	prepare_exec(t_global *data)
 - redirects
 	- create all files
 	- set fds
-	- reset fds when needed
+	- reset fds/dup when needed
 */
