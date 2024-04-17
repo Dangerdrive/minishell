@@ -92,10 +92,14 @@ int	hashsize(t_tkn *hashtable)
 void	fill_args(t_tkn	**node, char **args, int i)
 {
 	char	*arg_tmp;
+	t_tkn	*temp_node;
 
 	arg_tmp = NULL;
-	if ((*node)->space_after == TRUE && (*node)->content)
+	if ((*node)->prev && !ft_strcmp((*node)->prev->content, "") && (*node)->prev->space_after == TRUE)
+		args[i] = ft_strjoin(" ", (*node)->content);
+	else if ((*node)->space_after == TRUE && (*node)->content)
 		args[i] = ft_strdup((*node)->content);
+	temp_node = *node;
 	while ((*node)->space_after == FALSE && (*node)->next)
 	{
 		if ((*node)->prev->space_after == TRUE)
@@ -114,6 +118,8 @@ char	**hash_to_args(t_tkn *hashtable)
 	int		i;
 	int		args_count;
 
+	if (!hashtable->content && !hashtable->next)
+		return (NULL);
 	args_count = hashsize(hashtable);
 	args = malloc(sizeof(char *) * (args_count + 1));
 	temp = hashtable;
@@ -125,11 +131,5 @@ char	**hash_to_args(t_tkn *hashtable)
 		i++;
 	}
 	args[args_count] = NULL;
-	// //debug
-	// while (i >= 0)
-	// {
-	// printf("%i: %s\n", i, args[i]);
-	// 	i--;
-	// }
 	return (args);
 }
