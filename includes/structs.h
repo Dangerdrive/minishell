@@ -32,6 +32,8 @@ typedef struct s_global
 	char			*usr;
 	char			*usr_input;
 	char			*cur_path;
+	int				original_stdin;
+	int				original_stdout;
 	int				pid;
 	int				is_exec;
 	int				prev_process_status;

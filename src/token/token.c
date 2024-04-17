@@ -129,6 +129,9 @@ int	readline_and_handle_input(t_global **data)
 {
 	int	input;
 
+	(*data)->original_stdin = dup(STDIN_FILENO);
+	(*data)->original_stdout = dup(STDOUT_FILENO);	
+
 	input = 0;
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);

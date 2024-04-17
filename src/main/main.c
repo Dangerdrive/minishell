@@ -19,6 +19,13 @@ static int	print_cwd(t_global **data)
 	free(cwd);
 	return (0);
 }
+void	restore_fds(t_global *data)
+{
+	dup2(data->original_stdin, STDIN_FILENO);
+	close(data->original_stdin);
+	dup2(data->original_stdout, STDOUT_FILENO);
+	close(data->original_stdout);
+}
 
 int	main(void)
 {
@@ -30,7 +37,6 @@ int	main(void)
 	// data->exit = handle_signal();
 	while (!data->exit)
 	{
-		// printf("%s$ ", data->cur_path);
 		print_cwd(&data);
 		define_prompt_signals();
 		if (!data->exit && readline_and_handle_input(&data) == -1)

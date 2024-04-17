@@ -114,6 +114,8 @@ char	**hash_to_args(t_tkn *hashtable)
 	int		i;
 	int		args_count;
 
+	if (!hashtable->content)
+		return (NULL);
 	args_count = hashsize(hashtable);
 	args = malloc(sizeof(char *) * (args_count + 1));
 	temp = hashtable;
@@ -125,11 +127,5 @@ char	**hash_to_args(t_tkn *hashtable)
 		i++;
 	}
 	args[args_count] = NULL;
-	// //debug
-	// while (i >= 0)
-	// {
-	// printf("%i: %s\n", i, args[i]);
-	// 	i--;
-	// }
 	return (args);
 }
