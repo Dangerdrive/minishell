@@ -67,7 +67,7 @@ OBJ_DIR		= obj
 
 # Source and object files
 SRC		= ft_print_ptr ft_print_char ft_print_str ft_print_hex \
-                  ft_print_unsig ft_print_nbr ft_printf ft_printf_fd
+                  ft_print_unsig ft_print_nbr ft_printf ft_dprintf
 SRCS		= $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC)))
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

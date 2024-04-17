@@ -50,7 +50,7 @@ static int	go_oldpwd(t_global *data)
 	path = ft_getenv("OLDPWD", &data);
 	if (!path)
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell : cd: OLDPWD not set\n");
+		ft_dprintf(STDERR_FILENO, "minishell : cd: OLDPWD not set\n");
 		return (0);
 	}
 	result = chdir(path);
@@ -69,7 +69,7 @@ static int	go_home(t_global *data)
 	update_pwds(data, 1);
 	path = ft_getenv("HOME", &data);
 	if (!path)
-		ft_printf_fd(STDERR_FILENO, "minishell: cd: HOME not set\n");
+		ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
 	if (!path)
 		return (0);
 	result = chdir(path);
@@ -83,7 +83,7 @@ int	ft_cd(char **args, int args_len, t_global *data)
 	if (args_len > 2)
 	{
 		result = 1;
-		ft_printf_fd(2, "minishell : cd: too many arguments");
+		ft_dprintf(2, "minishell : cd: too many arguments");
 	}	
 	else if (args_len == 1)
 		result = go_home(data);
@@ -96,7 +96,7 @@ int	ft_cd(char **args, int args_len, t_global *data)
 		if (result < 0)
 			result *= -1;
 		if (result != 0)
-			ft_printf_fd(2, "minishell: cd: %s: %s\n", args[1], strerror(errno));
+			ft_dprintf(2, "minishell: cd: %s: %s\n", args[1], strerror(errno));
 	}
 	update_pwds(data, 0);
 	return (result);

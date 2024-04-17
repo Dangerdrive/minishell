@@ -19,33 +19,135 @@
 //  *                     about the pipeline execution, including the heredoc flag
 //  *                     and file descriptors for input and output files.
 //  */
-// static void	handle_heredoc(t_data *data)
+// int	handle_heredoc(t_tkn *node, char *)
 // {
 // 	int		tmp_fd;
 // 	int		stdin_fd;
 // 	char	*line;
 
+
 // 	tmp_fd = open(".heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 // 	stdin_fd = dup(STDIN_FILENO);
 // 	if (tmp_fd == -1)
-// 		cleanup_n_exit(ft_printf_fd(2, "here_doc: %s\n", strerror(errno)), data);
+// 	{
+// 		ft_dprintf(2, "minishell: here_doc: %s\n", strerror(errno));
+// 		return (1);
+// 	}
 // 	while (1)
 // 	{
-// 		ft_printf_fd(1, "> ");
+// 		ft_dprintf(1, "> ");
 // 		line = get_next_line(stdin_fd);
 // 		if (line == NULL)
 // 			break ;
-// 		if (ft_strlen(data->here_doc) + 1 == ft_strlen(line)
-// 			&& !ft_strncmp(line, data->here_doc, ft_strlen(data->here_doc))) //checar se essa logica faz sentido
+// 		if (ft_strlen(node->here_doc) + 1 == ft_strlen(line)
+// 			&& !ft_strncmp(line, node->here_doc, ft_strlen(node->here_doc))) //checar se essa logica faz sentido
 // 		{
 // 			close(stdin_fd);
 // 			break ;
 // 		}
 // 		else
-// 			ft_printf_fd(tmp_fd, line);
+// 			ft_dprintf(tmp_fd, line);
 // 		free(line);
 // 	}
 // 	close(tmp_fd);
+// 	return (0);
+// }
+
+
+//como fica a questão do nome do arquivo temporário? precisa salvar?
+int handle_heredoc(t_tkn *node, char *delimiter, char *index)
+{
+	int		tmp_fd;
+	char	*line;
+	char	*heredoc_filename;
+	char	*heredoc_temp = ".heredoc_";
+
+	heredoc_filename = malloc(ft_strlen(heredoc_temp) + ft_strlen(index) + 1);
+	if (!heredoc_filename)
+	{
+		perror("Memory allocation failed");
+		return -1;
+	}
+	strcpy(heredoc_filename, heredoc_temp);
+	strcat(heredoc_filename, index);
+	tmp_fd = open(heredoc_filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (tmp_fd == -1)
+	{
+		perror("Error creating temp file for heredoc");
+		free(heredoc_filename);
+		return -1;
+	}
+	while (1)
+	{
+		ft_dprintf(1, "> ");
+		line = get_next_line(STDIN_FILENO);
+		if (line == NULL) {
+			free(heredoc_filename);
+			close(tmp_fd);
+			return -1;
+		}
+		if (!ft_strcmp(line, delimiter))
+		{
+			free(line);
+			break;
+		}
+		ft_dprintf(tmp_fd, "%s\n", line);
+		free(line);
+	}
+	close(tmp_fd);
+	node->input_fd = open(heredoc_filename, O_RDONLY);
+	if (node->input_fd == -1)
+	{
+		perror("Error opening heredoc temp file for reading");
+		free(heredoc_filename);
+		return -1;
+	}
+	free(heredoc_filename);
+	return 0;
+}
+
+
+// int handle_heredoc(t_tkn *node, char *delimiter, char *index)
+// {
+// 	int  	tmp_fd;
+// 	int		stdin_fd;
+// 	char	*line;
+// 	char	*heredoc_tmp;
+ 
+// 	heredoc_tmp = ft_strjoin(delimiter, index);
+// 	free(index);
+// 	tmp_fd = open(heredoc_tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+// 	stdin_fd = dup(STDIN_FILENO);
+// 	if (tmp_fd == -1)
+// 	{
+// 		perror("Error creating temp file for heredoc");
+// 		return -1;
+// 	}
+// 	while (1)
+// 	{
+// 		ft_dprintf(1, "> ");
+// 		line = get_next_line(stdin_fd);
+// 		if (line == NULL)
+// 			break;
+// 		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter)))
+// 		{
+// 			close(stdin_fd);
+// 			free(line);
+// 			break;
+// 		}
+// 		else
+// 			ft_dprintf(tmp_fd, "%s", line);
+// 		free(line);
+// 	}
+// 	close(tmp_fd);
+// 	close(stdin_fd);
+// 	node->input_fd = open(".heredoc.tmp", O_RDONLY);
+// 	if (node->input_fd == -1)
+// 	{
+// 		perror("Error opening heredoc temp file for reading");
+// 		return -1;
+// 	}
+// 	return 0;
 // }
 
 // /**
@@ -60,7 +162,7 @@
 //  * is printed, and the program exits after cleanup.
 //  *
 //  * @param[in,out] data Pointer to a t_data structure containing the heredoc flag,
-//  *                     command line arguments, and the input file descriptor to
+//  *	         command line arguments, and the input file descriptor to
 //  * be set.
 //  */
 // int	get_input_file(t_global *data, t_tkn *tkn)
@@ -71,7 +173,7 @@
 // 		data->input_fd = open(".heredoc.tmp", O_RDONLY);
 // 		if (data->input_fd == -1)
 // 		{
-// 			ft_printf_fd(2, "here_doc: %s\n", strerror(errno));
+// 			ft_dprintf(2, "here_doc: %s\n", strerror(errno));
 // 			//cleanup_n_exit(ERROR, data);
 // 			return (0);
 // 		}
@@ -81,7 +183,7 @@
 // 		data->input_fd = open(data->input, O_RDONLY, 644);
 // 		if (data->input_fd == -1)
 // 		{
-// 			ft_printf_fd(2, "%s: %s\n", data->input, strerror(errno));
+// 			ft_dprintf(2, "%s: %s\n", data->input, strerror(errno));
 // 			return (0);
 // 		}	
 // 	}
@@ -110,7 +212,7 @@
 // 	if (data->output_fd == -1)
 // 	{
 // 		//cleanup_n_exit(ERROR, data);
-// 		ft_printf_fd(2, "%s: %s\n",	data->output, strerror(errno));
+// 		ft_dprintf(2, "%s: %s\n",	data->output, strerror(errno));
 // 		return (0);
 // 	}
 // }
@@ -142,20 +244,53 @@
 // 	}
 // }
 
-int	redir_input(t_tkn *node, char *input)
-{
-	int	fd;
+// int	redir_input(t_tkn *node, char *input, int index)
+// {
+// 	int		fd;
+// 	char 	*file;
 
-	if (input[1] == '<')
-		fd = open(&(input[2]), O_WRONLY | O_CREAT, 0644);
+// 	if (input[1] == '<')
+// 	{
+// 		file = ft_strjoin(input, index);
+// 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);		
+// 	}
+// 	else
+// 	{
+// 		file = ft_strdup(input);
+// 		fd = open(file, O_RDONLY);
+// 	}	
+// 	if (fd == -1) 
+// 		return -1;
+// 	close(node->input_fd);
+// 	node->input_fd = fd;
+// 	node->input = ft_strdup(input);//
+// 	free(file);//
+// 	return (0);
+// }
+
+int redir_input(t_tkn *node, char *input, int index)
+{
+    int     fd;
+    char    *h_index;
+
+    if (input[1] == '<')
+	{
+        h_index = ft_itoa(index);
+        return handle_heredoc(node, input, h_index);
+    } 
 	else
-		fd = open(&(input[2]), O_RDONLY);
-	if (fd == -1) 
-		return -1;
-	close(node->input_fd);
-	node->input_fd = fd;
-	node->input = &input[2];
-	return (0);
+	{
+        fd = open(input, O_RDONLY);
+        if (fd == -1)
+		{
+            perror("Error opening file");
+            return -1;
+        }
+        close(node->input_fd);
+        node->input_fd = fd;
+        node->input = input;
+    }
+    return 0;
 }
 
 int	redir_output(t_tkn *node, char *output)
@@ -163,14 +298,14 @@ int	redir_output(t_tkn *node, char *output)
 	int fd;
 
 	if (output[1] == '>')
-		fd = open(&output[2], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		fd = open(&output[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1) 
 		return 1;
 	close(node->output_fd);
 	node->output_fd = fd;
-	node->output = &output[2];
+	node->output = output;
 	return (0);
 }
 
@@ -182,15 +317,15 @@ int parse_redirections(t_tkn *node)
 	while (node->redir[i])
 	{
 		if (node->redir[i][0] == '>')
-		{
-			if(!redir_output( node, &(node->redir[i][2])))
+        {
+			if(redir_output(node, &(node->redir[i][2])))
 				return 1;
-		}
+        }
 		else if (node->redir[i][0] == '<')
 		{
-			if (redir_input(node, &(node->redir[i][2])))
-			return 1;
-		}
+        	if (redir_input(node, &(node->redir[i][2]), i))
+				return 1;
+        }
 		i++;
 	}
 	return 0;
@@ -234,3 +369,6 @@ int parse_redirections(t_tkn *node)
 // 	}
 // 	return 0;
 // }
+
+
+// expansões no redirect

@@ -63,23 +63,27 @@ void	check_pipe(t_tkn **node, int i)
 
 void	check_export(t_tkn **node)
 {
-	char 	*new_content;
+	char	*new_content;
 	t_tkn	*temp;
 
-	if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0
-		&& ft_strcmp((*node)->type, SPECIAL_CHAR)) // CHECAR NECESSIDADE DESSA VERIFICAÇÃO
+	if ((*node)->content)
 	{
-		new_content = ft_strjoin((*node)->prev->content, (*node)->content);
-		free((*node)->content);
-		(*node)->content = ft_strdup(new_content);
-		temp = (*node)->prev->prev;
-		if (temp)
-			temp->next = *node;
-		free(new_content);
-		free((*node)->prev->content);
-		free((*node)->prev);
-		(*node)->prev = temp;
+		if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0
+			&& ft_strcmp((*node)->type, SPECIAL_CHAR)) // CHECAR NECESSIDADE DESSA VERIFICAÇÃO
+		{
+			new_content = ft_strjoin((*node)->prev->content, (*node)->content);
+			free((*node)->content);
+			(*node)->content = ft_strdup(new_content);
+			temp = (*node)->prev->prev;
+			if (temp)
+				temp->next = *node;
+			free(new_content);
+			free((*node)->prev->content);
+			free((*node)->prev);
+			(*node)->prev = temp;
 	}
+	}
+
 }
 
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
