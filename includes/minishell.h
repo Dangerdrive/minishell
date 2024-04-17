@@ -76,7 +76,7 @@ t_bool		is_export_var(char *content);
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
 void		init_redir_args(char *(*args)[TABLE_SIZE]);
-void		update_redir_files_list(t_tkn **node, char *new_arg, char *sig);
+void		update_redir_files_list(char *(*redir)[TABLE_SIZE], char *new_arg, char *sig);
 t_bool		is_redir_in(char *c);
 t_bool		is_redir_out(char *c);
 t_bool		is_append(char *c);

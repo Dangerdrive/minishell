@@ -34,7 +34,7 @@ t_bool	input_starts_with_command(t_tkn	*node)
 	return (true);
 }
 
-void	update_redir_files_list(t_tkn **node, char *new_arg, char *sig)
+void	update_redir_files_list(char *(*redir)[TABLE_SIZE], char *new_arg, char *sig)
 {
 	int		i;
 	char	*new_sig;
@@ -44,15 +44,14 @@ void	update_redir_files_list(t_tkn **node, char *new_arg, char *sig)
 		new_sig = ft_strjoin(sig, " ");
 	else
 		new_sig = ft_strdup(sig);
-	if (!(*node)->redir[i])
+	if ((*redir)[i])
 	{
-		(*node)->redir[i] = ft_strjoin(new_sig, new_arg);
-		return ;
+		while ((*redir)[i])
+			i++;
 	}
-	while ((*node)->redir[i])
-		i++;
-	(*node)->redir[i] = ft_strjoin(new_sig, new_arg);
-	//free(new_sig);
+	(*redir)[i] = ft_strjoin(new_sig, new_arg);
+	free(new_sig);
+	return ;
 }
 
 void	check_redirects(t_tkn **node)
@@ -71,7 +70,7 @@ void	check_redirects(t_tkn **node)
 		{
 			if ((ft_strcmp((*node)->type, SPECIAL_CHAR)) && is_redir((*node)->prev->content))
 			{
-				update_redir_files_list(&temp_node, (*node)->content, (*node)->prev->content);
+				update_redir_files_list(&temp_node->redir, (*node)->content, (*node)->prev->content);
 				free((*node)->content);
 				if ((*node)->prev->prev)
 					temp_tkn = (*node)->prev->prev;
@@ -80,11 +79,14 @@ void	check_redirects(t_tkn **node)
 				temp_tkn->next = (*node)->next;
 				if ((*node)->next)
 					(*node)->next->prev = temp_tkn;
-				free(*node);
-				free((*node)->prev->content);
-				(*node)->prev->content = NULL;
+				if ((*node)->prev)
+				{
+					free((*node)->prev->content);
+					(*node)->prev->content = NULL;
+				}
 				if ((*node)->prev->prev)
 					free((*node)->prev);
+				free(*node);
 				(*node) = temp_tkn;
 			}
 			*node = (*node)->next;
