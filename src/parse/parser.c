@@ -46,21 +46,6 @@ void	remove_quotes(t_tkn **node, char *content)
 	}
 }
 
-void	check_pipe(t_tkn **node, int i)
-{
-	t_tkn	*temp;
-
-	if (i > 0 && is_pipe((*node)->content))
-	{
-		temp = (*node)->next;
-		free((*node)->content);
-		free(*node);
-		*node = temp;
-		if (*node)
-			(*node)->prev = NULL;
-	}
-}
-
 void	check_export(t_tkn **node)
 {
 	char	*new_content;
@@ -68,8 +53,8 @@ void	check_export(t_tkn **node)
 
 	if ((*node)->content)
 	{
-		if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0
-			&& ft_strcmp((*node)->type, SPECIAL_CHAR)) // CHECAR NECESSIDADE DESSA VERIFICAÇÃO
+		if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0)
+			//  && ft_strcmp((*node)->type, SPECIAL_CHAR)) CHECAR NECESSIDADE DESSA VERIFICAÇÃO
 		{
 			new_content = ft_strjoin((*node)->prev->content, (*node)->content);
 			free((*node)->content);
@@ -95,7 +80,6 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 	i = 0;
 	while ((*hashtable)[i])
 	{
-		check_pipe(&(*hashtable)[i], i);
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{

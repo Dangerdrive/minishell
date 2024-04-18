@@ -31,6 +31,8 @@ t_bool	input_starts_with_command(t_tkn	*node)
 	if (!node->prev
 		&& ft_strcmp(node->type, COMMAND) && !is_redir(node->content))
 		return (false);
+	if (!node->next && ft_strcmp(node->type, SPECIAL_CHAR) == 0)
+		return (false);
 	return (true);
 }
 
@@ -112,6 +114,21 @@ t_bool	check_valid_input(t_tkn **node, t_tkn *temp)
 	return (TRUE);
 }
 
+void	remove_pipe(t_tkn **node, int i)
+{
+	t_tkn	*temp;
+
+	if (i >= 0 && is_pipe((*node)->content))
+	{
+		temp = (*node)->next;
+		free((*node)->content);
+		free(*node);
+		*node = temp;
+		if (*node)
+			(*node)->prev = NULL;
+	}
+}
+
 int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 {
 	t_tkn	*temp;
@@ -131,6 +148,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
+		remove_pipe(&(*hashtable)[i], i);
 		i++;
 	}
 	return (1);

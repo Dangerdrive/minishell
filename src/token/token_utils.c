@@ -91,7 +91,6 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	i = 0;
 	if (ft_strncmp(token, PIPE, 1) == 0)
 	{
-		
 		while ((*data)->hashtable[i])
 			i++;
 	}
