@@ -7,16 +7,17 @@ int handle_heredoc(t_tkn *node, char *delimiter, char *index)
 	char	*heredoc_filename;
 	char	*heredoc_temp = ".heredoc_";
 
-
+// ADD EXPANSION TO HEREDOC
 //atualizar node->input
-	heredoc_filename = malloc(ft_strlen(heredoc_temp) + ft_strlen(index) + 1);
-	if (!heredoc_filename)
-	{
-		perror("Memory allocation failed");
-		return -1;
-	}
-	strcpy(heredoc_filename, heredoc_temp);
-	strcat(heredoc_filename, index);
+	// heredoc_filename = malloc(ft_strlen(heredoc_temp) + ft_strlen(index) + 1);
+	// if (!heredoc_filename)
+	// {
+	// 	perror("Memory allocation failed");
+	// 	return -1;
+	// }
+	// strcpy(heredoc_filename, heredoc_temp);
+	// strcat(heredoc_filename, index);
+	heredoc_filename = ft_strjoin(heredoc_temp, index);
 	tmp_fd = open(heredoc_filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (tmp_fd == -1)
 	{
@@ -62,7 +63,7 @@ int handle_heredoc(t_tkn *node, char *delimiter, char *index)
 // 	{
 //         h_index = ft_itoa(index);
 //         return handle_heredoc(node, input, h_index);
-//     } 
+//     }
 // 	else
 // 	{
 //         fd = open(input, O_RDONLY);
@@ -86,7 +87,7 @@ int handle_heredoc(t_tkn *node, char *delimiter, char *index)
 // 		fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 // 	else
 // 		fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd == -1) 
+// 	if (fd == -1)
 // 		return 1;
 // 	//close(node->output_fd);
 // 	node->output_fd = fd;
