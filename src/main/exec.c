@@ -292,7 +292,7 @@ void	exec_command(t_global *data, int idx)
 		cmd = get_cmd(args[0], data);
 		if (cmd)
 			data->ret = execve(cmd, args, data->env); //consolidar env talvez
-		//perror("minishell: execve"); 
+		//perror("minishell: execve");
 	}
 	ft_strarr_free(args, ft_strarr_len(args));
 	exit(EXIT_FAILURE);
