@@ -65,7 +65,7 @@ $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
 
 valgrind: all
 	@echo "Running the program with valgrind..."
-	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
+	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes --suppressions=readline.supp  ./minishell
 
 run: all
 	@echo "Running the program..."
