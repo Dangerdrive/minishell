@@ -12,6 +12,7 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 		while ((*hashtable)[i])
 		{
 			if ((is_double_special_token((*hashtable)[i]) && !(*hashtable)[i]->delimiter)
+				|| (!(*hashtable)[i]->next && !ft_strcmp((*hashtable)[i]->type, SPECIAL_CHAR))
 				|| is_and_or((*hashtable)[i]->content))
 			{
 				printf("Syntax error.\n");
