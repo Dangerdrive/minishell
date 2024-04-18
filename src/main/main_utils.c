@@ -18,7 +18,7 @@ t_global	*init_data(void)
 	data->usr = ft_strdup(ft_getenv("USER", &data));
 	data->is_echo = false;
 	init_hashtable(&data->hashtable);
-	printf("PATH\n");
+	//printf("PATH\n");
 	return (data);
 }
 
