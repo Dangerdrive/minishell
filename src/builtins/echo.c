@@ -16,7 +16,7 @@ int	ft_echo(char **args, int args_len)
 		}
 		while (args[i])
 		{
-			ft_printf(args[i]);
+			ft_printf("%s", args[i]);
 			if (args[i + 1] && args[i][0] != '\0')
 				ft_printf(" ");
 			i++;

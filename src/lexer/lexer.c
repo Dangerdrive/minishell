@@ -101,10 +101,21 @@ void	check_redirects(t_tkn **node)
 	}
 }
 
+t_bool	check_valid_input(t_tkn **node, t_tkn *temp)
+{
+	if (!input_starts_with_command((*node)))
+	{
+		printf("%s: command not found\n", (*node)->content);
+		(*node) = temp;
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
 int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 {
-	int i;
 	t_tkn	*temp;
+	int 	i;
 
 	i = 0;
 	if (check_syntax(hashtable) != 1)
@@ -114,12 +125,8 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			if (!input_starts_with_command((*hashtable)[i]))
-			{
-				printf("%s: command not found\n", (*hashtable)[i]->content);
-				(*hashtable)[i] = temp;
+			if (!check_valid_input(hashtable[i], temp))
 				return (0);
-			}
 			check_redirects(hashtable[i]);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
