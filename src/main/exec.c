@@ -10,7 +10,7 @@
 //  * `close_pipe_fds` to close all pipe file descriptors.
 //  *
 //  * @param[in,out] data Pointer to a t_data structure that contains the file
-//  *				     descriptors for input, output, and pipes.
+//  *					 descriptors for input, output, and pipes.
 //  */
 // void	close_fds(t_global *data)
 //
@@ -40,7 +40,7 @@
 //  * after performing cleanup.
 //  *
 //  * @param[in,out] data Pointer to a t_data structure containing the command
-//  *                     count and the array to store pipe file descriptors.
+//  *				     count and the array to store pipe file descriptors.
 //  */
 // static int	create_pipes(t_global *data)
 //
@@ -359,10 +359,38 @@ void	fork_processes(t_global *data, int pipes[][2], int n)
 
 
 
-int	exec(t_global *data)
+// int	exec(t_global *data)
+// {
+// 	int	n;
+// 	int	(*pipes)[2];
+
+// 	n = pipecount(data);
+// 	if (data->hashtable[0]->content == NULL && n == 0)
+// 		return (0);
+// 	pipes = malloc(n * sizeof(*pipes));
+// 	if (pipes == NULL)
+// 	{
+// 		perror("minishell: pipes: malloc failed");
+// 		return (-1);
+// 	}
+// 	create_pipes(pipes, n);
+// 	fork_processes(data, pipes, n);
+// 	close_pipes(pipes, n);
+// 	n = 2;
+// 	while (++n < 1024)
+// 		close(n);
+// 	while (wait(NULL) > 0)
+
+// 	free(pipes);
+// 	return (0);
+// }
+
+int exec(t_global *data)
 {
-	int	n;
-	int	(*pipes)[2];
+	int n;
+	int(*pipes)[2];
+	int status;
+	pid_t pid;
 
 	n = pipecount(data);
 	if (data->hashtable[0]->content == NULL && n == 0)
@@ -379,8 +407,9 @@ int	exec(t_global *data)
 	n = 2;
 	while (++n < 1024)
 		close(n);
-	while (wait(NULL) > 0)
-
+	pid = waitpid(-1, &status, 0);
+	while (pid != -1)
+		pid = waitpid(-1, &status, 0);
 	free(pipes);
 	return (0);
 }
