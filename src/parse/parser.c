@@ -66,7 +66,7 @@ void	check_export(t_tkn **node)
 			free((*node)->prev->content);
 			free((*node)->prev);
 			(*node)->prev = temp;
-	}
+		}
 	}
 
 }
