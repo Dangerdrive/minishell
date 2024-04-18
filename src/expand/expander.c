@@ -37,11 +37,11 @@ static void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
 /**
  * Searches for the key that matches the token's variable and then returns its value.
  */
-static char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
+char	*fetch_in_array(char **str, int i, int len, char *arr)
 {
 	char	*value;
 
-	if (ft_strncmp((*node)->content + i, arr, len) == 0)
+	if (ft_strncmp(str + i, arr, len) == 0)
 	{
 		while (*arr != '=')
 			arr++;
@@ -52,7 +52,7 @@ static char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
 	return (NULL);
 }
 
-static char	*search_value(t_global **data, t_tkn **node, int i, int len)
+char	*search_value(t_global **data, char **str, int i, int len)
 {
 	char	*value;
 	int		j;
@@ -61,7 +61,7 @@ static char	*search_value(t_global **data, t_tkn **node, int i, int len)
 	j = 0;
 	while (!value && (*data)->env[j])
 	{
-		value = fetch_in_array(node, i, len, (*data)->env[j]);
+		value = fetch_in_array(str, i, len, (*data)->env[j]);
 		j++;
 	}
 	j = 0;
@@ -69,7 +69,7 @@ static char	*search_value(t_global **data, t_tkn **node, int i, int len)
 	{
 		while (!value && (*data)->exported[j])
 		{
-			value = fetch_in_array(node, i, len, (*data)->exported[j]);
+			value = fetch_in_array(str, i, len, (*data)->exported[j]);
 			j++;
 		}
 	}
@@ -123,7 +123,7 @@ static int	get_var_value(t_tkn **node, int i, t_global **data)
 		printf("%s\nThis functionality is beyond Minishell's scope, ****@#$@***.\n\n%s", RED, END);
 		return (0);
 	}
-	value = search_value(data, node, i, len);
+	value = search_value(data, &(*node)->content, i, len);
 	if (!value)
 	{
 		handle_expand_fail(node);

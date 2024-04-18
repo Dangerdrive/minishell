@@ -51,6 +51,7 @@ void	check_export(t_tkn **node)
 	char	*new_content;
 	t_tkn	*temp;
 
+	//printf("HELLO\n");
 	if ((*node)->content)
 	{
 		if ((*node)->prev && ft_strcmp((*node)->prev->type, EXPT_VARIABLE) == 0)

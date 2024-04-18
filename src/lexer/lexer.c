@@ -12,6 +12,7 @@ int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
 		while ((*hashtable)[i])
 		{
 			if ((is_double_special_token((*hashtable)[i]) && !(*hashtable)[i]->delimiter)
+				|| (!(*hashtable)[i]->next && !ft_strcmp((*hashtable)[i]->type, SPECIAL_CHAR))
 				|| is_and_or((*hashtable)[i]->content))
 			{
 				printf("Syntax error.\n");
@@ -30,8 +31,6 @@ t_bool	input_starts_with_command(t_tkn	*node)
 {
 	if (!node->prev
 		&& ft_strcmp(node->type, COMMAND) && !is_redir(node->content))
-		return (false);
-	if (!node->next && ft_strcmp(node->type, SPECIAL_CHAR) == 0)
 		return (false);
 	return (true);
 }

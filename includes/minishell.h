@@ -55,6 +55,8 @@ t_tkn		*add_node_after(t_tkn **node, int i);
 t_bool		is_var_name(t_tkn **node, int i, int len);
 t_bool		is_special_variable(char *var);
 t_bool		is_special_var_char(char c);
+char		*search_value(t_global **data, char **str, int i, int len);
+char		*fetch_in_array(char **str, int i, int len, char *arr);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);
