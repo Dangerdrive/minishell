@@ -104,10 +104,11 @@ void	check_redirects(t_tkn **node)
 		}
 		*node = (*node)->next;
 	}
-	if (!temp_node->prev)
+	if (temp_node && !temp_node->prev)
 		*node = temp_node;
 	else
 	{
+		*node = temp;
 		while ((*node)->next != NULL)
 			*node = (*node)->next;
 		*node = temp_node;

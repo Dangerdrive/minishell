@@ -102,7 +102,7 @@ void	fill_args(t_tkn	**node, char **args, int i)
 	temp_node = *node;
 	while ((*node)->space_after == FALSE && (*node)->next)
 	{
-		if ((*node)->prev->space_after == TRUE)
+		if ((*node)->prev && (*node)->prev->space_after == TRUE)
 			args[i] = ft_strdup((*node)->content);
 		arg_tmp = ft_strjoin(args[i], (*node)->next->content);
 		free(args[i]);
