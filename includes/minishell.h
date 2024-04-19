@@ -57,6 +57,7 @@ t_bool		is_special_variable(char *var);
 t_bool		is_special_var_char(char c);
 char		*search_value(t_global **data, char **str, int i, int len);
 char		*fetch_in_array(char **str, int i, int len, char *arr);
+void		expand_heredoc(t_global **data, char **line);
 
 /*--------------token--------------*/
 int			readline_and_handle_input(t_global **data);

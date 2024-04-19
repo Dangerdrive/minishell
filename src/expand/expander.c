@@ -41,7 +41,7 @@ char	*fetch_in_array(char **str, int i, int len, char *arr)
 {
 	char	*value;
 
-	if (ft_strncmp(str + i, arr, len) == 0)
+	if (ft_strncmp(*str + i, arr, len) == 0)
 	{
 		while (*arr != '=')
 			arr++;

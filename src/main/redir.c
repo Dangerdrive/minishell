@@ -39,7 +39,8 @@ int handle_heredoc(t_tkn *node, char *delimiter, char *index)
 			free(line);
 			break;
 		}
-		expand_heredoc(line);
+		//expand_heredoc(data, line); // inlcude data parameter
+		
 		ft_dprintf(tmp_fd, "%s\n", line);
 		free(line);
 	}
