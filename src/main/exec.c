@@ -295,7 +295,7 @@ void	exec_command(t_global *data, int idx)
 		//perror("minishell: execve");
 	}
 	ft_strarr_free(args, ft_strarr_len(args));
-	exit(EXIT_FAILURE);
+	//exit(EXIT_FAILURE);
 }
 
 void	create_pipes(int pipes[][2], int n)
@@ -351,7 +351,7 @@ void	fork_processes(t_global *data, int pipes[][2], int n)
 			// 	return;
 			if (data->hashtable[i]->content == NULL)
 				return ;
-			exec_command(data, i);
+			exec_command(data, n); // TROQUEI O SEGUNDO ARG DE 'i' PARA 'n'
 		}
 		i++;
 	}
@@ -433,7 +433,6 @@ int	prepare_exec(t_global *data)
 		ft_strarr_free(args, ft_strarr_len(args));
 	// else
 	// 	return (exec(data, args));
-
 	return (ret);
 }
 

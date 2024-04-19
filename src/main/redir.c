@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int handle_heredoc(t_tkn *node, char *delimiter, char *index)
+int handle_heredoc(t_global **data, t_tkn *node, char *delimiter, char *index)
 {
 	int		tmp_fd;
 	char	*line;
@@ -39,7 +39,7 @@ int handle_heredoc(t_tkn *node, char *delimiter, char *index)
 			free(line);
 			break;
 		}
-		//expand_heredoc(line);
+		//expand_heredoc(data, line);
 		ft_dprintf(tmp_fd, "%s\n", line);
 		free(line);
 	}
@@ -125,7 +125,7 @@ int handle_heredoc(t_tkn *node, char *delimiter, char *index)
 //     return 0;
 // }
 
-// int parse_redirections(t_tkn *node)
+// int parse_redirections(t_global **data, t_tkn *node)
 // {
 //     int i = 0;
 
@@ -163,13 +163,13 @@ int handle_output_redirection(t_tkn *node, char *redirection) {
     return 0;
 }
 
-int handle_input_redirection(t_tkn *node, char *redirection, int index) {
+int handle_input_redirection(t_global **data, *node, char *redirection, int index) {
     int fd;
     char *h_index;
 
     if (redirection[1] == '<') {
         h_index = ft_itoa(index);
-        int result = handle_heredoc(node, redirection, h_index);
+        int result = handle_heredoc(data, node, redirection, h_index);
         free(h_index);
         return result;
     } else {
@@ -197,7 +197,7 @@ int apply_redirections(t_tkn *node) {
     return 0;
 }
 
-int parse_redirections(t_tkn *node) {
+int parse_redirections(t_global **data, t_tkn *node) {
     int i = 0;
 
     while (node->redir[i]) {
@@ -205,7 +205,7 @@ int parse_redirections(t_tkn *node) {
             if (handle_output_redirection(node, &(node->redir[i][2])))
                 return 1;
         } else if (node->redir[i][0] == '<') {
-            if (handle_input_redirection(node, &(node->redir[i][2]), i))
+            if (handle_input_redirection(data, node, &(node->redir[i][2]), i))
                 return 1;
         }
         i++;
