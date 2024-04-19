@@ -88,6 +88,7 @@ void	check_redirects(t_tkn **node)
 	t_tkn	*temp;
 
 	temp = *node;
+	temp_node = NULL;
 	while (*node)
 	{
 		if ((ft_strcmp((*node)->type, SPECIAL_CHAR)) && (*node)->prev && is_redir((*node)->prev->content))
@@ -96,13 +97,22 @@ void	check_redirects(t_tkn **node)
 				temp_node = (*node)->prev->prev;
 			else if (!temp_node)
 				temp_node = (*node)->prev;
-			init_redir_args(&temp_node->redir);
+			if (!temp_node->redir[0])
+				init_redir_args(&temp_node->redir);
 			update_redir_files_list(&temp_node->redir, (*node)->content, (*node)->prev->content);
 			update_node_after_redir(node);
 		}
 		*node = (*node)->next;
 	}
-	*node = temp;
+	if (!temp_node->prev)
+		*node = temp_node;
+	else
+	{
+		while ((*node)->next != NULL)
+			*node = (*node)->next;
+		*node = temp_node;
+		*node = temp;
+	}
 }
 
 void	remove_pipe(t_tkn **node, int i)

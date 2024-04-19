@@ -96,10 +96,10 @@ int	readline_and_handle_input(t_global **data)
 	int	input;
 
 	input = 0;
-	handle_signals(data);
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
-	//printf("usr_input: %s", (*data)->usr_input);
+	if (!(*data)->usr_input)
+		return (-1);
 	if (!(*data)->usr_input[0])
 	{
 		printf("\n");

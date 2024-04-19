@@ -30,7 +30,7 @@ int	main(void)
 	// data->exit = handle_signal();
 	while (!data->exit)
 	{
-		// printf("%s$ ", data->cur_path);
+		define_prompt_signals();
 		print_cwd(&data);
 		if (!data->exit && readline_and_handle_input(&data) == -1)
 			break ;

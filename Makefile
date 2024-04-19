@@ -30,7 +30,7 @@ SRC = 	./src/builtins/cd.c \
 		./src/lexer/lexer_utils.c \
 		./src/expand/expander.c \
 		./src/expand/expander_utils.c \
-		./src/signals/signal_handler.c \
+		./src/signals/signals.c \
 		./src/main/exec.c \
 		./src/main/exec_utils.c \
 		./src/main/main.c \

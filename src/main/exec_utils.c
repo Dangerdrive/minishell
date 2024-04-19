@@ -89,6 +89,28 @@ int	hashsize(t_tkn *hashtable)
 	return (i);
 }
 
+void	fill_args(t_tkn	**node, char **args, int i)
+{
+	char	*arg_tmp;
+	t_tkn	*temp_node;
+
+	arg_tmp = NULL;
+	if ((*node)->prev && !ft_strcmp((*node)->prev->content, "") && (*node)->prev->space_after == TRUE)
+		args[i] = ft_strjoin(" ", (*node)->content);
+	else if ((*node)->space_after == TRUE && (*node)->content)
+		args[i] = ft_strdup((*node)->content);
+	temp_node = *node;
+	while ((*node)->space_after == FALSE && (*node)->next)
+	{
+		if ((*node)->prev->space_after == TRUE)
+			args[i] = ft_strdup((*node)->content);
+		arg_tmp = ft_strjoin(args[i], (*node)->next->content);
+		free(args[i]);
+		args[i] = arg_tmp;
+		(*node) = (*node)->next;
+	}
+}
+
 char	**hash_to_args(t_tkn *hashtable)
 {
 	char	**args;
@@ -96,21 +118,18 @@ char	**hash_to_args(t_tkn *hashtable)
 	int		i;
 	int		args_count;
 
+	if (!hashtable->content && !hashtable->next)
+		return (NULL);
 	args_count = hashsize(hashtable);
 	args = malloc(sizeof(char *) * (args_count + 1));
-	i = -1;
 	temp = hashtable;
+	i = 0;
 	while (temp)
 	{
-		args[++i] = ft_strdup(temp->content);
+		fill_args(&temp, args, i);
 		temp = temp->next;
+		i++;
 	}
-	args[++i] = NULL;
-	// //debug
-	// while (i >= 0)
-	// {
-	// printf("%i: %s\n", i, args[i]);
-	// 	i--;
-	// }
+	args[args_count] = NULL;
 	return (args);
-}	
+}

@@ -85,6 +85,9 @@ int			validate_identifier(char *str);
 void		handle_signals(t_global **data);
 void		interrupt_handler(int signal);
 
+/*-------------signals-------------*/
+void		define_prompt_signals(void);
+
 /*--------------exec---------------*/
 int			prepare_exec(t_global *data);
 int			hashsize(t_tkn *hashtable);
