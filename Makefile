@@ -26,12 +26,13 @@ SRC = 	./src/builtins/cd.c \
 		./src/token/token_utils.c \
 		./src/parse/parser.c \
 		./src/parse/parser_utils.c \
+		./src/lexer/lexer.c \
+		./src/lexer/lexer_utils.c \
 		./src/expand/expander.c \
 		./src/expand/expander_utils.c \
 		./src/signals/signal_handler.c \
 		./src/main/exec.c \
 		./src/main/exec_utils.c \
-		./src/main/lexer.c \
 		./src/main/main.c \
 		./src/main/main_utils.c
 #		./src/main/redir.c

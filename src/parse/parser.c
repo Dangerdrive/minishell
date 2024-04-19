@@ -1,33 +1,5 @@
 #include "../includes/minishell.h"
 
-int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
-{
-	int 	i;
-	t_tkn *temp;
-
-	i = 0;
-	while ((*hashtable)[i])
-	{
-		temp = (*hashtable)[i];
-		while ((*hashtable)[i])
-		{
-			if (((*hashtable)[i]->next && is_special_token((*hashtable)[i]->content)
-				&& is_special_token((*hashtable)[i]->next->content))
-				|| ((!(*hashtable)[i]->next || is_special_token((*hashtable)[i]->next->content)) && is_special_token((*hashtable)[i]->content))
-				|| is_and_or((*hashtable)[i]->content))
-			{
-				printf("Syntax error.\n");
-				(*hashtable)[i] = temp;
-				return (0);
-			}
-			(*hashtable)[i] = (*hashtable)[i]->next;
-		}
-		(*hashtable)[i] = temp;
-		i++;
-	}
-	return (1);
-}
-
 char	*get_tkn_type(t_tkn *node)
 {
 	if (!node->type)
@@ -41,7 +13,7 @@ char	*get_tkn_type(t_tkn *node)
 		else if ((node->content[0] == '$' && identifier_is_valid(node->content + 1))
 			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
-		else if (!node->prev)
+		else if (!node->prev || (node->prev && !ft_strcmp(node->prev->content, PIPE)))
 			return (COMMAND);
 		else
 			return (ARGUMENT);
@@ -99,21 +71,6 @@ void	update_content(char *content)
 	}
 }
 
-void	check_pipe(t_tkn **node, int i)
-{
-	t_tkn	*temp;
-
-	if (i > 0 && is_pipe((*node)->content))
-	{
-		temp = (*node)->next;
-		free((*node)->content);
-		free(*node);
-		*node = temp;
-		if (*node)
-			(*node)->prev = NULL;
-	}
-}
-
 // void	check_heredoc(t_tkn **node)
 // {
 // 	if (strncmp((*node)->content, DOUBLE_LESS_THAN))
@@ -128,7 +85,6 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 	i = 0;
 	while ((*hashtable)[i])
 	{
-		check_pipe(&(*hashtable)[i], i);
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
@@ -141,7 +97,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		i++;
 	}
 	syntax = 0;
-	if (expand(hashtable, data) == 1 && check_syntax(hashtable) == 1)
+	if (expand(hashtable, data) == 1)
 		syntax = lexer(hashtable);
 	return (syntax);
 }

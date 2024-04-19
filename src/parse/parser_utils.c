@@ -39,3 +39,10 @@ t_bool	is_special_token(char *token)
 	else
 		return (false);
 }
+
+t_bool	is_double_special_token(t_tkn *node)
+{
+	if ((!node->next || is_special_token(node->next->content)) && is_special_token(node->content))
+		return (true);
+	return (false);
+}
