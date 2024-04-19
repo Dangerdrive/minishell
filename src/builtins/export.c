@@ -105,7 +105,7 @@ int	ft_export(char **args, int args_len, t_global *data)
 		{
 			if (!identifier_is_valid(args[i]))
 			{
-				ft_printf_fd(2, "export: `%s': not a valid identifier\n",
+				ft_dprintf(2, "export: `%s': not a valid identifier\n",
 					args[i]);
 				ret = 1;
 			}	

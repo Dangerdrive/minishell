@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 21:09:15 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/04/16 17:47:43 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:59:40 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ int			ft_print_str(int fd, char *str);
 int			ft_print_unsigned(int fd, unsigned int num);
 // ft_print
 int			ft_printf(const char *frmt, ...);
-int			ft_dprintf(int fd, const char *frmt, ...);
+int			ft_printf_fd(int fd, const char *frmt, ...);
 
 #endif

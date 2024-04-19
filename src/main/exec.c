@@ -52,7 +52,7 @@
 // 	{
 // 		if (pipe(data->pipe + 2 * i) == -1)
 // 		{
-// 			ft_printf_fd(2, "pipex: Could not create pipe: %s\n",
+// 			ft_dprintf(2, "pipex: Could not create pipe: %s\n",
 // 				strerror(errno));
 // 			return (1);
 // 			//cleanup_n_exit(ERROR, data);
@@ -90,13 +90,13 @@
 // 	data.pids = malloc(sizeof(*data.pids) * hashsize());
 // 	if (!data.pids)
 // 	{
-// 		ft_printf_fd(2, "pipex: PID error: %s\n", strerror(errno));
+// 		ft_dprintf(2, "pipex: PID error: %s\n", strerror(errno));
 // 		cleanup_n_exit(ERROR, &data);
 // 	}
 // 	data.pipe = malloc(sizeof(*data.pipe) * 2 * (hashsize() - 1));
 // 	if (!data.pipe)
 // 	{
-// 		ft_printf_fd(2, "pipex: Pipe error: %s\n", strerror(errno));
+// 		ft_dprintf(2, "pipex: Pipe error: %s\n", strerror(errno));
 // 		cleanup_n_exit(ERROR, &data);
 // 	}
 // 	create_pipes(&data);
@@ -240,7 +240,7 @@
 
 // 	if (pipe(d->pipe) == -1)
 // 	{
-// 		ft_printf_fd("minishell: %s\n", strerror(errno));
+// 		ft_dprintf("minishell: %s\n", strerror(errno));
 // 		return (1);//ou outro erro
 // 	}
 // 	d->child = 0;
@@ -285,7 +285,7 @@ int	pipecount(t_global *data)
 // 	data->pid = fork();
 // 	if (data->pid < 0)
 // 	{
-// 		ft_printf_fd(2, "minishell: %s\n", strerror(errno));
+// 		ft_dprintf(2, "minishell: %s\n", strerror(errno));
 // 		return (1);//precisa de outro retorno?
 // 	}
 // 	else if (data->pid == 0)
@@ -441,13 +441,13 @@ int	prepare_exec(t_global *data)
 // // 	{
 // // 		if (execve(args[0], args, data->env) == -1)
 // // 		{
-// // 			ft_printf_fd(2, "minishell: %s: %s\n", args[0], strerror(errno));
+// // 			ft_dprintf(2, "minishell: %s: %s\n", args[0], strerror(errno));
 // // 			exit(1);
 // // 		}
 // // 	}
 // // 	else if (pid < 0)
 // // 	{
-// // 		ft_printf_fd(2, "minishell: %s\n", strerror(errno));
+// // 		ft_dprintf(2, "minishell: %s\n", strerror(errno));
 // // 		return (1);
 // // 	}
 // // 	else
