@@ -8,7 +8,7 @@ static int	print_cwd(t_global **data)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		ft_dprintf(2, "minishell: %s\n", strerror(errno));
+		ft_dprintf(2, "\nminishell: %s\n", strerror(errno));
 		return (1);
 	}
 	home = ft_strlen(ft_getenv("HOME", data));
