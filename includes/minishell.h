@@ -80,6 +80,8 @@ typedef struct s_global
 	int				is_exec;
 	char			*input;
 	char			*output;
+	int				original_stdin;
+	int				original_stdout;
 	int				input_fd;
 	int				output_fd;
 	int				pipe[2];
