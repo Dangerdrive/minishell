@@ -10,7 +10,7 @@
 //  * `close_pipe_fds` to close all pipe file descriptors.
 //  *
 //  * @param[in,out] data Pointer to a t_data structure that contains the file
-//  *                     descriptors for input, output, and pipes.
+//  *					 descriptors for input, output, and pipes.
 //  */
 // void	close_fds(t_global *data)
 //
@@ -40,7 +40,7 @@
 //  * after performing cleanup.
 //  *
 //  * @param[in,out] data Pointer to a t_data structure containing the command
-//  *                     count and the array to store pipe file descriptors.
+//  *				     count and the array to store pipe file descriptors.
 //  */
 // static int	create_pipes(t_global *data)
 //
@@ -275,190 +275,169 @@ int	pipecount(t_global *data)
 	return (result - 1);
 }
 
-// int	exec(t_global *data)
-//
-//{
-// 	char	**args;
-// 	char	*command;
-// 	int		status;
-	
-// 	data->pid = fork();
-// 	if (data->pid < 0)
-// 	{
-// 		ft_dprintf(2, "minishell: %s\n", strerror(errno));
-// 		return (1);//precisa de outro retorno?
-// 	}
-// 	else if (data->pid == 0)
-// 	{
-// 		args = hash_to_args(data->hashtable[0]);
-// 		if (is_builtin(args[0]))
-// 			return (exec_builtin(args, hashsize(data->hashtable[0]), data));
-// 		else
-// 		{
-// 			command = get_cmd(args[0], data);
-// 			if (command)
-// 				return (execve(command, args, data->env));//maybe we need export here as well.
-// 		}
-// 		if (args)
-// 			ft_strarr_free(args, hashsize(data->hashtable[0]));
-// 	else
-// 	{
-// 		waitpid(data->pid, &status, 0);
-// 		if (WIFEXITED(status))
-// 		data->ret = WEXITSTATUS(status);
-// 	}
-// 	}
-	
-// 	return (127);
-// }
-
-void exec_command(t_global *data, int idx)
+void	exec_command(t_global *data, int idx)
 {
 	char	**args;
 	char	*cmd;
 
+	//parse_redirections(data->hashtable[idx]);
+	// if (data->hashtable[idx]->content == NULL)
+	// 	exit(EXIT_SUCCESS);
 	args = hash_to_args(data->hashtable[idx]);
 	if (is_builtin(args[0]))
-		exec_builtin(args, hashsize(data->hashtable[idx]), data);
+		data->ret = exec_builtin(args, hashsize(data->hashtable[idx]), data);
 	else
 	{
+		data->ret = 127; //arrumar valor de retorno para comandos que nao existem
 		cmd = get_cmd(args[0], data);
-		execve(cmd, args, data->env); 
-		perror("minishell: execve"); 
+		if (cmd)
+			data->ret = execve(cmd, args, data->env); //consolidar env talvez
+		//perror("minishell: execve");
 	}
 	ft_strarr_free(args, ft_strarr_len(args));
 	exit(EXIT_FAILURE);
 }
 
-void create_pipes(int pipes[][2], int n)
+void	create_pipes(int pipes[][2], int n)
 {
-    int i = 0;
-    while (i < n)
+	int	i;
+
+	i = 0;
+	while (i < n)
 	{
-        if (pipe(pipes[i]) == -1)
+		if (pipe(pipes[i]) == -1)
 		{
-            perror("minishell: pipe");
-            exit(EXIT_FAILURE);
-        }
-        i++;
-    }
+			perror("minishell: pipe:");
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
 }
 
-void close_pipes(int pipes[][2], int n)
+void	close_pipes(int pipes[][2], int n)
 {
-    int i = 0;
-    while (i < n)
+	int	i;
+
+	i = 0;
+	while (i < n)
 	{
-        close(pipes[i][0]);
-        close(pipes[i][1]);
-        i++;
-    }
+		close(pipes[i][0]);
+		close(pipes[i][1]);
+		i++;
+	}
 }
 
-void setup_dup2(int pipes[][2], int i, int n)
+void	fork_processes(t_global *data, int pipes[][2], int n)
 {
-    if (i > 0)
-	{
-        dup2(pipes[i-1][0], STDIN_FILENO);
-    }
-    if (i < n)
-	{
-        dup2(pipes[i][1], STDOUT_FILENO);
-    }
-}
+	int	i;
 
-void handle_child_process(t_global *data, int pipes[][2], int i, int n)
-{
-    setup_dup2(pipes, i, n);
-    close_pipes(pipes, n);
-    exec_command(data, i);
-}
-
-void fork_processes(t_global *data, int pipes[][2], int n)
-{
-    int i = 0;
-    while (i <= n)
+	i = 0;
+	while (i <= n)
 	{
-        data->pid = fork();
-        if (data->pid == -1)
+		data->pid = fork();
+		if (data->pid == -1)
 		{
-            perror("minishell: fork");
-            exit(EXIT_FAILURE);
-        } else if (data->pid == 0)
+			perror("minishell: fork");
+			exit(EXIT_FAILURE);
+		}
+		else if (data->pid == 0)
 		{
-            handle_child_process(data, pipes, i, n);
-        }
-        i++;
-    }
+			if (i > 0)
+				dup2(pipes[i - 1][0], STDIN_FILENO);
+			if (i < n)
+				dup2(pipes[i][1], STDOUT_FILENO);
+			close_pipes(pipes, n);
+			// if (parse_redirections(data->hashtable[i]) == 1) not included yet
+			// 	return;
+			if (data->hashtable[i]->content == NULL)
+				return ;
+			exec_command(data, i);
+		}
+		i++;
+	}
 }
 
-void wait_for_children()
-{
-    while (wait(NULL) > 0);
-}
+
+
+// int	exec(t_global *data)
+// {
+// 	int	n;
+// 	int	(*pipes)[2];
+
+// 	n = pipecount(data);
+// 	if (data->hashtable[0]->content == NULL && n == 0)
+// 		return (0);
+// 	pipes = malloc(n * sizeof(*pipes));
+// 	if (pipes == NULL)
+// 	{
+// 		perror("minishell: pipes: malloc failed");
+// 		return (-1);
+// 	}
+// 	create_pipes(pipes, n);
+// 	fork_processes(data, pipes, n);
+// 	close_pipes(pipes, n);
+// 	n = 2;
+// 	while (++n < 1024)
+// 		close(n);
+// 	while (wait(NULL) > 0)
+
+// 	free(pipes);
+// 	return (0);
+// }
 
 int exec(t_global *data)
 {
-    int n = pipecount(data);
-    int pipes[n][2];
+	int n;
+	int(*pipes)[2];
+	int status;
+	pid_t pid;
 
-    create_pipes(pipes, n);
-    fork_processes(data, pipes, n);
-    close_pipes(pipes, n); // Close in parent after forking
-    wait_for_children();
-    return 0;
+	n = pipecount(data);
+	if (data->hashtable[0]->content == NULL && n == 0)
+		return (0);
+	pipes = malloc(n * sizeof(*pipes));
+	if (pipes == NULL)
+	{
+		perror("minishell: pipes: malloc failed");
+		return (-1);
+	}
+	create_pipes(pipes, n);
+	fork_processes(data, pipes, n);
+	close_pipes(pipes, n);
+	n = 2;
+	while (++n < 1024)
+		close(n);
+	pid = waitpid(-1, &status, 0);
+	while (pid != -1)
+		pid = waitpid(-1, &status, 0);
+	free(pipes);
+	return (0);
 }
 
 int	prepare_exec(t_global *data)
 {
-	// int		i;
-	int			ret;
+	int		ret;
 	char	**args;
 
-
-	args = hash_to_args(data->hashtable[0]);
-	// i = 0;
+	args = NULL;
+	if (data->hashtable[0]->content)
+		args = hash_to_args(data->hashtable[0]);
 	ret = 1;
-	if (pipecount(data) == 0 && is_builtin(args[0]))
+	// if (parse_redirections(data->hashtable[0]) == 1)
+	// 	return (1);
+	if (pipecount(data) == 0 && args && args[0] && is_builtin(args[0]))
 		exec_builtin(args, hashsize(data->hashtable[0]), data);
 	else if (pipecount(data) > -1)
 		exec(data);
-	ft_strarr_free(args, ft_strarr_len(args));
+	if (data->hashtable[0]->content)
+		ft_strarr_free(args, ft_strarr_len(args));
 	// else
 	// 	return (exec(data, args));
 
 	return (ret);
 }
 
-// // int	exec(t_global *data, char **args)
-// //
-//{//
-// // 	pid_t	pid;
-// // 	int		status;
-
-// // 	pid = fork();
-// // 	if (pid == 0)
-// // 	{
-// // 		if (execve(args[0], args, data->env) == -1)
-// // 		{
-// // 			ft_dprintf(2, "minishell: %s: %s\n", args[0], strerror(errno));
-// // 			exit(1);
-// // 		}
-// // 	}
-// // 	else if (pid < 0)
-// // 	{
-// // 		ft_dprintf(2, "minishell: %s\n", strerror(errno));
-// // 		return (1);
-// // 	}
-// // 	else
-// // 	{
-// // 		waitpid(pid, &status, 0);
-// // 		if (WIFEXITED(status))
-// // 			data->ret = WEXITSTATUS(status);
-// // 	}
-// // 	return (0);
-// // }
-
+// modificar wait para waitpid
 
 /*
 - check pipe behavior
@@ -467,5 +446,5 @@ int	prepare_exec(t_global *data)
 - redirects
 	- create all files
 	- set fds
-	- reset fds when needed
+	- reset fds/dup when needed
 */
