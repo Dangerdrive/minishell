@@ -51,6 +51,7 @@ int			ft_exit(char **args, int args_len, t_global *data);
 
 /*--------------expand--------------*/
 int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
+char	    *search_value(t_global **data, char **str, int i, int len);
 void		add_node_before(t_tkn **node, int i);
 t_tkn		*add_node_after(t_tkn **node, int i);
 t_bool		is_var_name(t_tkn **node, int i, int len);

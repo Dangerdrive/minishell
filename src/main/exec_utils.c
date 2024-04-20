@@ -92,14 +92,15 @@ int	hashsize(t_tkn *hashtable)
 void	fill_args(t_tkn	**node, char **args, int i)
 {
 	char	*arg_tmp;
-	t_tkn	*temp_node;
+	//t_tkn	*temp_node;
 
 	arg_tmp = NULL;
+	//temp_node = NULL;
 	if ((*node)->prev && !ft_strcmp((*node)->prev->content, "") && (*node)->prev->space_after == TRUE)
 		args[i] = ft_strjoin(" ", (*node)->content);
 	else if ((*node)->space_after == TRUE && (*node)->content)
 		args[i] = ft_strdup((*node)->content);
-	temp_node = *node;
+	//temp_node = *node;
 	while ((*node)->space_after == FALSE && (*node)->next)
 	{
 		if ((*node)->prev && (*node)->prev->space_after == TRUE)
