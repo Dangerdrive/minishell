@@ -89,27 +89,27 @@ int	hashsize(t_tkn *hashtable)
 	return (i);
 }
 
-void	fill_args(t_tkn	**node, char **args, int i)
+void	fill_args(t_tkn	**node, char **args, int i) // REVISAR SITUAÇÃO STRING VAZIA (echo lala"" haha)
 {
 	char	*arg_tmp;
 	//t_tkn	*temp_node;
 
 	arg_tmp = NULL;
-	//temp_node = NULL;
 	if ((*node)->prev && !ft_strcmp((*node)->prev->content, "") && (*node)->prev->space_after == TRUE)
 		args[i] = ft_strjoin(" ", (*node)->content);
 	else if ((*node)->space_after == TRUE && (*node)->content)
 		args[i] = ft_strdup((*node)->content);
 	//temp_node = *node;
-	while ((*node)->space_after == FALSE && (*node)->next)
+	if ((*node)->space_after == FALSE && (*node)->next)
 	{
-		if ((*node)->prev && (*node)->prev->space_after == TRUE)
+		if ((*node)->prev->space_after == TRUE)
 			args[i] = ft_strdup((*node)->content);
 		arg_tmp = ft_strjoin(args[i], (*node)->next->content);
 		free(args[i]);
 		args[i] = arg_tmp;
 		(*node) = (*node)->next;
 	}
+
 }
 
 char	**hash_to_args(t_tkn *node)
@@ -122,7 +122,7 @@ char	**hash_to_args(t_tkn *node)
 	if (!node->content && !node->next)
 		return (NULL);
 	args_count = hashsize(node);
-	args = malloc(sizeof(char *) * (args_count + 1));
+	args = ft_calloc((args_count + 1), sizeof(char *));
 	temp = node;
 	i = 0;
 	while (temp)

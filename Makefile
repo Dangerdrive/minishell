@@ -26,6 +26,7 @@ SRC = 	./src/builtins/cd.c \
 		./src/token/token_utils.c \
 		./src/parse/parser.c \
 		./src/parse/parser_utils.c \
+		./src/parse/parser_utils2.c \
 		./src/lexer/lexer.c \
 		./src/lexer/lexer_utils.c \
 		./src/expand/expander.c \
@@ -65,7 +66,7 @@ $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
 
 valgrind: all
 	@echo "Running the program with valgrind..."
-	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes --suppressions=readline.supp  ./minishell
+	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes --suppressions=readline.supp ./minishell
 
 run: all
 	@echo "Running the program..."

@@ -13,7 +13,9 @@ char	*get_tkn_type(t_tkn *node)
 		else if ((node->content[0] == '$' && identifier_is_valid(node->content + 1))
 			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
 			return (VARIABLE);
-		else if (!node->prev || (node->prev && !ft_strcmp(node->prev->content, PIPE)))
+		else if (is_export_var(node->content))
+			return (EXPT_VARIABLE);
+		else if (!node->prev || is_pipe(node->prev->content))
 			return (COMMAND);
 		else
 			return (ARGUMENT);
@@ -21,60 +23,53 @@ char	*get_tkn_type(t_tkn *node)
 	return (node->type);
 }
 
-bool	check_there_is_var(char *content)
-{
-	int	i;
-
-	i = 0;
-	while (content[i])
-	{
-		if (content[i] == '$' && (ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-bool	is_empty_str(char *content, char quote)
-{
-	int	i;
-
-	i = 1;
-	while (content[i] && content[i] != quote)
-	{
-		if (content[i] != 32)
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-void	update_content(char *content)
+void	remove_quotes(char **content)
 {
 	char *new_content;
 	int	len;
 	int	i;
 
-	len = ft_strlen(content) - 1;
-	if (ft_strcmp(content, PIPE)
-		&& (content[0] == 34 || content[0] == 39))
+	len = ft_strlen(*content) - 1;
+	if (ft_strcmp(*content, PIPE)
+		&& ((*content)[0] == 34 || (*content)[0] == 39))
 	{
 		new_content = ft_calloc(len, sizeof(char));
 		i = 1;
 		while (i < len)
 		{
-			new_content[i - 1] = content[i];
+			new_content[i - 1] = (*content)[i];
 			i++;
 		}
-		ft_strlcpy(content, new_content, len);
+		ft_strlcpy(*content, new_content, len);
 		free(new_content);
 	}
 }
 
-// void	check_heredoc(t_tkn **node)
-// {
-// 	if (strncmp((*node)->content, DOUBLE_LESS_THAN))
-// }
+void	handle_export(t_tkn **node)
+{
+	char	*new_content;
+	t_tkn	*head;
+	t_tkn	*temp;
+
+	new_content = NULL;
+	head = *node;
+	*node = (*node)->next;
+	while ((*node) && is_export_var((*node)->content) && (*node)->next)
+	{
+		new_content = ft_strjoin((*node)->content, (*node)->next->content);
+		free((*node)->content);
+		(*node)->content = ft_strdup(new_content);
+		temp = (*node)->next->next;
+		if (temp)
+			temp->prev = *node;
+		free(new_content);
+		free((*node)->next->content);
+		free((*node)->next);
+		(*node)->next = temp;
+		*node = (*node)->next;
+	}
+	*node = head;
+}
 
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
@@ -89,11 +84,12 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		while ((*hashtable)[i])
 		{
 			(*hashtable)[i]->type = get_tkn_type((*hashtable)[i]);
-			//check_heredoc(&(*hashtable)[i]);
-			update_content((*hashtable)[i]->content);
+			remove_quotes(&(*hashtable)[i]->content);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
+		if (!ft_strcmp((*hashtable)[i]->content, "export"))
+			handle_export(hashtable[i]);
 		i++;
 	}
 	syntax = 0;

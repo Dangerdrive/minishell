@@ -68,6 +68,7 @@ int			check_exit_input(char **input, t_global *data);
 
 /*--------------parse--------------*/
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
+t_bool  	is_export_var(char *content);
 t_bool		is_pipe(char *token);
 t_bool		is_and_or(char *token);
 t_bool		is_special_token(char *token);

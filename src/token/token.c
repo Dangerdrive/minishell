@@ -44,23 +44,38 @@ int	check_quotes(char *input, int i)
 	return (0);
 }
 
+t_bool	is_special_char(char c)
+{
+	if (c == '|' || c == '&' || c == '<' || c == '>')
+		return (true);
+	return (false);
+}
+
+/**
+ * Counts the length of the 'input'(char *) parameter, starting on the 'i'(index).
+ *
+ * Returns the lenght of the token started in the position 'input[i]'.
+ */
 int	get_token_len(char *input, int i)
 {
 	int	len;
 
 	len = 0;
-	if (input[i] == '|' || input[i] == '&' || input[i] == '<' || input[i] == '>')
+	if (is_special_char(input[i]))
 	{
 		len++;
-		if (input[i + 1] == input[i])
+		if (input[i + 1] && input[i + 1] == input[i])
 			len++;
 	}
 	else if (input[i] == SIMPLE_QUOTE || input[i] == DOUBLE_QUOTE)
 		len = check_quotes(input, i);
 	else
 	{
-		while (input[i + len] && input[i + len] != ' '
-			&& input[i + len] != SIMPLE_QUOTE && input[i + len] != DOUBLE_QUOTE)
+		if (input[i + len] == '$')
+			len++;
+		while (input[i + len] && input[i + len] != ' ' && input[i + len] != '$'
+		&& !is_special_char(input[i + len]) && input[i + len] != SIMPLE_QUOTE
+		&& input[i + len] != DOUBLE_QUOTE)
 			len++;
 	}
 	return (len);
