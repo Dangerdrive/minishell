@@ -1,217 +1,165 @@
 #include "../../includes/minishell.h"
 
-int handle_heredoc(t_global **data, t_tkn **node, char *delimiter, char *index)
+static char	*tmp_filename(int heredoc_number)
 {
-	int		tmp_fd;
-	char	*line;
-	char	*heredoc_filename;
-	char	*heredoc_temp = ".heredoc_";
+	char	filename[30];
+	char	*number_str;
 
-// ADD EXPANSION TO HEREDOC
-//atualizar node->input
-	// heredoc_filename = malloc(ft_strlen(heredoc_temp) + ft_strlen(index) + 1);
-	// if (!heredoc_filename)
-	// {
-	// 	perror("Memory allocation failed");
-	// 	return -1;
-	// }
-	// strcpy(heredoc_filename, heredoc_temp);
-	// strcat(heredoc_filename, index);
-	heredoc_filename = ft_strjoin(heredoc_temp, index);
-	tmp_fd = open(heredoc_filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (tmp_fd == -1)
-	{
-		perror("Error creating temp file for heredoc");
-		free(heredoc_filename);
-		return -1;
-	}
-	while (1)
-	{
-		ft_dprintf(1, "> ");
-		line = get_next_line(STDIN_FILENO);
-		if (line == NULL) {
-			free(heredoc_filename);
-			close(tmp_fd);
-			return -1;
-		}
-		if (!ft_strcmp(line, delimiter))
-		{
-			free(line);
-			break;
-		}
-		expand_heredoc(data, line);
-		ft_dprintf(tmp_fd, "%s\n", line);
-		free(line);
-	}
-	close(tmp_fd);
-	(*node)->input_fd = open(heredoc_filename, O_RDONLY);
-	if ((*node)->input_fd == -1)
-	{
-		perror("Error opening heredoc temp file for reading");
-		free(heredoc_filename);
-		return -1;
-	}
-	free(heredoc_filename);
-	return 0;
+	ft_bzero(filename, 30);
+	number_str = ft_itoa(heredoc_number);
+	ft_strlcat(filename, "/tmp/heredoc", 30);
+	ft_strlcat(filename, number_str, 30);
+	free(number_str);
+	return (ft_strdup(filename));
 }
 
-// int redir_input(t_tkn *node, char *input, int index)
+void	redirect_heredoc(char *command, int heredoc_number)
+{
+	char	*filename;
+	int		tmp_file_fd;
+	char	*h_doc_pos;
+
+	filename = tmp_filename(heredoc_number);
+	tmp_file_fd = open(filename, O_RDONLY);
+	if (tmp_file_fd == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "open: %s: %s\n", filename, strerror(errno));
+		//print_perror_msg("open", filename);
+		free(filename);
+		return ;
+	}
+	free(filename);
+	redirect_fd(tmp_file_fd, STDIN_FILENO);
+	// h_doc_pos = get_redirect_position(command, heredoc_number);
+	//move_one_forward(h_doc_pos);
+	// ft_memmove(h_doc_pos, h_doc_pos + 1, ft_strlen(h_doc_pos + 1) + 1);
+}
+
+
+
+
+
+
+
+
+
+//-----------------------input-------------------------------|
+
+
+
+// int	is_name_delimeter(char c)
 // {
-//     int     fd;
-//     char    *h_index;
-
-//     if (input[1] == '<')
-// 	{
-//         h_index = ft_itoa(index);
-//         return handle_heredoc(node, input, h_index);
-//     }
-// 	else
-// 	{
-//         fd = open(input, O_RDONLY);
-//         if (fd == -1)
-// 		{
-//             perror("Error opening file");
-//             return -1;
-//         }
-//         //close(node->input_fd);
-//         node->input_fd = fd;
-//         node->input = input;
-//     }
-//     return 0;
-// }
-
-// int	redir_output(t_tkn *node, char *output)
-// {
-// 	int fd;
-
-// 	if (output[1] == '>')
-// 		fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
-// 	else
-// 		fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd == -1)
-// 		return 1;
-// 	//close(node->output_fd);
-// 	node->output_fd = fd;
-// 	node->output = output;
+// 	if (c == ' ' || c == '>' || c == '<' || c == '|' || c == '\t')
+// 		return (1);
 // 	return (0);
 // }
 
-// int redirect_io(t_tkn *node)
+
+
+// static int	get_name_end(char *name)
 // {
-//     // Simplify input redirection
-//     if (node->input_fd != -1)
-//     {
-//         if (dup2(node->input_fd, STDIN_FILENO) == -1)
-//         {
-//             perror("Failed to redirect standard input");
-//             return 1;
-//         }
-//         close(node->input_fd);  // Good to close after dup2
-//         node->input_fd = -1;    // Reset fd after closing
-//     }
+// 	int	end;
 
-//     // Simplify output redirection
-//     if (node->output_fd != -1)
-//     {
-//         if (dup2(node->output_fd, STDOUT_FILENO) == -1)
-//         {
-//             perror("Failed to redirect standard output");
-//             return 1;
-//         }
-//         close(node->output_fd);  // Good to close after dup2
-//         node->output_fd = -1;    // Reset fd after closing
-//     }
-
-//     return 0;
+// 	end = 0;
+// 	while (name[end] && !is_name_delimeter(name[end]))
+// 	{
+// 		if (name[end] == '\'')
+// 		{
+// 			move_one_forward(&name[end]);
+// 			while (name[end] && name[end] != '\'')
+// 				end++;
+// 			move_one_forward(&name[end]);
+// 		}
+// 		else if (name[end] == '"')
+// 		{
+// 			move_one_forward(&name[end]);
+// 			while (name[end] && name[end] != '"')
+// 				end++;
+// 			move_one_forward(&name[end]);
+// 		}
+// 		else if (name[end] && !is_name_delimeter(name[end]))
+// 			end++;
+// 	}
+// 	return (end);
 // }
 
-// int parse_redirections(t_global **data, t_tkn *node)
+// char	*get_label_name(char *redirect_str)
 // {
-//     int i = 0;
+// 	int		name_start;
+// 	int		name_end;
+// 	char	*name;
+// 	char	*remaining_cmd;
 
-//     while (node->redir[i])
-//     {
-//         if (node->redir[i][0] == '>')
-//         {
-//             if(redir_output(node, &(node->redir[i][2])))
-//                 return 1;
-//         }
-//         else if (node->redir[i][0] == '<')
-//         {
-//             if (redir_input(node, &(node->redir[i][2]), i))
-//                 return 1;
-//         }
-//         i++;
-//     }
-
-//     // Assuming redirection setup handles file opening
-//     if (redirect_io(node))
-//         return 1;
-
-//     return 0;
+// 	name_start = 0;
+// 	move_one_forward(redirect_str);
+// 	if (redirect_str[name_start] == '>')
+// 		move_one_forward(&redirect_str[name_start]);
+// 	while (redirect_str[name_start] == ' ' || redirect_str[name_start] == '\t')
+// 		name_start++;
+// 	name_end = get_name_end(&redirect_str[name_start]);
+// 	name = ft_substr(&redirect_str[name_start], 0, name_end);
+// 	remaining_cmd = &redirect_str[name_start + name_end];
+// 	ft_memmove(redirect_str, remaining_cmd, ft_strlen(remaining_cmd) + 2);
+// 	return (name);
 // }
 
-int handle_output_redirection(t_tkn **node, char *redirection)
+int	redirect_input(char *input_redirect)
 {
-    int fd = open(redirection, redirection[1] == '>' ? O_WRONLY | O_CREAT | O_APPEND : O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1) {
-        perror("Failed to open output file");
-        return 1;
-    }
-    if ((*node)->output_fd != -1) close((*node)->output_fd);
-    (*node)->output_fd = fd;
-    (*node)->output = redirection;
-    return 0;
+	// char	*input_redirect;
+	char	*filename;
+	int		fd;
+
+	// input_redirect = get_redirect_position(command, '<');
+	// if (!input_redirect)
+	// 	return (SUCCESS);
+	//filename = get_label_name(input_redirect);
+	fd = open(input_redirect, O_RDONLY, FD_CLOEXEC);
+	if (fd == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "open: %s: %s\n", input_redirect, strerror(errno));
+		// free(input_redirect);
+		return (FAILED);
+	}
+	else
+		redirect_fd(fd, STDIN_FILENO);
+	// free(input_redirect);
+	return (SUCCESS);
 }
 
-int handle_input_redirection(t_global **data, t_tkn **node, char *redirection, int index) {
-    int fd;
-    char *h_index;
 
-    if (redirection[1] == '<') {
-        h_index = ft_itoa(index);
-        int result = handle_heredoc(data, node, redirection, h_index);
-        free(h_index);
-        return result;
-    } else {
-        fd = open(redirection, O_RDONLY);
-        if (fd == -1) {
-            perror("Error opening input file");
-            return 1;
-        }
-        if ((*node)->input_fd != -1) close((*node)->input_fd);
-        (*node)->input_fd = fd;
-        (*node)->input = redirection;
-    }
-    return 0;
+//-----------------------output-------------------------------|
+
+int	redirect_output(char *output_redirect)
+{
+// 	char	*output_redirect;
+// 	char	*filename;
+	int		fd;
+	int		open_flags;
+
+	// output_redirect = get_redirect_position(command, '>');
+	// if (!output_redirect)
+	// 	return (1);
+
+	if (output_redirect[1] == '>')
+		fd = open(output_redirect, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		fd = open(output_redirect, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+
+	// if (output_redirect[1] == '>')
+	// 	open_flags = O_WRONLY | O_CREAT | O_APPEND;
+	// else
+	// 	open_flags = O_WRONLY | O_CREAT | O_TRUNC;
+	// filename = get_label_name(output_redirect);
+	// fd = open(filename, open_flags, 0644);
+	if (fd == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "open: %s: %s\n", output_redirect, strerror(errno));
+		// free(filename);
+		return (0);
+	}
+	else
+		redirect_fd(fd, STDOUT_FILENO);
+	// free(filename);
+	return (1);
 }
-
-int apply_redirections(t_tkn **node) {
-    if ((*node)->input_fd != -1 && dup2((*node)->input_fd, STDIN_FILENO) == -1) {
-        perror("Failed to redirect standard input");
-        return 1;
-    }
-    if ((*node)->output_fd != -1 && dup2((*node)->output_fd, STDOUT_FILENO) == -1) {
-        perror("Failed to redirect standard output");
-        return 1;
-    }
-    return 0;
-}
-
-int parse_redirections(t_global **data, t_tkn **node) {
-    int i = 0;
-
-    while ((*node)->redir[i]) {
-        if ((*node)->redir[i][0] == '>') {
-            if (handle_output_redirection(node, &((*node)->redir[i][2])))
-                return 1;
-        } else if ((*node)->redir[i][0] == '<') {
-            if (handle_input_redirection(data, node, &((*node)->redir[i][2]), i))
-                return 1;
-        }
-        i++;
-    }
-    return apply_redirections(node);
-}
-
-// expansões no redirect
