@@ -275,23 +275,23 @@ int	pipecount(t_global *data)
 	return (result - 1);
 }
 
-void	exec_command(t_global *data, int idx)
+void	exec_command(t_global **data, int idx)
 {
 	char	**args;
 	char	*cmd;
 
-	//parse_redirections(data->hashtable[idx]);
-	// if (data->hashtable[idx]->content == NULL)
+	parse_redirections(data, &(*data)->hashtable[idx]);
+	// if ((*data)->hashtable[idx]->content == NULL)
 	// 	exit(EXIT_SUCCESS);
-	args = hash_to_args(data->hashtable[idx]);
+	args = hash_to_args((*data)->hashtable[idx]);
 	if (is_builtin(args[0]))
-		data->ret = exec_builtin(args, hashsize(data->hashtable[idx]), data);
+		(*data)->ret = exec_builtin(args, hashsize((*data)->hashtable[idx]), *data);
 	else
 	{
-		data->ret = 127; //arrumar valor de retorno para comandos que nao existem
-		cmd = get_cmd(args[0], data);
+		(*data)->ret = 127; //arrumar valor de retorno para comandos que nao existem
+		cmd = get_cmd(args[0], *data);
 		if (cmd)
-			data->ret = execve(cmd, args, data->env); //consolidar env talvez
+			(*data)->ret = execve(cmd, args, (*data)->env); //consolidar env talvez
 		//perror("minishell: execve");
 	}
 	ft_strarr_free(args, ft_strarr_len(args));
@@ -327,29 +327,29 @@ void	close_pipes(int pipes[][2], int n)
 	}
 }
 
-void	fork_processes(t_global *data, int pipes[][2], int n)
+void	fork_processes(t_global **data, int pipes[][2], int n)
 {
 	int	i;
 
 	i = 0;
 	while (i <= n)
 	{
-		data->pid = fork();
-		if (data->pid == -1)
+		(*data)->pid = fork();
+		if ((*data)->pid == -1)
 		{
 			perror("minishell: fork");
 			exit(EXIT_FAILURE);
 		}
-		else if (data->pid == 0)
+		else if ((*data)->pid == 0)
 		{
 			if (i > 0)
 				dup2(pipes[i - 1][0], STDIN_FILENO);
 			if (i < n)
 				dup2(pipes[i][1], STDOUT_FILENO);
 			close_pipes(pipes, n);
-			// if (parse_redirections(data->hashtable[i]) == 1) not included yet
+			// if (parse_redirections((*data)->hashtable[i]) == 1) not included yet
 			// 	return;
-			if (data->hashtable[i]->content == NULL)
+			if ((*data)->hashtable[i]->content == NULL)
 				return ;
 			exec_command(data, n); // TROQUEI O SEGUNDO ARG DE 'i' PARA 'n'
 		}
@@ -385,15 +385,15 @@ void	fork_processes(t_global *data, int pipes[][2], int n)
 // 	return (0);
 // }
 
-int exec(t_global *data)
+int exec(t_global **data)
 {
 	int n;
 	int(*pipes)[2];
 	int status;
 	pid_t pid;
 
-	n = pipecount(data);
-	if (data->hashtable[0]->content == NULL && n == 0)
+	n = pipecount(*data);
+	if ((*data)->hashtable[0]->content == NULL && n == 0)
 		return (0);
 	pipes = malloc(n * sizeof(*pipes));
 	if (pipes == NULL)
@@ -414,22 +414,22 @@ int exec(t_global *data)
 	return (0);
 }
 
-int	prepare_exec(t_global *data)
+int	prepare_exec(t_global **data)
 {
 	int		ret;
 	char	**args;
 
 	args = NULL;
-	if (data->hashtable[0]->content)
-		args = hash_to_args(data->hashtable[0]);
+	if ((*data)->hashtable[0]->content)
+		args = hash_to_args((*data)->hashtable[0]);
 	ret = 1;
-	// if (parse_redirections(data->hashtable[0]) == 1)
-	// 	return (1);
-	if (pipecount(data) == 0 && args && args[0] && is_builtin(args[0]))
-		exec_builtin(args, hashsize(data->hashtable[0]), data);
-	else if (pipecount(data) > -1)
+	if (parse_redirections(data, &(*data)->hashtable[0]) == 1)
+		return (1);
+	if (pipecount(*data) == 0 && args && args[0] && is_builtin(args[0]))
+		exec_builtin(args, hashsize((*data)->hashtable[0]), *data);
+	else if (pipecount(*data) > -1)
 		exec(data);
-	if (data->hashtable[0]->content)
+	if ((*data)->hashtable[0]->content)
 		ft_strarr_free(args, ft_strarr_len(args));
 	// else
 	// 	return (exec(data, args));

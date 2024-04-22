@@ -36,8 +36,8 @@ SRC = 	./src/builtins/cd.c \
 		./src/main/exec_utils.c \
 		./src/main/heredoc_expander.c \
 		./src/main/main.c \
-		./src/main/main_utils.c
-#		./src/main/redir.c
+		./src/main/main_utils.c \
+		./src/main/redir.c
 
 # Objects
 OBJ_PATH = src/build/

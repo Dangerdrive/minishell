@@ -91,12 +91,12 @@ void		interrupt_handler(int signal);
 void		define_prompt_signals(void);
 
 /*--------------exec---------------*/
-int			prepare_exec(t_global *data);
+int			prepare_exec(t_global **data);
 int			hashsize(t_tkn *hashtable);
 char		**hash_to_args(t_tkn *node);
 char		*get_cmd(char *cmd, t_global *data);
-char		*get_cmd_path(char*cmd, char**paths);
-int 		parse_redirections(t_tkn *node);
-void		expand_heredoc(t_global **data, char **line);
+char		*get_cmd_path(char *cmd, char **paths);
+int 		parse_redirections(t_global **data, t_tkn **node);
+void		expand_heredoc(t_global **data, char *line);
 
 #endif

@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int handle_heredoc(t_global **data, t_tkn *node, char *delimiter, char *index)
+int handle_heredoc(t_global **data, t_tkn **node, char *delimiter, char *index)
 {
 	int		tmp_fd;
 	char	*line;
@@ -39,13 +39,13 @@ int handle_heredoc(t_global **data, t_tkn *node, char *delimiter, char *index)
 			free(line);
 			break;
 		}
-		//expand_heredoc(data, line);
+		expand_heredoc(data, line);
 		ft_dprintf(tmp_fd, "%s\n", line);
 		free(line);
 	}
 	close(tmp_fd);
-	node->input_fd = open(heredoc_filename, O_RDONLY);
-	if (node->input_fd == -1)
+	(*node)->input_fd = open(heredoc_filename, O_RDONLY);
+	if ((*node)->input_fd == -1)
 	{
 		perror("Error opening heredoc temp file for reading");
 		free(heredoc_filename);
@@ -151,19 +151,20 @@ int handle_heredoc(t_global **data, t_tkn *node, char *delimiter, char *index)
 //     return 0;
 // }
 
-int handle_output_redirection(t_tkn *node, char *redirection) {
+int handle_output_redirection(t_tkn **node, char *redirection)
+{
     int fd = open(redirection, redirection[1] == '>' ? O_WRONLY | O_CREAT | O_APPEND : O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1) {
         perror("Failed to open output file");
         return 1;
     }
-    if (node->output_fd != -1) close(node->output_fd);
-    node->output_fd = fd;
-    node->output = redirection;
+    if ((*node)->output_fd != -1) close((*node)->output_fd);
+    (*node)->output_fd = fd;
+    (*node)->output = redirection;
     return 0;
 }
 
-int handle_input_redirection(t_global **data, *node, char *redirection, int index) {
+int handle_input_redirection(t_global **data, t_tkn **node, char *redirection, int index) {
     int fd;
     char *h_index;
 
@@ -178,34 +179,34 @@ int handle_input_redirection(t_global **data, *node, char *redirection, int inde
             perror("Error opening input file");
             return 1;
         }
-        if (node->input_fd != -1) close(node->input_fd);
-        node->input_fd = fd;
-        node->input = redirection;
+        if ((*node)->input_fd != -1) close((*node)->input_fd);
+        (*node)->input_fd = fd;
+        (*node)->input = redirection;
     }
     return 0;
 }
 
-int apply_redirections(t_tkn *node) {
-    if (node->input_fd != -1 && dup2(node->input_fd, STDIN_FILENO) == -1) {
+int apply_redirections(t_tkn **node) {
+    if ((*node)->input_fd != -1 && dup2((*node)->input_fd, STDIN_FILENO) == -1) {
         perror("Failed to redirect standard input");
         return 1;
     }
-    if (node->output_fd != -1 && dup2(node->output_fd, STDOUT_FILENO) == -1) {
+    if ((*node)->output_fd != -1 && dup2((*node)->output_fd, STDOUT_FILENO) == -1) {
         perror("Failed to redirect standard output");
         return 1;
     }
     return 0;
 }
 
-int parse_redirections(t_global **data, t_tkn *node) {
+int parse_redirections(t_global **data, t_tkn **node) {
     int i = 0;
 
-    while (node->redir[i]) {
-        if (node->redir[i][0] == '>') {
-            if (handle_output_redirection(node, &(node->redir[i][2])))
+    while ((*node)->redir[i]) {
+        if ((*node)->redir[i][0] == '>') {
+            if (handle_output_redirection(node, &((*node)->redir[i][2])))
                 return 1;
-        } else if (node->redir[i][0] == '<') {
-            if (handle_input_redirection(data, node, &(node->redir[i][2]), i))
+        } else if ((*node)->redir[i][0] == '<') {
+            if (handle_input_redirection(data, node, &((*node)->redir[i][2]), i))
                 return 1;
         }
         i++;
