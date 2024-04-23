@@ -19,6 +19,26 @@ static void	handle_expand_fail(char **line, int i, int len)
 	free(new_line);
 }
 
+static void	update_line(char **line, int i, int len, char **value)
+{
+	char	*new_line;
+	int		total_len;
+	int		val_len;
+	int		line_len;
+
+	line_len = ft_strlen(*line);
+	val_len = ft_strlen(*value);
+	total_len = line_len - len + val_len;
+	new_line = ft_calloc((total_len + 1), sizeof(char));
+	ft_strlcpy(new_line, *line, i);
+	ft_strlcpy((new_line + i), *value, val_len);
+	ft_strlcpy((new_line + i + val_len), (*line + i + len), (line_len - i - len));
+	free(*line);
+	free(*value);
+	*line = ft_strdup(new_line);
+	free(new_line);
+}
+
 static int	get_var_value(t_global **data, char **line, int i)
 {
 	int		len;
@@ -35,25 +55,22 @@ static int	get_var_value(t_global **data, char **line, int i)
 	}
 	value = search_value(data, line, i, len);
 	if (!value)
-		handle_expand_fail(line, i, len); // troca a var por "string vazia"
-	// else
-	// 	update_line(*line, i, len, &value);
+		handle_expand_fail(line, i, len);
+	else
+		update_line(line, i, len, &value);
 	return (1);
 }
 
 void	expand_heredoc(t_global **data, char *line)
 {
 	int		i;
-	//int		result;
 
 	i = 0;
-	//result = 0;
 	while (line[i] != '\0')
 	{
 		if (line[i] == '$')
 		{
 			i++;
-			//result =
 			get_var_value(data, &line, i);
 			break ;
 		}

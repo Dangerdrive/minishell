@@ -91,12 +91,23 @@ void		interrupt_handler(int signal);
 void		define_prompt_signals(void);
 
 /*--------------exec---------------*/
-int			prepare_exec(t_global **data);
+int			handle_execution(t_global *data);
 int			hashsize(t_tkn *hashtable);
 char		**hash_to_args(t_tkn *node);
 char		*get_cmd(char *cmd, t_global *data);
 char		*get_cmd_path(char *cmd, char **paths);
-int 		parse_redirections(t_global **data, t_tkn **node);
+// int 		parse_redirections(t_global **data, t_tkn **node);
+
+/*------------redirections---------*/
+void		redirect_heredoc(int heredoc_number);
+int			redirect_input(char *input_redirect);
+int			redirect_output(char *output_redirect);
 void		expand_heredoc(t_global **data, char *line);
+void		redirect_fd(int fd_to_redirect, int fd_location);
+void		redirect_fds(int fd_in, int fd_out);
+void		close_all_fds(void);
+
+void		restore_original_fds(int original_fds[2]);
+int			handle_redirects(t_global *data, int ori_fds[2]);
 
 #endif

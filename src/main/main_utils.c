@@ -77,6 +77,7 @@ void	clean_stuff(t_global **data)
 		ft_strarr_free((*data)->exported, ft_strarr_len((*data)->exported));
 	free_hashtable(&(*data)->hashtable);
 	rl_clear_history();
+	close_all_fds();
 	ft_memdel((*data)->usr);
 	ft_memdel(*data);
 	*data = NULL;
