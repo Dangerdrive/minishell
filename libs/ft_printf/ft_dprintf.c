@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_fd.c                                     :+:      :+:    :+:   */
+/*   ft_dprintf.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -71,7 +71,7 @@ static int	parse_format_type(int fd, va_list args, const char *type)
  *
  * @return The total number of characters printed or -1 if an error occurs.
  */
-int	ft_printf_fd(int fd, const char *frmt, ...)
+int	ft_dprintf(int fd, const char *frmt, ...)
 {
 	va_list	args;
 	int		len;

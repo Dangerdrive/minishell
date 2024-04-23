@@ -62,9 +62,9 @@ int	ft_env(char **args, int args_len, t_global **data)
 	else if (args_len > 1)
 	{
 		if (access(args[1], F_OK) == 0)
-			ft_printf_fd(2, "env: %s: Permission denied\n", args[1]);
+			ft_dprintf(2, "env: %s: Permission denied\n", args[1]);
 		else
-			ft_printf_fd(2, "env: %s: No such file or directory\n", args[1]);
+			ft_dprintf(2, "env: %s: No such file or directory\n", args[1]);
 		return (1);
 	}
 	return (0);

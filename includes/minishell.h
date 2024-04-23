@@ -1,6 +1,10 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+//for readline
+# include <readline/readline.h>
+# include <readline/history.h>
+
 //
 # include <stdio.h>
 # include <unistd.h>
@@ -50,6 +54,7 @@ int			ft_exit(char **args, int args_len, t_global *data);
 
 /*--------------expand--------------*/
 int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
+char	    *search_value(t_global **data, char **str, int i, int len);
 void		add_node_before(t_tkn **node, int i);
 t_tkn		*add_node_after(t_tkn **node, int i);
 t_bool		is_var_name(t_tkn **node, int i, int len);
@@ -66,21 +71,16 @@ int			check_exit_input(char **input, t_global *data);
 
 /*--------------parse--------------*/
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
+t_bool  	is_export_var(char *content);
 t_bool		is_pipe(char *token);
 t_bool		is_and_or(char *token);
 t_bool		is_special_token(char *token);
 t_bool		is_double_special_token(t_tkn *node);
-t_bool		check_there_is_var(char *content);
-t_bool		is_export_var(char *content);
 
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
-void		init_redir_args(char *(*args)[TABLE_SIZE]);
-void		update_redir_files_list(t_tkn **node, char *new_arg, char *sig);
 t_bool		is_redir_in(char *c);
 t_bool		is_redir_out(char *c);
-t_bool		is_append(char *c);
-t_bool		is_heredoc(char *content);
 t_bool		is_redir(char *sig);
 
 /*--------------export-------------*/
@@ -89,22 +89,27 @@ int			validate_identifier(char *str);
 /*--------------lexer--------------*/
 void		interrupt_handler(int signal);
 
-/*--------------signals--------------*/
-void		handle_signals(t_global **data);
-void		handle_signals_exec(t_global **data);
+/*-------------signals-------------*/
 void		define_prompt_signals(void);
-void		define_exec_signals(int child_pid);
-void		define_heredoc_signals(int child_pid);
 
 /*--------------exec---------------*/
-int			prepare_exec(t_global *data);
+int			handle_execution(t_global *data);
 int			hashsize(t_tkn *hashtable);
-char		**hash_to_args(t_tkn *hashtable);
+char		**hash_to_args(t_tkn *node);
 char		*get_cmd(char *cmd, t_global *data);
-char		*get_cmd_path(char*cmd, char**paths);
+char		*get_cmd_path(char *cmd, char **paths);
+// int 		parse_redirections(t_global **data, t_tkn **node);
 
-int			parse_redirections(t_tkn *node);
+/*------------redirections---------*/
+void		redirect_heredoc(int heredoc_number);
+int			redirect_input(char *input_redirect);
+int			redirect_output(char *output_redirect);
+void		expand_heredoc(t_global **data, char *line);
+void		redirect_fd(int fd_to_redirect, int fd_location);
+void		redirect_fds(int fd_in, int fd_out);
+void		close_all_fds(void);
 
-
+void		restore_original_fds(int original_fds[2]);
+int			handle_redirects(t_global *data, int ori_fds[2]);
 
 #endif

@@ -51,11 +51,6 @@ int	check_quotes(char *input, int i)
 	return (0);
 }
 
-/**
- * Check if the 'c' parameter is a special bash char (|, &, <, >).
- *
- * Returns true or false.
- */
 t_bool	is_special_char(char c)
 {
 	if (c == '|' || c == '&' || c == '<' || c == '>')
@@ -132,8 +127,13 @@ int	readline_and_handle_input(t_global **data)
 	input = 0;
 	(*data)->usr_input = NULL;
 	(*data)->usr_input = readline((*data)->usr_input);
-	if (!(*data)->usr_input) // EOF CATCHER (CTRL-D)
+	if (!(*data)->usr_input)
 		return (-1);
+	if (!(*data)->usr_input[0])
+	{
+		printf("\n");
+		return (0);
+	}
 	add_history((*data)->usr_input);
 	input = handle_input(data);
 	if (input == -1)
@@ -141,11 +141,9 @@ int	readline_and_handle_input(t_global **data)
 	if (input == 1)
 	{
 		input = parse(&(*data)->hashtable, data);
-		 if (input == 1)
-		 {
-			prepare_exec(*data);
-			// 	prt_hashtable((*data)->hashtable);
-		 }
+		if (input == 1)
+			(*data)->ret = handle_execution(*data);
+		// 	prt_hashtable((*data)->hashtable);
 	}
 	return (1);
 }

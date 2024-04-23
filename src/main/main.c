@@ -8,14 +8,14 @@ static int	print_cwd(t_global **data)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		ft_printf_fd(2, "minishell: %s\n", strerror(errno));
+		ft_dprintf(2, "\nminishell: %s\n", strerror(errno));
 		return (1);
 	}
 	home = ft_strlen(ft_getenv("HOME", data));
 	if (ft_strncmp(cwd, ft_getenv("HOME", data), home) == 0)
-		ft_printf_fd(1, "%s%s:~%s$ %s",BLUE, (*data)->usr, &cwd[home], END);
+		ft_dprintf(1, "%s%s:~%s$ %s",BLUE, (*data)->usr, &cwd[home], END);
 	else
-		ft_printf_fd(1, "%s$ ", cwd);
+		ft_dprintf(1, "%s$ ", cwd);
 	free(cwd);
 	return (0);
 }
@@ -30,7 +30,7 @@ int	main(void)
 	// data->exit = handle_signal();
 	while (!data->exit)
 	{
-		// printf("%s$ ", data->cur_path);
+		define_prompt_signals();
 		print_cwd(&data);
 		define_prompt_signals();
 		if (!data->exit && readline_and_handle_input(&data) == -1)

@@ -38,12 +38,12 @@ int	ft_exit(char **args, int args_len, t_global *data)
 	else if (args_len > 1 && !argument_is_valid(args[1]))
 	{
 		data->ret = 2;
-		ft_printf_fd(2, "exit: %s: numeric argument required\n", args[1]);
+		ft_dprintf(2, "exit: %s: numeric argument required\n", args[1]);
 		data->exit = TRUE;
 	}
 	else if (args_len > 2 && argument_is_valid(args[1]))
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell: exit: too many arguments\n");
+		ft_dprintf(STDERR_FILENO, "minishell: exit: too many arguments\n");
 		data->ret = 1;
 	}
 	else if (args_len == 2 && argument_is_valid(args[1]))

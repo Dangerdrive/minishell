@@ -32,11 +32,18 @@ typedef struct s_global
 	char			*usr;
 	char			*usr_input;
 	char			*cur_path;
-	int				pid;
 	int				is_exec;
+	char			*input;
+	char			*output;
+	int				original_stdin;//
+	int				original_stdout;//
+	int				original_fds[2];
+	int				input_fd;
+	int				output_fd;
+	int				pipe[2];
+	pid_t			pid;
 	int				prev_process_status;
 	int				ret;
-	t_bool			is_echo;
 	t_bool			exit;
 	struct s_global	*next;
 }	t_global;

@@ -39,7 +39,7 @@ char	*get_cmd_path(char *cmd, char **paths)
 		if (!cmd_path)
 		{
 			ft_strarr_free(paths, ft_strarr_len(paths));
-			ft_printf_fd(2, "cmd_path error\n");
+			ft_dprintf(2, "cmd_path error\n");
 			return (NULL);
 		}
 		if (access(cmd_path, F_OK | X_OK) == 0)
@@ -64,7 +64,7 @@ char	*get_cmd(char *cmd, t_global *data)
 	cmd_path = get_cmd_path(cmd, env_paths);
 	if (!cmd_path)
 	{
-		ft_printf_fd(2, "%s: command not found\n", cmd);
+		ft_dprintf(2, "%s: command not found\n", cmd);
 		ft_strarr_free(env_paths, ft_strarr_len(env_paths));
 		return (NULL);
 	}
@@ -89,7 +89,30 @@ int	hashsize(t_tkn *hashtable)
 	return (i);
 }
 
-char	**hash_to_args(t_tkn *hashtable)
+void	fill_args(t_tkn	**node, char **args, int i) // REVISAR SITUAÇÃO STRING VAZIA (echo lala"" haha)
+{
+	char	*arg_tmp;
+	//t_tkn	*temp_node;
+
+	arg_tmp = NULL;
+	if ((*node)->prev && !ft_strcmp((*node)->prev->content, "") && (*node)->prev->space_after == TRUE)
+		args[i] = ft_strjoin(" ", (*node)->content);
+	else if ((*node)->space_after == TRUE && (*node)->content)
+		args[i] = ft_strdup((*node)->content);
+	//temp_node = *node;
+	if ((*node)->space_after == FALSE && (*node)->next)
+	{
+		if ((*node)->prev->space_after == TRUE)
+			args[i] = ft_strdup((*node)->content);
+		arg_tmp = ft_strjoin(args[i], (*node)->next->content);
+		free(args[i]);
+		args[i] = arg_tmp;
+		(*node) = (*node)->next;
+	}
+
+}
+
+char	**hash_to_args(t_tkn *node)
 {
 	char	**args;
 	char	*arg_tmp;
@@ -97,32 +120,18 @@ char	**hash_to_args(t_tkn *hashtable)
 	int		i;
 	int		args_count;
 
-	args_count = hashsize(hashtable);
-	args = malloc(sizeof(char *) * (args_count + 1));
-	i = -1;
-	temp = hashtable;
+	if (!node->content && !node->next)
+		return (NULL);
+	args_count = hashsize(node);
+	args = ft_calloc((args_count + 1), sizeof(char *));
+	temp = node;
+	i = 0;
 	while (temp)
 	{
-		arg_tmp = NULL;
-		if (temp->space_after == TRUE && temp->content)
-			args[++i] = ft_strdup(temp->content);
-		while (temp->space_after == FALSE && temp->next)
-		{
-			if (temp->prev->space_after == TRUE)
-				args[++i] = ft_strdup(temp->content);
-			arg_tmp = ft_strjoin(args[i], temp->next->content);
-			free(args[i]);
-			args[i] = arg_tmp;
-			temp = temp->next;
-		}
+		fill_args(&temp, args, i);
 		temp = temp->next;
+		i++;
 	}
-	args[++i] = NULL;
-	// //debug
-	// while (i >= 0)
-	// {
-	// printf("%i: %s\n", i, args[i]);
-	// 	i--;
-	// }
+	args[args_count] = NULL;
 	return (args);
 }
