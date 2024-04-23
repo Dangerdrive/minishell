@@ -1,21 +1,21 @@
 #include "../../includes/minishell.h"
 
-static void	handle_expand_fail(char **line, int i, int len, char **value)
+static void	handle_expand_fail(char **line, int i, int len)
 {
 	char	*new_line;
 	int		j;
 
 	j = 0;
 	new_line = ft_calloc((ft_strlen(*line) - len + 1), sizeof(char));
-	while (line[j])
+	while (*line[j])
 	{
-		new_line[j] = line[j];
+		new_line[j] = *line[j];
 		j++;
 		if (j == i)
-			j == len;
+			j += len;
 	}
 	free(*line);
-	line = ft_strdup(new_line);
+	*line = ft_strdup(new_line);
 	free(new_line);
 }
 
@@ -35,9 +35,9 @@ static int	get_var_value(t_global **data, char **line, int i)
 	}
 	value = search_value(data, line, i, len);
 	if (!value)
-		handle_expand_fail(line, i, len, value); // troca a var por "string vazia"
+		handle_expand_fail(line, i, len); // troca a var por "string vazia"
 	// else
-	// 	update_line(*line, i + len, len, &value);
+	// 	update_line(*line, i, len, &value);
 	return (1);
 }
 
