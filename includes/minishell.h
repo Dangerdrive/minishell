@@ -105,8 +105,6 @@ int			redirect_output(char *output_redirect);
 void		expand_heredoc(t_global **data, char *line);
 void		redirect_fd(int fd_to_redirect, int fd_location);
 void		redirect_fds(int fd_in, int fd_out);
-void		close_all_fds(void);
-
 void		restore_original_fds(int original_fds[2]);
 int			handle_redirects(t_global *data, int ori_fds[2]);
 
