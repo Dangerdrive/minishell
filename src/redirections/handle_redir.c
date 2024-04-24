@@ -56,7 +56,7 @@ int	handle_redirects(t_global *data, int ori_fds[2])
 		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
 		{
 			save_original_fd_in(ori_fds);
-			redirect_heredoc(i);
+			redirect_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
 		}
 		i++;
 	}

@@ -165,23 +165,23 @@ int	check_if_expandable(t_tkn **node, t_global **data)
 	return (result);
 }
 
-void	check_heredoc(t_tkn **node)
-{
-	t_tkn	*temp;
+// void	check_heredoc(t_tkn **node)
+// {
+// 	t_tkn	*temp;
 
-	temp = NULL;
-	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
-		&& (*node)->next && !is_special_token((*node)->next->content))
-	{
-		temp = (*node)->next->next;
-		(*node)->delimiter = ft_strdup((*node)->next->content);
-		free((*node)->next->content);
-		free((*node)->next);
-		(*node)->next = temp;
-		if (temp)
-			temp->prev = *node;
-	}
-}
+// 	temp = NULL;
+// 	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
+// 		&& (*node)->next && !is_special_token((*node)->next->content))
+// 	{
+// 		temp = (*node)->next->next;
+// 		(*node)->delimiter = ft_strdup((*node)->next->content);
+// 		free((*node)->next->content);
+// 		free((*node)->next);
+// 		(*node)->next = temp;
+// 		if (temp)
+// 			temp->prev = *node;
+// 	}
+// }
 
 /**
  * Handles variable expansion.
@@ -202,7 +202,6 @@ int	expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			check_heredoc(&(*hashtable)[i]);
 			result = check_if_expandable(&(*hashtable)[i], data);
 			if (result == 0)
 			{

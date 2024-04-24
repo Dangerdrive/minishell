@@ -78,6 +78,7 @@ t_bool		is_double_special_token(t_tkn *node);
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
 t_bool		is_redir_in(char *c);
 t_bool		is_redir_out(char *c);
+t_bool		is_heredoc(char *content);
 t_bool		is_redir(char *sig);
 
 /*--------------export-------------*/
@@ -96,15 +97,17 @@ int			hashsize(t_tkn *hashtable);
 char		**hash_to_args(t_tkn *node);
 char		*get_cmd(char *cmd, t_global *data);
 char		*get_cmd_path(char *cmd, char **paths);
-// int 		parse_redirections(t_global **data, t_tkn **node);
+int			exec_one_process(t_global *data);	
 
 /*------------redirections---------*/
-void		redirect_heredoc(int heredoc_number);
+void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect);
 int			redirect_output(char *output_redirect);
-void		expand_heredoc(t_global **data, char *line);
+void		expand_heredoc(t_global *data, char *line);
 void		redirect_fd(int fd_to_redirect, int fd_location);
 void		redirect_fds(int fd_in, int fd_out);
+void		close_all_fds(void);
+
 void		restore_original_fds(int original_fds[2]);
 int			handle_redirects(t_global *data, int ori_fds[2]);
 

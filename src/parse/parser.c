@@ -89,7 +89,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		}
 		(*hashtable)[i] = temp;
 		if (!ft_strcmp((*hashtable)[i]->content, "export"))
-			handle_export(hashtable[i]);
+			handle_export(hashtable[i]);		
 		i++;
 	}
 	syntax = 0;

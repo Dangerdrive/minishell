@@ -232,6 +232,12 @@ int	exec_one_nonbuiltin(t_global *data, char **args)
     }
 	return(ret); 
 }
+/*
+int exec_processes(t_global *data)
+{
+	
+}
+*/
 
 int	exec_one_process(t_global *data)
 {
@@ -240,7 +246,7 @@ int	exec_one_process(t_global *data)
 
 	ret = 1;
 	args = NULL;
-	if (handle_redirects(data, data->original_fds) == 0)
+	if (handle_redirect(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
 		return (1);
@@ -268,9 +274,114 @@ int	handle_execution(t_global *data)
 	ret = 1;
 	if (pipecount(data) == 0)
 		exec_one_process(data);
-	// else if (pipecountdata > 0)
-	// 	exec(data);
+	// else if (pipecount(data) > 0)
+	// 	exec_process(data);
 	if (data->hashtable[0]->content)
 		ft_strarr_free(args, ft_strarr_len(args));
 	return (ret);
+}
+
+
+
+
+
+static void	save_original_fds(int original_fds[2])
+{
+	original_fds[0] = dup(STDIN_FILENO);
+	original_fds[1] = dup(STDOUT_FILENO);
+}
+
+static void	handle_redirect(char *command, char **commands, t_env **minienv)
+{
+	char	redirect;
+
+	redirect = get_next_redirect(command);
+	while (redirect)
+	{
+		if (redirect == '<')
+		{
+			if (redirect_input(command) == FAILED)
+				quit_child(commands, minienv);
+		}
+		if (redirect == '>')
+		{
+			if (redirect_output(command) == FAILED)
+				quit_child(commands, minienv);
+		}
+		if (redirect < 0)
+			redirect_heredoc(command, redirect);
+		redirect = get_next_redirect(command);
+	}
+}
+
+// static void	execute_forked_command(char *command, char **commands,
+// 		t_env **minienv)
+static void	execute_forked_command(t_global *data, int idx)
+{
+	char	**args;
+
+	close_extra_fds();
+	args = hash_to_args(data->hashtable[idx]);
+
+	if (is_builtin(args[0]))
+		execute_forked_builtin(args, minienv);
+	else
+		execute_external(args, *minienv);
+}
+
+static void	restore_original_fds(int original_fds[2])
+{
+	redirect_fd(original_fds[IN], STDIN_FILENO);
+	redirect_fd(original_fds[OUT], STDOUT_FILENO);
+}
+
+void	handle_pipe(int original_fd_out, char *current_command, char **commands)
+{
+	int			is_first_command;
+	int			has_next_command;
+	char		*last_command;
+	static int	pipe_fds[2];
+
+	last_command = commands[arr_len(commands) - 1];
+	is_first_command = (current_command == commands[0]);
+	has_next_command = (current_command != last_command);
+	if (!is_first_command)
+		redirect_fd(pipe_fds[IN], STDIN_FILENO);
+	if (has_next_command)
+	{
+		if (pipe(pipe_fds) == -1)
+			print_perror_msg("pipe", current_command);
+		redirect_fd(pipe_fds[OUT], STDOUT_FILENO);
+	}
+	else
+		redirect_fd(original_fd_out, STDOUT_FILENO);
+}
+
+int	execute_multiple_commands(char **commands, t_env **minienv)
+int	exec_processes(t_global *data)
+{
+	int	original_fds[2];
+	int	*children_pid;
+	int	i;
+
+	save_original_fds(original_fds);
+	children_pid = init_children_pid(commands);
+	i = 0;
+	while (commands[i])
+	{
+		handle_pipe(original_fds[OUT], commands[i], commands);
+		children_pid[i] = fork();
+		//define_execute_signals(children_pid[i]); //handle signals
+		if (children_pid[i] == -1)
+			print_perror_msg("fork", commands[i]);
+		else if (children_pid[i] == 0)
+		{
+			free(children_pid);
+			handle_redirect();
+			execute_forked_command(commands[i], commands, minienv);
+		}
+		i++;
+	}
+	restore_original_fds(original_fds);
+	return (wait_for_children(children_pid));
 }

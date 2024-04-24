@@ -14,7 +14,7 @@ LIBFT		=	$(LIBFT_PATH)/libft.a
 FTPRINTF_PATH	= ./libs/ft_printf
 FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
-# push_swap
+
 SRC = 	./src/builtins/cd.c \
 		./src/builtins/echo.c \
 		./src/builtins/env.c \
@@ -34,13 +34,15 @@ SRC = 	./src/builtins/cd.c \
 		./src/expand/expander_utils.c \
 		./src/expand/heredoc_expander.c \
 		./src/signals/signals.c \
-		./src/main/exec.c \
-		./src/main/exec_utils.c \
 		./src/main/main.c \
 		./src/main/main_utils.c \
 		./src/redirections/handle_redir.c \
 		./src/redirections/redir.c \
-		./src/redirections/redir_utils.c
+		./src/redirections/redir_utils.c \
+		./src/execution/exec.c \
+		./src/execution/exec_utils.c \
+		./src/execution/exec_one_process.c
+#		./src/execution/exec_processes.c \
 
 # Objects
 OBJ_PATH = src/build/
