@@ -110,9 +110,13 @@ int			exec_one_process(t_global *data);
 int			exec_processes(t_global *data);
 void		exec_nonbuiltin(char **args, t_global *data);
 int			pipecount(t_global *data);
+void		handle_pipe(int original_fd_out, t_global *data,
+				t_tkn *current_node, t_tkn **hashtable);
 
 /*------------redirections---------*/
 int			handle_redirects(t_global *data, int ori_fds[2]);
+void		handle_redirects_for_pipes(t_global *data, char **redirects);
+
 void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect);
 int			redirect_output(char *output_redirect);
@@ -121,9 +125,8 @@ void		redirect_fd(int fd_to_redirect, int fd_location);
 void		redirect_fds(int fd_in, int fd_out);
 void		close_all_fds(void);
 void		close_extra_fds(void);
-
-
 void		restore_original_fds(int original_fds[2]);
+void		restore_fds(int original_fds[2]);
 //int			handle_redirects(t_global *data, int ori_fds[2]);
 void		save_original_fd_in(int original_fds[2]);
 void		save_original_fd_out(int original_fds[2]);

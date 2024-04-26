@@ -1,28 +1,5 @@
 #include "../includes/minishell.h"
 
-t_global	*init_data(void)
-{
-	t_global	*data;
-
-	data = ft_calloc(1, sizeof(t_global));
-	if (!data)
-		return (NULL);
-	data->usr_input = NULL;
-	data->env = NULL;
-	data->cur_path = getcwd(NULL, 0);
-	data->ret = 0;
-	data->exit = 0;
-	data->original_stdin = dup(STDIN_FILENO);
-	data->original_stdout = dup(STDOUT_FILENO);
-	data->env = ft_strarr_dup(__environ);
-	data->is_exec = FALSE;
-	data->is_heredoc = FALSE;
-	data->exported = NULL;
-	data->usr = ft_strdup(ft_getenv("USER", &data));
-	init_hashtable(&data->hashtable);
-	return (data);
-}
-
 void	free_redir_args(char *(*args)[TABLE_SIZE])
 {
 	int		i;
@@ -82,36 +59,35 @@ void	clean_stuff(t_global **data)
 	ft_memdel(*data);
 	*data = NULL;
 }
+// void	restore_fds(t_global *data)
+// {
+// 	dup2(data->original_stdin, STDIN_FILENO);
+// 	close(data->original_stdin);
+// 	dup2(data->original_stdout, STDOUT_FILENO);
+// 	close(data->original_stdout);
+// }
 
-void	restore_fds(t_global *data)
+void	clean_input_and_hashtable(t_global **data)
 {
-	dup2(data->original_stdin, STDIN_FILENO);
-	close(data->original_stdin);
-	dup2(data->original_stdout, STDOUT_FILENO);
-	close(data->original_stdout);
-}
+	int		i;
+	char	temp[30];
+	char	*num_part;
 
-void clean_input_and_hashtable(t_global **data)
-{
-    int		i;
-    char	temp[30];
-    char	*num_part;
-
-    ft_memdel((*data)->usr_input);
-    free_hashtable(&(*data)->hashtable);
-    restore_fds(*data);
-
-    i = 0;
-    while (i < 100)
-    {
-        strcpy(temp, ".tmp/heredoc");
-        num_part = ft_itoa(i);
-        if (num_part)
-        {
-            strcat(temp, num_part);
-            free(num_part);
-        }
-        unlink(temp);
-        i++;
-    }
+	ft_memdel((*data)->usr_input);
+	free_hashtable(&(*data)->hashtable);
+	//restore_fds(*data);
+	restore_fds((*data)->original_fds);
+	i = 0;
+	while (i < 100)
+	{
+		strcpy(temp, ".tmp/heredoc");
+		num_part = ft_itoa(i);
+		if (num_part)
+		{
+			strcat(temp, num_part);
+			free(num_part);
+		}
+		unlink(temp);
+		i++;
+	}
 }

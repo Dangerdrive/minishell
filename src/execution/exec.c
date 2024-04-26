@@ -1,18 +1,5 @@
 #include "../../includes/minishell.h"
 
-
-int	pipecount(t_global *data)
-{
-	int	result;
-
-	result = 0;
-	while (data->hashtable[result])
-	{
-		result++;
-	}
-	return (result - 1);
-}
-
 int	handle_execution(t_global *data)
 {
 	int		ret;

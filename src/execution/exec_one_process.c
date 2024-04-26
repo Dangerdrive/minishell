@@ -9,7 +9,8 @@ void	exec_nonbuiltin(char **args, t_global *data)
 	{
 		if (execve(cmd, args, data->env) == -1)
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", args[0], strerror(errno));
+			ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n",
+				args[0], strerror(errno));
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -17,14 +18,13 @@ void	exec_nonbuiltin(char **args, t_global *data)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: %s: command not found\n", args[0]);
 		rl_clear_history();
-		//freeenv?
 		ft_strarr_free(args, ft_strarr_len(args));
 		close_all_fds();
-
 		exit(127);//command not found.
 	}
 }
-int	handle_redirects1(t_global *data, int ori_fds[2])
+
+static int	handle_redirects_one_cmd(t_global *data, int ori_fds[2])
 {
 	int		i;
 
@@ -53,46 +53,49 @@ int	handle_redirects1(t_global *data, int ori_fds[2])
 	return (1);
 }
 
+int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
+{
+	int	status;
+	int	ret;
+
+	ret = 1;
+	if (pid == -1)
+		perror("minishell: fork");
+	else if (pid == 0)
+	{
+		exec_nonbuiltin(args, data);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		if (waitpid(pid, &status, 0) == -1)
+			ft_dprintf(STDERR_FILENO, "waitpid: %s\n", strerror(errno));
+		// else if (WIFSIGNALED(status))
+		// 	ret = handle_signal_interrupt(status, TRUE);
+		else if (WIFEXITED(status))
+			ret = WEXITSTATUS(status);
+	}
+	return (ret);
+}
+
 int	exec_nonbuiltin_onfork(t_global *data, char **args)
 {
-	pid_t	pid;
+	int		pid;
 	int		ret;
-	int		status;
 
 	ret = 1;
 	pid = fork();
-	//define_execute_signals(child_pid); lidar com sinais
-
-
-	if (handle_redirects1(data, data->original_fds) == 0)//
+	if (handle_redirects_one_cmd(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
 		return (1);
 	}
 	if (args && args[0] && !is_builtin(args[0]))
 	{
-		if (pid == -1)
-			perror("minishell: fork");
-
-		else if (pid == 0)
-		{
-			exec_nonbuiltin(args, data);
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			if (waitpid(pid, &status, 0) == -1)
-				ft_dprintf(STDERR_FILENO, "waitpid: %s\n", strerror(errno));
-			//	("waitpid", ft_itoa(pid));
-			// lidar com sinal
-			// else if (WIFSIGNALED(status))
-			//     ret = handle_signal_interrupt(status, TRUE);
-			else if (WIFEXITED(status))
-				ret = WEXITSTATUS(status);
-		}
-		restore_original_fds(data->original_fds);//
+		ret = exec_nonbuiltin_and_wait(data, args, pid);
+		restore_original_fds(data->original_fds);
 	}
-	return(ret);
+	return (ret);
 }
 
 int	exec_one_process(t_global *data)
