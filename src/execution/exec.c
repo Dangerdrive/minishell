@@ -24,8 +24,8 @@ int	handle_execution(t_global *data)
 	ret = 1;
 	if (pipecount(data) == 0)
 		exec_one_process(data);
-	// else if (pipecount(data) > 0)
-	// 	exec_process(data);
+	else if (pipecount(data) > 0)
+		exec_processes(data);
 	if (data->hashtable[0]->content)
 		ft_strarr_free(args, ft_strarr_len(args));
 	return (ret);

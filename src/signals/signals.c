@@ -9,7 +9,6 @@ static void	handle_sigint(int sig)
 	rl_redisplay();
 }
 
-
 void	define_prompt_signals(void)
 {
 	struct sigaction	sa_sigint;
