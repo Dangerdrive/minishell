@@ -16,14 +16,14 @@ int	ft_echo(char **args, int args_len)
 		}
 		while (args[i])
 		{
-			ft_printf(args[i]);
+			ft_dprintf(STDOUT_FILENO, args[i]);
 			if (args[i + 1] && args[i][0] != '\0')
-				ft_printf(" ");
+				ft_dprintf(STDOUT_FILENO, " ");
 			i++;
 		}
 	}
 	if (n_option == 0)
-		ft_printf("\n");
+		ft_dprintf(STDOUT_FILENO, "\n");
 	return (0);
 }
 

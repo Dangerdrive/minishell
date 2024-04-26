@@ -47,7 +47,6 @@ int			ft_unset(char **args, int args_len, t_global *data);
 char		*ft_getenv(char *name, t_global **data);
 int			ft_env(char **args, int args_len, t_global **data);
 
-
 /*--------------echo----------------*/
 int			ft_cd(char **args, int args_len, t_global *data);
 int			ft_echo(char **args, int args_len);
@@ -84,6 +83,11 @@ t_bool		is_redir_in(char *c);
 t_bool		is_redir_out(char *c);
 t_bool		is_heredoc(char *content);
 t_bool		is_redir(char *sig);
+t_bool		input_starts_with_command(t_tkn	*node, int i);
+void		check_redirects(t_tkn **node);
+void		remove_pipe(t_tkn **node, int i);
+void		parse_redir(t_tkn **node, t_tkn **temp_node);
+void		check_heredoc(t_tkn **node);
 
 /*--------------export-------------*/
 int			validate_identifier(char *str);

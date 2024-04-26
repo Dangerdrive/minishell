@@ -37,28 +37,35 @@ int	handle_output_redirect(char *command, int original_fds[2])
 int	handle_redirects(t_global *data, int ori_fds[2])
 {
 	int		i;
+	t_tkn	*temp;
 
 	i = 0;
+	temp = data->hashtable[0];
 	ori_fds[IN] = -1;
 	ori_fds[OUT] = -1;
-	while (data->hashtable[0]->redir[i])
+	while (data->hashtable[0])
 	{
-		if (ft_strncmp(data->hashtable[0]->redir[i], "< ", 2) == 0)
+		while (data->hashtable[0]->redir[i])
 		{
-			if (!handle_input_redirect(data->hashtable[0]->redir[i], ori_fds))
-				return (0);
+			if (ft_strncmp(data->hashtable[0]->redir[i], "< ", 2) == 0)
+			{
+				if (!handle_input_redirect(data->hashtable[0]->redir[i], ori_fds))
+					return (0);
+			}
+			if (data->hashtable[0]->redir[i][0] == '>')
+			{
+				if (!handle_output_redirect(data->hashtable[0]->redir[i], ori_fds))
+					return (0);
+			}
+			if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
+			{
+				save_original_fd_in(ori_fds);
+				redirect_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
+			}
+			i++;
 		}
-		if (data->hashtable[0]->redir[i][0] == '>')
-		{
-			if (!handle_output_redirect(data->hashtable[0]->redir[i], ori_fds))
-				return (0);
-		}
-		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
-		{
-			save_original_fd_in(ori_fds);
-			redirect_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
-		}
-		i++;
+		data->hashtable[0] = data->hashtable[0]->next;
 	}
+	data->hashtable[0] = temp;
 	return (1);
 }

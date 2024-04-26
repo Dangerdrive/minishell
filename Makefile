@@ -30,6 +30,8 @@ SRC = 	./src/builtins/cd.c \
 		./src/parse/parser_utils2.c \
 		./src/lexer/lexer.c \
 		./src/lexer/lexer_utils.c \
+		./src/lexer/lexer_utils2.c \
+		./src/lexer/parse_redir.c \
 		./src/expand/expander.c \
 		./src/expand/expander_utils.c \
 		./src/expand/heredoc_expander.c \

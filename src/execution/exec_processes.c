@@ -158,7 +158,7 @@ int	exec_processes(t_global *data)
 	{
 		handle_pipe(original_fds[OUT],data, data->hashtable[i], data->hashtable);
 		children_pid[i] = fork();
-		printf("children_pid[%d] = %d\n", i, children_pid[i]);
+		//printf("children_pid[%d] = %d\n", i, children_pid[i]);
 		//define_execute_signals(children_pid[i]); //handle signals
 		if (children_pid[i] == -1)
 			ft_dprintf(2, "minishell: %s: %s\n", "fork", strerror(errno));

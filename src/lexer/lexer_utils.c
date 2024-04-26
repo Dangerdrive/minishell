@@ -1,37 +1,49 @@
 #include "../includes/minishell.h"
 
-t_bool	is_redir_in(char *c)
+t_bool	input_starts_with_command(t_tkn	*node, int i)
 {
-	if (!ft_strcmp(c, LESS_THAN))
-		return (true);
-	return (false);
+	if ((i == 0 && !node->prev && !is_redir(node->content) && ft_strcmp(node->type, COMMAND))
+		|| (i > 0 && node->prev && is_pipe(node->prev->content)
+			&& ft_strcmp(node->type, COMMAND)))
+		return (FALSE);
+	return (TRUE);
 }
 
-t_bool	is_redir_out(char *c)
+void	check_redirects(t_tkn **node)
 {
-	if (!ft_strcmp(c, GREATER_THAN))
-		return (true);
-	return (false);
+	t_tkn	*temp_node;
+	t_tkn	*temp;
+
+	temp = *node;
+	temp_node = NULL;
+	while (*node)
+	{
+		parse_redir(node, &temp_node);
+		*node = (*node)->next;
+	}
+	if (temp_node && !temp_node->prev)
+		*node = temp_node;
+	else
+	{
+		*node = temp;
+		while ((*node)->next != NULL)
+			*node = (*node)->next;
+		*node = temp_node;
+		*node = temp;
+	}
 }
 
-t_bool	is_append(char *c)
+void	remove_pipe(t_tkn **node, int i)
 {
-	if (!ft_strcmp(c, DOUBLE_GREATER_THAN))
-		return (true);
-	return (false);
-}
+	t_tkn	*temp;
 
-t_bool	is_heredoc(char *content)
-{
-	if (strcmp(content, DOUBLE_LESS_THAN) == 0)
-		return (true);
-	return (false);
-}
-
-t_bool	is_redir(char *sig)
-{
-	if (is_redir_in(sig) || is_redir_out(sig)
-		|| is_heredoc(sig) || is_append(sig))
-		return (true);
-	return (false);
+	if (i > 0 && is_pipe((*node)->content))
+	{
+		temp = (*node)->next;
+		free((*node)->content);
+		free(*node);
+		*node = temp;
+		if (*node)
+			(*node)->prev = NULL;
+	}
 }
