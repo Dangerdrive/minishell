@@ -12,13 +12,14 @@ t_global	*init_data(void)
 	data->cur_path = getcwd(NULL, 0);
 	data->ret = 0;
 	data->exit = 0;
+	data->original_stdin = dup(STDIN_FILENO);
+	data->original_stdout = dup(STDOUT_FILENO);
 	data->env = ft_strarr_dup(__environ);
-	data->is_exec = 0;
+	data->is_exec = FALSE;
+	data->is_heredoc = FALSE;
 	data->exported = NULL;
 	data->usr = ft_strdup(ft_getenv("USER", &data));
-	data->is_echo = false;
 	init_hashtable(&data->hashtable);
-	//printf("PATH %s\n", data->cur_path);
 	return (data);
 }
 
@@ -76,13 +77,21 @@ void	clean_stuff(t_global **data)
 		ft_strarr_free((*data)->exported, ft_strarr_len((*data)->exported));
 	free_hashtable(&(*data)->hashtable);
 	rl_clear_history();
+	close_all_fds();
 	ft_memdel((*data)->usr);
 	ft_memdel(*data);
 	*data = NULL;
 }
-
+void	restore_fds(t_global *data)
+{
+	dup2(data->original_stdin, STDIN_FILENO);
+	close(data->original_stdin);
+	dup2(data->original_stdout, STDOUT_FILENO);
+	close(data->original_stdout);
+}
 void	clean_input_and_hashtable(t_global **data)
 {
 	ft_memdel((*data)->usr_input);
 	free_hashtable(&(*data)->hashtable);
+	restore_fds(*data);
 }

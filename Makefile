@@ -1,5 +1,6 @@
 # Name of the executable
 NAME = minishell
+NAME_BONUS = minishell_bonus
 
 # Compilation flags
 CFLAGS = -Wall -Wextra -Werror -g
@@ -13,7 +14,7 @@ LIBFT		=	$(LIBFT_PATH)/libft.a
 FTPRINTF_PATH	= ./libs/ft_printf
 FTPRINTF		=	$(FTPRINTF_PATH)/libftprintf.a
 
-# push_swap
+
 SRC = 	./src/builtins/cd.c \
 		./src/builtins/echo.c \
 		./src/builtins/env.c \
@@ -27,22 +28,30 @@ SRC = 	./src/builtins/cd.c \
 		./src/parse/parser.c \
 		./src/parse/parser_utils.c \
 		./src/parse/parser_utils2.c \
-		./src/expand/expander.c \
-		./src/expand/expander_utils.c \
 		./src/lexer/lexer.c \
 		./src/lexer/lexer_utils.c \
-		./src/signals/signal.c \
-		./src/main/exec.c \
-		./src/main/exec_utils.c \
-		./src/main/redir.c \
+		./src/expand/expander.c \
+		./src/expand/expander_utils.c \
+		./src/expand/heredoc_expander.c \
+		./src/signals/signals.c \
 		./src/main/main.c \
-		./src/main/main_utils.c
+		./src/main/main_utils.c \
+		./src/main/prompt.c \
+		./src/redirections/handle_redir.c \
+		./src/redirections/redir.c \
+		./src/redirections/redir_utils.c \
+		./src/execution/exec.c \
+		./src/execution/exec_utils.c \
+		./src/execution/exec_one_process.c \
+		./src/execution/exec_processes.c
 
 # Objects
 OBJ_PATH = src/build/
 OBJ = $(addprefix $(OBJ_PATH), $(notdir $(SRC:.c=.o)))
-# OBJ_PATH_BONUS = ./build_bonus/
-# OBJ_BONUS = $(addprefix $(OBJ_PATH_BONUS), $(notdir $(SRC_BONUS:.c=.o)))
+OBJ_PATH_BONUS = ./build_bonus/
+OBJ_BONUS = $(addprefix $(OBJ_PATH_BONUS), $(notdir $(SRC_BONUS:.c=.o)))
+OBJ_PATH_BONUS = ./build_bonus/
+OBJ_BONUS = $(addprefix $(OBJ_PATH_BONUS), $(notdir $(SRC_BONUS:.c=.o)))
 
 # Color codes of output on terminal
 GREEN = \e[1;32m
@@ -65,11 +74,23 @@ $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
 
 valgrind: all
 	@echo "Running the program with valgrind..."
-	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
+	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes --suppressions=readline.supp ./minishell
 
 run: all
 	@echo "Running the program..."
 	./minishell
+
+bonus: $(NAME_BONUS)
+
+# Target to build the bonus part
+$(NAME_BONUS): $(OBJ_BONUS) $(LIBFT) $(FTPRINTF)
+# 	@cp $(LIBFT) $(NAME_BONUS)
+# 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME_BONUS)
+	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline
+#	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
+	@echo "$(GREEN)--------------------------------------------------$(END)"
+	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
+	@echo "$(GREEN)--------------------------------------------------$(END)"
 
 # Builds dependencies
 $(LIBFT):
@@ -80,6 +101,13 @@ $(FTPRINTF):
 # Builds mandatory object files
 $(OBJ_PATH)%.o: src/**/%.c
 	@mkdir -p $(OBJ_PATH)
+	@mkdir -p .tmp/
+	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
+
+# Builds bonus object files
+$(OBJ_PATH_BONUS)%.o: src/**/%.c
+	@mkdir -p $(OBJ_PATH_BONUS)
+	@mkdir -p .tmp/
 	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
 
 # Cleans object files and dependencies

@@ -3,7 +3,7 @@
 /**
  * It updates the token node with the variable value (*exp_value).
  */
-void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
+static void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
 {
 	char	*new_content;
 	int		token_len;
@@ -37,11 +37,11 @@ void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
 /**
  * Searches for the key that matches the token's variable and then returns its value.
  */
-char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
+char	*fetch_in_array(char **str, int i, int len, char *arr)
 {
 	char	*value;
 
-	if (ft_strncmp((*node)->content + i, arr, len) == 0)
+	if (ft_strncmp((*str) + i, arr, len) == 0)
 	{
 		while (*arr != '=')
 			arr++;
@@ -52,7 +52,7 @@ char	*fetch_in_array(t_tkn **node, int i, int len, char *arr)
 	return (NULL);
 }
 
-char	*search_value(t_global **data, t_tkn **node, int i, int len)
+char	*search_value(t_global **data, char **str, int i, int len)
 {
 	char	*value;
 	int		j;
@@ -61,7 +61,7 @@ char	*search_value(t_global **data, t_tkn **node, int i, int len)
 	j = 0;
 	while (!value && (*data)->env[j])
 	{
-		value = fetch_in_array(node, i, len, (*data)->env[j]);
+		value = fetch_in_array(str, i, len, (*data)->env[j]);
 		j++;
 	}
 	j = 0;
@@ -69,14 +69,14 @@ char	*search_value(t_global **data, t_tkn **node, int i, int len)
 	{
 		while (!value && (*data)->exported[j])
 		{
-			value = fetch_in_array(node, i, len, (*data)->exported[j]);
+			value = fetch_in_array(str, i, len, (*data)->exported[j]);
 			j++;
 		}
 	}
 	return (value);
 }
 
-void	handle_expand_fail(t_tkn **node)
+static void	handle_expand_fail(t_tkn **node)
 {
 	t_tkn	*temp;
 
@@ -90,6 +90,8 @@ void	handle_expand_fail(t_tkn **node)
 		temp->next = (*node)->next;
 		if ((*node)->next)
 			(*node)->next->prev = temp;
+		if (temp->space_after != (*node)->space_after)
+			temp->space_after = (*node)->space_after;
 		free(*node);
 		*node = temp;
 	}
@@ -105,7 +107,7 @@ void	handle_expand_fail(t_tkn **node)
  * Returns (1) if no problem is found.
  * Otherwise, returns (0).
  */
-int	get_var_value(t_tkn **node, int i, t_global **data)
+static int	get_var_value(t_tkn **node, int i, t_global **data)
 {
 	int		len;
 	char	*value;
@@ -121,7 +123,7 @@ int	get_var_value(t_tkn **node, int i, t_global **data)
 		printf("%s\nThis functionality is beyond Minishell's scope, ****@#$@***.\n\n%s", RED, END);
 		return (0);
 	}
-	value = search_value(data, node, i, len);
+	value = search_value(data, &(*node)->content, i, len);
 	if (!value)
 	{
 		handle_expand_fail(node);
@@ -163,23 +165,23 @@ int	check_if_expandable(t_tkn **node, t_global **data)
 	return (result);
 }
 
-void	check_heredoc(t_tkn **node)
-{
-	t_tkn	*temp;
+// void	check_heredoc(t_tkn **node)
+// {
+// 	t_tkn	*temp;
 
-	temp = NULL;
-	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
-		&& (*node)->next && !is_special_token((*node)->next->content))
-	{
-		temp = (*node)->next->next;
-		(*node)->delimiter = ft_strdup((*node)->next->content);
-		free((*node)->next->content);
-		free((*node)->next);
-		(*node)->next = temp;
-		if (temp)
-			temp->prev = *node;
-	}
-}
+// 	temp = NULL;
+// 	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
+// 		&& (*node)->next && !is_special_token((*node)->next->content))
+// 	{
+// 		temp = (*node)->next->next;
+// 		(*node)->delimiter = ft_strdup((*node)->next->content);
+// 		free((*node)->next->content);
+// 		free((*node)->next);
+// 		(*node)->next = temp;
+// 		if (temp)
+// 			temp->prev = *node;
+// 	}
+// }
 
 /**
  * Handles variable expansion.
@@ -200,7 +202,6 @@ int	expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			check_heredoc(&(*hashtable)[i]);
 			result = check_if_expandable(&(*hashtable)[i], data);
 			if (result == 0)
 			{

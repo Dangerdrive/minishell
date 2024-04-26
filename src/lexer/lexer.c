@@ -1,40 +1,57 @@
 #include "../includes/minishell.h"
 
-int	check_syntax(t_tkn	*(*hashtable)[TABLE_SIZE])
+bool	input_starts_with_command(t_tkn	*node, int i)
 {
-	int 	i;
-	t_tkn *temp;
-
-	i = 0;
-	while ((*hashtable)[i])
-	{
-		temp = (*hashtable)[i];
-		while ((*hashtable)[i])
-		{
-			if ((is_double_special_token((*hashtable)[i]) && !(*hashtable)[i]->delimiter)
-				|| is_and_or((*hashtable)[i]->content))
-			{
-				printf("Syntax error.\n");
-				(*hashtable)[i] = temp;
-				return (0);
-			}
-			(*hashtable)[i] = (*hashtable)[i]->next;
-		}
-		(*hashtable)[i] = temp;
-		i++;
-	}
-	return (1);
-}
-
-t_bool	input_starts_with_command(t_tkn	*node)
-{
-	if (!node->prev
-		&& ft_strcmp(node->type, COMMAND) && !is_redir(node->content))
+	if ((i == 0 && !node->prev && !is_redir(node->content) && ft_strcmp(node->type, COMMAND))
+		|| (i > 0 && node->prev && is_pipe(node->prev->content)
+			&& ft_strcmp(node->type, COMMAND)))
 		return (false);
 	return (true);
 }
 
-void	update_redir_files_list(t_tkn **node, char *new_arg, char *sig)
+int	check_valid_input(t_tkn **node, int i)
+{
+	if (!input_starts_with_command((*node), i))
+	{
+		printf("%s: command not found\n", (*node)->content);
+		return (0);
+	}
+	if ((is_double_special_token((*node)) && !(*node)->delimiter)
+		|| (!(*node)->next && !ft_strcmp((*node)->type, SPECIAL_CHAR) && !(*node)->delimiter)
+		|| is_and_or((*node)->content))
+	{
+		printf("Syntax error.\n");
+		return (0);
+	}
+	return (1);
+}
+
+void	init_redir_args(char *(*args)[TABLE_SIZE])
+{
+	int	i;
+
+	i = 0;
+	while (i < TABLE_SIZE)
+	{
+		(*args)[i] = NULL;
+		i++;
+	}
+	return ;
+}
+
+void	check_heredoc(t_tkn **node)
+{
+	t_tkn	*temp;
+
+	temp = NULL;
+	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
+		&& (*node)->next && !is_special_token((*node)->next->content))
+	{
+		(*node)->delimiter = ft_strdup((*node)->next->content);
+	}
+}
+
+void	update_redir_files_list(char *(*redir)[TABLE_SIZE], char *sig, char *new_arg)
 {
 	int		i;
 	char	*new_sig;
@@ -44,52 +61,98 @@ void	update_redir_files_list(t_tkn **node, char *new_arg, char *sig)
 		new_sig = ft_strjoin(sig, " ");
 	else
 		new_sig = ft_strdup(sig);
-	if (!(*node)->redir[i])
+	if ((*redir)[i])
 	{
-		(*node)->redir[i] = ft_strjoin(new_sig, new_arg);
-		return ;
+		while ((*redir)[i])
+			i++;
 	}
-	while ((*node)->redir[i])
-		i++;
-	(*node)->redir[i] = ft_strjoin(new_sig, new_arg);
-	//free(new_sig);
+	(*redir)[i] = ft_strjoin(new_sig, new_arg);
+	free(new_sig);
+	return ;
+}
+
+void	update_node_after_redir(t_tkn **node)
+{
+	t_tkn	*temp;
+
+	free((*node)->content);
+	(*node)->content = NULL;
+	// if ((*node)->prev)
+	// 	temp = (*node)->prev;
+	// else
+	// 	temp = *node;
+	// temp->next = temp->next->next;
+	if ((*node)->prev)
+		temp = (*node)->prev;
+	else
+	{
+		temp = *node;
+		*node = (*node)->next;
+	}
+	temp->next = (*node)->next;
+	if (temp->next)
+	{
+		temp->next->prev = temp;
+	}
+	if (*node)
+	{
+		free((*node)->content);
+		free(*node);
+	}
+	if (temp->prev && temp->prev->prev)
+		free(temp->prev->prev);
+	(*node) = temp;
 }
 
 void	check_redirects(t_tkn **node)
 {
 	t_tkn	*temp_node;
-	t_tkn	*temp_tkn;
+	t_tkn	*temp;
 
-	if ((*node)->prev && (*node)->prev->content && is_redir((*node)->prev->content))
+	temp = *node;
+	temp_node = NULL;
+	while (*node)
 	{
-		if ((*node)->prev->prev)
-			temp_node = (*node)->prev->prev;
-		else
-			temp_node = (*node)->prev;
-		init_redir_args(&temp_node->redir);
-		while (*node)
+
+		if (is_heredoc((*node)->content))
+			check_heredoc(node);
+		if (is_redir((*node)->content) && (*node)->next)
 		{
-			if ((ft_strcmp((*node)->type, SPECIAL_CHAR)) && is_redir((*node)->prev->content))
-			{
-				update_redir_files_list(&temp_node, (*node)->content, (*node)->prev->content);
-				free((*node)->content);
-				if ((*node)->prev->prev)
-					temp_tkn = (*node)->prev->prev;
-				else
-					temp_tkn = (*node)->prev;
-				temp_tkn->next = (*node)->next;
-				if ((*node)->next)
-					(*node)->next->prev = temp_tkn;
-				free(*node);
-				free((*node)->prev->content);
-				(*node)->prev->content = NULL;
-				if ((*node)->prev->prev)
-					free((*node)->prev);
-				(*node) = temp_tkn;
-			}
-			*node = (*node)->next;
+			if (!temp_node && (*node)->prev)
+				temp_node = (*node)->prev;
+			else if (!temp_node)
+				temp_node = (*node);
+			if (!temp_node->redir[0])
+				init_redir_args(&temp_node->redir);
+			update_redir_files_list(&temp_node->redir, (*node)->content, (*node)->next->content);
+			update_node_after_redir(node);
 		}
+		*node = (*node)->next;
+	}
+	if (temp_node && !temp_node->prev)
 		*node = temp_node;
+	else
+	{
+		*node = temp;
+		while ((*node)->next != NULL)
+			*node = (*node)->next;
+		*node = temp_node;
+		*node = temp;
+	}
+}
+
+void	remove_pipe(t_tkn **node, int i)
+{
+	t_tkn	*temp;
+
+	if (i > 0 && is_pipe((*node)->content))
+	{
+		temp = (*node)->next;
+		free((*node)->content);
+		free(*node);
+		*node = temp;
+		if (*node)
+			(*node)->prev = NULL;
 	}
 }
 
@@ -99,23 +162,21 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 	t_tkn	*temp;
 
 	i = 0;
-	if (check_syntax(hashtable) != 1)
-		return (0);
 	while ((*hashtable)[i])
 	{
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			if (!input_starts_with_command((*hashtable)[i]))
+			if (!check_valid_input(&(*hashtable)[i], i))
 			{
-				printf("%s: command not found\n", (*hashtable)[i]->content);
 				(*hashtable)[i] = temp;
 				return (0);
 			}
-			check_redirects(hashtable[i]);
 			(*hashtable)[i] = (*hashtable)[i]->next;
 		}
 		(*hashtable)[i] = temp;
+		remove_pipe(&(*hashtable)[i], i);
+		check_redirects(&(*hashtable)[i]);
 		i++;
 	}
 	return (1);
