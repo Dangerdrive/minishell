@@ -13,6 +13,18 @@ void	init_redir_args(char *(*args)[TABLE_SIZE])
 	return ;
 }
 
+void	check_heredoc(t_tkn **node)
+{
+	t_tkn	*temp;
+
+	temp = NULL;
+	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
+		&& (*node)->next && !is_special_token((*node)->next->content))
+	{
+		(*node)->delimiter = ft_strdup((*node)->next->content);
+	}
+}
+
 void	update_redir_files_list(char *(*redir)[TABLE_SIZE], char *sig, char *new_arg)
 {
 	int		i;
@@ -65,19 +77,19 @@ void	update_node_after_redir(t_tkn **node)
 {
 	t_tkn	*temp;
 
+	temp = NULL;
 	free((*node)->content);
 	(*node)->content = NULL;
-	temp = *node;
-	*node = (*node)->next;
-	free((*node)->content);
+	if ((*node)->prev)
+		temp = (*node)->prev;
+	else
+		temp = *node;
+	temp->next = (*node)->next->next;
+	if ((*node)->next->next)
+		temp->next->prev = temp;
+	free((*node)->next->content);
+	free((*node)->next);
 	free((*node));
-	if (temp->prev)
-	{
-		*node = temp;
-		temp = temp->prev;
-		free(*node);
-	}
-	temp->next = NULL;
 	*node = temp;
 }
 

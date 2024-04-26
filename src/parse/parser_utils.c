@@ -42,7 +42,8 @@ t_bool	is_special_token(char *token)
 
 t_bool	is_double_special_token(t_tkn *node)
 {
-	if ((!node->next || is_special_token(node->next->content)) && is_special_token(node->content))
+	if ((!node->next || is_special_token(node->next->content)) && is_special_token(node->content)
+		&& (!is_pipe(node->content) && !is_redir_in(node->next->content)))
 		return (true);
 	return (false);
 }

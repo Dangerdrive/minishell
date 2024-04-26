@@ -17,16 +17,28 @@ int	check_valid_input(t_tkn **node, int i)
 	return (1);
 }
 
-void	check_heredoc(t_tkn **node)
+void	check_redirects(t_tkn **node)
 {
+	//t_tkn	*temp_node;
 	t_tkn	*temp;
 
-	temp = NULL;
-	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
-		&& (*node)->next && !is_special_token((*node)->next->content))
+	temp = *node;
+	//temp_node = NULL;
+	while (*node)
 	{
-		(*node)->delimiter = ft_strdup((*node)->next->content);
+		parse_redir(node, &temp);
+		*node = (*node)->next;
 	}
+	// if (temp_node && !temp_node->prev)
+	// 	*node = temp_node;
+	// else
+	// {
+	// 	*node = temp;
+	// 	while ((*node)->next != NULL)
+	// 		*node = (*node)->next;
+	// 	*node = temp_node;
+		*node = temp;
+	//}
 }
 
 int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
