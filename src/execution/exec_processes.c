@@ -59,31 +59,31 @@ void	quit_child(char **args)
 	exit(EXIT_FAILURE);
 }
 
-// static void	handle_redirect(char *command, char **commands, t_env **minienv)
-// static void	handle_redirects(t_global *data, char **redirects, int pid)
-// {
-// 	// char	redirect;
-// 	int	i;
-// 	//redirect = get_next_redirect(command);
 
-// 	i = 0;
-// 	while (redirects[i])
-// 	{
-// 	if (ft_strncmp(redirects[i], "< ", 2) == 0)
-// 		{
-// 			if (redirect_input(&redirects[i][2]) == 0)
-// 				quit_child(redirects);
-// 		}
-// 		if (redirects[i][0] == '>')
-// 		{
-// 			if (redirect_output(&redirects[i][2]) == 0)
-// 				quit_child(redirects);
-// 		}
-// 		if (ft_strncmp(redirects[i], "<<", 2) == 0)
-// 			redirect_heredoc(data, pid, i, &redirects[i][2]);
-// 		i++;
-// 	}
-// }
+static void	handle_redirects_pipes(t_global *data, char **redirects)
+{
+	// char	redirect;
+	int	i;
+	//redirect = get_next_redirect(command);
+
+	i = 0;
+	while (redirects[i])
+	{
+	if (ft_strncmp(redirects[i], "< ", 2) == 0)
+		{
+			if (redirect_input(&redirects[i][2]) == 0)
+				quit_child(redirects);
+		}
+		if (redirects[i][0] == '>')
+		{
+			if (redirect_output(redirects[i]) == 0)
+				quit_child(redirects);
+		}
+		if (ft_strncmp(redirects[i], "<<", 2) == 0)
+			redirect_heredoc(data, i, &redirects[i][2]);
+		i++;
+	}
+}
 
 // static void	execute_forked_command(char *command, char **commands,
 // 		t_env **minienv)
@@ -158,15 +158,13 @@ int	exec_processes(t_global *data)
 	{
 		handle_pipe(original_fds[OUT],data, data->hashtable[i], data->hashtable);
 		children_pid[i] = fork();
-		//printf("children_pid[%d] = %d\n", i, children_pid[i]);
 		//define_execute_signals(children_pid[i]); //handle signals
 		if (children_pid[i] == -1)
 			ft_dprintf(2, "minishell: %s: %s\n", "fork", strerror(errno));
 		else if (children_pid[i] == 0)
 		{
 			//free(children_pid);
-			//handle_redirects(data, data->hashtable[i]->redir, children_pid[i]);
-			handle_redirects(data, original_fds); //MUDEI AQUI
+			handle_redirects_pipes(data, data->hashtable[i]->redir);
 			execute_forked_command(data, i);
 		}
 		i++;

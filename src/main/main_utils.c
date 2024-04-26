@@ -89,9 +89,27 @@ void	restore_fds(t_global *data)
 	dup2(data->original_stdout, STDOUT_FILENO);
 	close(data->original_stdout);
 }
-void	clean_input_and_hashtable(t_global **data)
+void clean_input_and_hashtable(t_global **data)
 {
-	ft_memdel((*data)->usr_input);
-	free_hashtable(&(*data)->hashtable);
-	restore_fds(*data);
+    int i;
+    char temp[30];
+    char *num_part;
+
+    ft_memdel((*data)->usr_input);
+    free_hashtable(&(*data)->hashtable);
+    restore_fds(*data);
+
+    i = 0;
+    while (i < 100)
+    {
+        strcpy(temp, ".tmp/heredoc");
+        num_part = ft_itoa(i);
+        if (num_part)
+        {
+            strcat(temp, num_part);
+            free(num_part);
+        }
+        unlink(temp);
+        i++;
+    }
 }
