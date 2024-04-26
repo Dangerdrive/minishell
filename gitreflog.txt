@@ -1,5 +1,0 @@
-26cad52 HEAD@{0}: commit: redirects are functional (except heredoc)
-f8a8fff HEAD@{1}: pull origin new_develop: Fast-forward
-4bc1a77 HEAD@{2}: commit: Sheela pls sav us
-4777cb2 HEAD@{3}: checkout: moving from master to new_develop
-57b8879 HEAD@{4}: clone: from git@github.com:Dangerdrive/minishell
