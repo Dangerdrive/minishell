@@ -25,41 +25,69 @@ t_bool	ends_with_linebreak(char *line)
 	return (FALSE);
 }
 
-void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
+int	get_fd(char *filename)
 {
-	char	*filename;
-	char	*line;
-	int		tmp_file_fd;
+	int	tmp_file_fd;
 
-	filename = tmp_filename(heredoc_number);
-	tmp_file_fd = open(filename, O_RDONLY | O_CREAT, 0644);
+	tmp_file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (tmp_file_fd == -1)
 	{
 		ft_dprintf(STDERR_FILENO, "open: %s: %s\n", filename, strerror(errno));
 		free(filename);
-		return ;
+		return (-1);
 	}
-	line = NULL;
-	while (1)
+	return (tmp_file_fd);
+}
+
+void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
+{
+	int		tmp_file_fd;
+	char	*filename;
+	char	*line;
+
+	tmp_file_fd = 0;
+	filename = tmp_filename(heredoc_number);
+	tmp_file_fd = get_fd(filename);
+	line = readline("> ");
+	while (line && ft_strncmp(line, eof, (ft_strlen(eof) + 1)))
 	{
-		ft_dprintf(1, "> ");
-		line = readline(line);
-		if (!ft_strcmp(line, eof))
-		{
-			close(tmp_file_fd);
-			break ;
-		}
-		else
-		{
-			(void)data;
-			//expand_heredoc(data, line);
-			ft_dprintf(tmp_file_fd, line);
-		}
+		//expand_exit_status(&line, *exit_status);
+		expand_heredoc(data, &line);
+		ft_putstr_fd(line, tmp_file_fd);
+		ft_putchar_fd('\n', tmp_file_fd);
 		free(line);
+		line = readline("> ");
 	}
+	if (!line)
+		ft_dprintf(STDOUT_FILENO, "minishell: warning: heredoc delimited by EOF (wanted '%s')\n", eof);
+	//add_history();
 	close(tmp_file_fd);
 	free(filename);
+	free(line);
 	redirect_fd(tmp_file_fd, STDIN_FILENO);
+	exit(EXIT_SUCCESS);
+}
+
+void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
+{
+	int 	status;
+	int		pid;
+
+	pid = fork();
+	define_heredoc_signals(pid);
+	if (pid < 0)
+	{
+		perror("fork");
+        exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+		write_in_heredoc(data, heredoc_number, eof);
+	else if (waitpid(pid, &status, 0) == -1)
+	{
+		perror("waitpid");
+		exit(EXIT_FAILURE);
+	}
+	//salvar histórico heredoc
 }
 
 int	redirect_input(char *input_redirect)

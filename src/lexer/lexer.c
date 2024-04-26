@@ -77,22 +77,30 @@ void	update_node_after_redir(t_tkn **node)
 
 	free((*node)->content);
 	(*node)->content = NULL;
+	// if ((*node)->prev)
+	// 	temp = (*node)->prev;
+	// else
+	// 	temp = *node;
+	// temp->next = temp->next->next;
 	if ((*node)->prev)
 		temp = (*node)->prev;
 	else
-		temp = (*node);
-	temp->next = (*node)->next->next;
+	{
+		temp = *node;
+		*node = (*node)->next;
+	}
+	temp->next = (*node)->next;
 	if (temp->next)
 	{
 		temp->next->prev = temp;
 	}
-	if ((*node)->next)
+	if (*node)
 	{
-		free((*node)->next->content);
-		free((*node)->next);
+		free((*node)->content);
+		free(*node);
 	}
-	if ((*node)->prev)
-		free((*node));
+	if (temp->prev && temp->prev->prev)
+		free(temp->prev->prev);
 	(*node) = temp;
 }
 

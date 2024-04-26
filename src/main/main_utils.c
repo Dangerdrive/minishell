@@ -15,11 +15,11 @@ t_global	*init_data(void)
 	data->original_stdin = dup(STDIN_FILENO);
 	data->original_stdout = dup(STDOUT_FILENO);
 	data->env = ft_strarr_dup(__environ);
-	data->is_exec = 0;
+	data->is_exec = FALSE;
+	data->is_heredoc = FALSE;
 	data->exported = NULL;
 	data->usr = ft_strdup(ft_getenv("USER", &data));
 	init_hashtable(&data->hashtable);
-	//printf("PATH %s\n", data->cur_path);
 	return (data);
 }
 

@@ -16,6 +16,7 @@
 # define SPECIAL_CHAR "special char"
 # define STRING_STRONG "string strong"
 # define STRING_STD "string standard"
+# define PATH_MAX 4096
 # define IN 0
 # define OUT 1
 

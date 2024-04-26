@@ -29,6 +29,7 @@ t_global	*init_data(void);
 int			handle_signal(t_global **data);
 void		clean_stuff(t_global **data);
 void		clean_input_and_hashtable(t_global **data);
+char		*print_cwd(t_global **data);
 
 /*------------BUILTINS-------------*/
 int			exec_builtin(char **args, int args_len, t_global *data);
@@ -90,6 +91,8 @@ void		interrupt_handler(int signal);
 
 /*-------------signals-------------*/
 void		define_prompt_signals(void);
+void		define_exec_signals(void);
+void		define_heredoc_signals(int pid);
 
 /*--------------exec---------------*/
 int			handle_execution(t_global *data);
@@ -97,13 +100,13 @@ int			hashsize(t_tkn *hashtable);
 char		**hash_to_args(t_tkn *node);
 char		*get_cmd(char *cmd, t_global *data);
 char		*get_cmd_path(char *cmd, char **paths);
-int			exec_one_process(t_global *data);	
+int			exec_one_process(t_global *data);
 
 /*------------redirections---------*/
 void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect);
 int			redirect_output(char *output_redirect);
-void		expand_heredoc(t_global *data, char *line);
+void		expand_heredoc(t_global *data, char **line);
 void		redirect_fd(int fd_to_redirect, int fd_location);
 void		redirect_fds(int fd_in, int fd_out);
 void		close_all_fds(void);

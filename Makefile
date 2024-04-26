@@ -42,7 +42,7 @@ SRC = 	./src/builtins/cd.c \
 		./src/execution/exec.c \
 		./src/execution/exec_utils.c \
 		./src/execution/exec_one_process.c
-#		./src/execution/exec_processes.c \
+#		./src/execution/exec_processes.c
 
 # Objects
 OBJ_PATH = src/build/
