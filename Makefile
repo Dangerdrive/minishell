@@ -1,7 +1,6 @@
 # Name of the executable
 NAME = minishell
 NAME_BONUS = minishell_bonus
-NAME_BONUS = minishell_bonus
 
 # Compilation flags
 CFLAGS = -Wall -Wextra -Werror -g
@@ -97,18 +96,6 @@ $(NAME_BONUS): $(OBJ_BONUS) $(LIBFT) $(FTPRINTF)
 	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 
-bonus: $(NAME_BONUS)
-
-# Target to build the bonus part
-$(NAME_BONUS): $(OBJ_BONUS) $(LIBFT) $(FTPRINTF)
-# 	@cp $(LIBFT) $(NAME_BONUS)
-# 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME_BONUS)
-	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline
-#	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
-	@echo "$(GREEN)--------------------------------------------------$(END)"
-	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
-	@echo "$(GREEN)--------------------------------------------------$(END)"
-
 # Builds dependencies
 $(LIBFT):
 	@make -C $(LIBFT_PATH)
@@ -125,11 +112,6 @@ $(OBJ_PATH)%.o: src/**/%.c
 $(OBJ_PATH_BONUS)%.o: src/**/%.c
 	@mkdir -p $(OBJ_PATH_BONUS)
 	@mkdir -p .tmp/
-	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
-
-# Builds bonus object files
-$(OBJ_PATH_BONUS)%.o: src/**/%.c
-	@mkdir -p $(OBJ_PATH_BONUS)
 	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
 
 # Cleans object files and dependencies

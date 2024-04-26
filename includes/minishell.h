@@ -116,14 +116,14 @@ char		*get_cmd(char *cmd, t_global *data);
 char		*get_cmd_path(char *cmd, char **paths);
 int			exec_one_process(t_global *data);
 int			exec_processes(t_global *data);
-void	exec_nonbuiltin(char **args, t_global *data);
+void		exec_nonbuiltin(char **args, t_global *data);
 int			pipecount(t_global *data);
 
 /*------------redirections---------*/
 void		redirect_heredoc(t_global *data, int pid, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect);
 int			redirect_output(char *output_redirect);
-void			expand_heredoc(t_global *data, char **line);
+void		expand_heredoc(t_global *data, char **line);
 void		redirect_fd(int fd_to_redirect, int fd_location);
 void		redirect_fds(int fd_in, int fd_out);
 void		close_all_fds(void);
