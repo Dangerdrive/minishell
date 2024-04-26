@@ -1,0 +1,14 @@
+1
+123
+2
+all_in_one.c
+allowed_functions.txt
+includes
+libs
+Makefile
+minishell
+readline.supp
+README.md
+src
+test.c
+tests

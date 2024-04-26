@@ -82,6 +82,7 @@ void	clean_stuff(t_global **data)
 	ft_memdel(*data);
 	*data = NULL;
 }
+
 void	restore_fds(t_global *data)
 {
 	dup2(data->original_stdin, STDIN_FILENO);
@@ -89,11 +90,12 @@ void	restore_fds(t_global *data)
 	dup2(data->original_stdout, STDOUT_FILENO);
 	close(data->original_stdout);
 }
+
 void clean_input_and_hashtable(t_global **data)
 {
-    int i;
-    char temp[30];
-    char *num_part;
+    int		i;
+    char	temp[30];
+    char	*num_part;
 
     ft_memdel((*data)->usr_input);
     free_hashtable(&(*data)->hashtable);

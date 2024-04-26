@@ -66,3 +66,13 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 	}
 	return (1);
 }
+
+
+
+// TESTS
+// ls > qwe | < 123
+// ls > 123 | echo
+// ls | < 123 echo
+// ls | < 123 wc
+// < 123 wc
+// < 123
