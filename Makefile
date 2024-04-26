@@ -30,17 +30,13 @@ SRC = 	./src/builtins/cd.c \
 		./src/parse/parser_utils2.c \
 		./src/lexer/lexer.c \
 		./src/lexer/lexer_utils.c \
-		./src/parse/parser_utils2.c \
-		./src/lexer/lexer.c \
-		./src/lexer/lexer_utils.c \
 		./src/expand/expander.c \
 		./src/expand/expander_utils.c \
 		./src/expand/heredoc_expander.c \
 		./src/signals/signals.c \
-		./src/expand/heredoc_expander.c \
-		./src/signals/signals.c \
 		./src/main/main.c \
 		./src/main/main_utils.c \
+		./src/main/prompt.c \
 		./src/redirections/handle_redir.c \
 		./src/redirections/redir.c \
 		./src/redirections/redir_utils.c \

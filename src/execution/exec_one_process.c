@@ -24,7 +24,7 @@ void	exec_nonbuiltin(char **args, t_global *data)
 		exit(127);//command not found.
 	}
 }
-int	handle_redirects1(t_global *data, int pid, int ori_fds[2])
+int	handle_redirects1(t_global *data, int ori_fds[2])
 {
 	int		i;
 
@@ -46,7 +46,7 @@ int	handle_redirects1(t_global *data, int pid, int ori_fds[2])
 		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
 		{
 			save_original_fd_in(ori_fds);
-			redirect_heredoc(data, pid, i, &data->hashtable[0]->redir[i][2]);
+			redirect_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
 		}
 		i++;
 	}
@@ -64,7 +64,7 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 	//define_execute_signals(child_pid); lidar com sinais
 
 
-	if (handle_redirects1(data, pid, data->original_fds) == 0)//
+	if (handle_redirects1(data, data->original_fds) == 0)//
 	{
 		restore_original_fds(data->original_fds);
 		return (1);

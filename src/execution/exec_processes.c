@@ -60,30 +60,30 @@ void	quit_child(char **args)
 }
 
 // static void	handle_redirect(char *command, char **commands, t_env **minienv)
-static void	handle_redirects(t_global *data, char **redirects, int pid)
-{
-	// char	redirect;
-	int	i;
-	//redirect = get_next_redirect(command);
+// static void	handle_redirects(t_global *data, char **redirects, int pid)
+// {
+// 	// char	redirect;
+// 	int	i;
+// 	//redirect = get_next_redirect(command);
 
-	i = 0;
-	while (redirects[i])
-	{
-	if (ft_strncmp(redirects[i], "< ", 2) == 0)
-		{
-			if (redirect_input(&redirects[i][2]) == 0)
-				quit_child(redirects);
-		}
-		if (redirects[i][0] == '>')
-		{
-			if (redirect_output(&redirects[i][2]) == 0)
-				quit_child(redirects);
-		}
-		if (ft_strncmp(redirects[i], "<<", 2) == 0)
-			redirect_heredoc(data, pid, i, &redirects[i][2]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (redirects[i])
+// 	{
+// 	if (ft_strncmp(redirects[i], "< ", 2) == 0)
+// 		{
+// 			if (redirect_input(&redirects[i][2]) == 0)
+// 				quit_child(redirects);
+// 		}
+// 		if (redirects[i][0] == '>')
+// 		{
+// 			if (redirect_output(&redirects[i][2]) == 0)
+// 				quit_child(redirects);
+// 		}
+// 		if (ft_strncmp(redirects[i], "<<", 2) == 0)
+// 			redirect_heredoc(data, pid, i, &redirects[i][2]);
+// 		i++;
+// 	}
+// }
 
 // static void	execute_forked_command(char *command, char **commands,
 // 		t_env **minienv)
@@ -165,7 +165,8 @@ int	exec_processes(t_global *data)
 		else if (children_pid[i] == 0)
 		{
 			//free(children_pid);
-			handle_redirects(data, data->hashtable[i]->redir, children_pid[i]); //estamos aq
+			//handle_redirects(data, data->hashtable[i]->redir, children_pid[i]);
+			handle_redirects(data, original_fds); //MUDEI AQUI
 			execute_forked_command(data, i);
 		}
 		i++;

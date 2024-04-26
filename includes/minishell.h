@@ -28,7 +28,6 @@
 # include "./macros.h"
 
 t_global	*init_data(void);
-int			handle_signal(t_global **data);
 void		clean_stuff(t_global **data);
 void		clean_input_and_hashtable(t_global **data);
 int			handle_prompt(t_global **data);
@@ -58,12 +57,10 @@ int			ft_exit(char **args, int args_len, t_global *data);
 /*--------------expand--------------*/
 int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
 char	    *search_value(t_global **data, char **str, int i, int len);
-char	    *search_value(t_global **data, char **str, int i, int len);
 void		add_node_before(t_tkn **node, int i);
 t_tkn		*add_node_after(t_tkn **node, int i);
 t_bool		is_var_name(t_tkn **node, int i, int len);
 t_bool		is_special_variable(char *var);
-t_bool		is_special_var_char(char c);
 t_bool		is_special_var_char(char c);
 
 /*--------------token--------------*/
@@ -76,19 +73,13 @@ int			check_exit_input(char **input, t_global *data);
 /*--------------parse--------------*/
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
 t_bool  	is_export_var(char *content);
-t_bool  	is_export_var(char *content);
 t_bool		is_pipe(char *token);
 t_bool		is_and_or(char *token);
 t_bool		is_special_token(char *token);
 t_bool		is_double_special_token(t_tkn *node);
-t_bool		is_double_special_token(t_tkn *node);
 
 /*--------------lexer--------------*/
 int			lexer(t_tkn	*(*hashtable)[TABLE_SIZE]);
-t_bool		is_redir_in(char *c);
-t_bool		is_redir_out(char *c);
-t_bool		is_heredoc(char *content);
-t_bool		is_redir(char *sig);
 t_bool		is_redir_in(char *c);
 t_bool		is_redir_out(char *c);
 t_bool		is_heredoc(char *content);
@@ -98,7 +89,6 @@ t_bool		is_redir(char *sig);
 int			validate_identifier(char *str);
 
 /*--------------lexer--------------*/
-void		handle_signals(t_global **data);
 void		interrupt_handler(int signal);
 
 /*-------------signals-------------*/
@@ -108,9 +98,7 @@ void		define_heredoc_signals(int pid);
 
 /*--------------exec---------------*/
 int			handle_execution(t_global *data);
-int			handle_execution(t_global *data);
 int			hashsize(t_tkn *hashtable);
-char		**hash_to_args(t_tkn *node);
 char		**hash_to_args(t_tkn *node);
 char		*get_cmd(char *cmd, t_global *data);
 char		*get_cmd_path(char *cmd, char **paths);
@@ -120,7 +108,8 @@ void		exec_nonbuiltin(char **args, t_global *data);
 int			pipecount(t_global *data);
 
 /*------------redirections---------*/
-void		redirect_heredoc(t_global *data, int pid, int heredoc_number, char *eof);
+int			handle_redirects(t_global *data, int ori_fds[2]);
+void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect);
 int			redirect_output(char *output_redirect);
 void		expand_heredoc(t_global *data, char **line);
