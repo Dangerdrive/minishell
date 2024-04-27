@@ -39,6 +39,7 @@ SRC = 	./src/builtins/cd.c \
 		./src/main/main.c \
 		./src/main/main_utils.c \
 		./src/main/prompt.c \
+		./src/main/exit_status.c \
 		./src/redirections/handle_redir.c \
 		./src/redirections/redir.c \
 		./src/redirections/redir_utils.c \

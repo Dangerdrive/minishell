@@ -3,14 +3,15 @@
 void	exec_nonbuiltin(char **args, t_global *data)
 {
 	char	*cmd;
-	int		exec;
 
+	// if (args[0][0])
+	// 	external_exit(EXIT_SUCCESS);
+	// if (is_folder(args[0]))
+	// 	external_exit(NOT_EXECUTABLE);
 	cmd = get_cmd(args[0], data);
 	if (cmd)
 	{
-		exec = execve(cmd, args, data->env);
-		printf("execve = %d\n", exec);
-		if (exec == -1)
+		if (execve(cmd, args, data->env) == -1)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n",
 				args[0], strerror(errno));
@@ -23,7 +24,7 @@ void	exec_nonbuiltin(char **args, t_global *data)
 		rl_clear_history();
 		ft_strarr_free(args, ft_strarr_len(args));
 		close_all_fds();
-		exit(127);//command not found.
+		exit(CMD_NOT_FOUND);
 	}
 }
 
@@ -73,8 +74,8 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	{
 		if (waitpid(pid, &status, 0) == -1)
 			ft_dprintf(STDERR_FILENO, "waitpid: %s\n", strerror(errno));
-		// else if (WIFSIGNALED(status))
-		// 	ret = handle_signal_interrupt(status, TRUE);
+		else if (WIFSIGNALED(status))
+			ret = handle_signal_interrupt(status, TRUE);
 		else if (WIFEXITED(status))
 			ret = WEXITSTATUS(status);
 	}
@@ -91,7 +92,7 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 	if (handle_redirects_one_cmd(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	if (args && args[0] && !is_builtin(args[0]))
 	{

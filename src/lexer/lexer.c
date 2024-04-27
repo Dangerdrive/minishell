@@ -67,5 +67,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 // ls > 123 | echo --> PARA NO PRIMEIRO execve (exec_one_process.c) e não executa o echo.
 // ls | < 123 echo --> PARA NO PRIMEIRO execve (exec_one_process.c) e não executa o echo.
 // ls | < 123 wc --> NÃO FUNCIONA
+// cat 007 | wc --> DÁ MENSAGEM DE ERRO MAS PRINTA '0	0	0' NA LINHA SEGUINTE (testar com arquivo q não existe)
+// echo > 1 -n > 2 hahahahaha --> não está atualizando o original_fd. Dá erro a partir da 2ª tentativa seguida desse comando.
 // < 123 wc
 // < 123

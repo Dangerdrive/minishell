@@ -60,6 +60,5 @@ int	handle_redirects(t_global *data, int ori_fds[2])
 		}
 		i++;
 	}
-	//data->hashtable[0] = data->hashtable[0]->next;
 	return (1);
 }

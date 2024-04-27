@@ -29,6 +29,7 @@ int	execute_forked_builtin(char **args, int idx, t_global *data)
 	exit_status = exec_builtin(args, hashsize(data->hashtable[idx]), data);
 	ft_strarr_free(args, ft_strarr_len(args));
 	rl_clear_history();
+	data->ret = exit_status;
 	exit(exit_status);
 }
 
@@ -58,7 +59,7 @@ int	exec_processes(t_global *data)
 		handle_pipe(original_fds[OUT], data,
 			data->hashtable[i], data->hashtable);
 		children_pid[i] = fork();
-		//define_execute_signals(children_pid[i]); //handle signals
+		define_exec_signals(children_pid[i]); //handle signals
 		if (children_pid[i] == -1)
 			ft_dprintf(2, "minishell: %s: %s\n", "fork", strerror(errno));
 		else if (children_pid[i] == 0)

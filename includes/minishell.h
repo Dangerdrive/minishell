@@ -89,15 +89,9 @@ void		remove_pipe(t_tkn **node, int i);
 void		parse_redir(t_tkn **node, t_tkn **temp_node);
 void		check_heredoc(t_tkn **node);
 
-/*--------------export-------------*/
-int			validate_identifier(char *str);
-
-/*--------------lexer--------------*/
-void		interrupt_handler(int signal);
-
 /*-------------signals-------------*/
 void		define_prompt_signals(void);
-void		define_exec_signals(void);
+void		define_exec_signals(int pid);
 void		define_heredoc_signals(int pid);
 
 /*--------------exec---------------*/
@@ -112,6 +106,10 @@ void		exec_nonbuiltin(char **args, t_global *data);
 int			pipecount(t_global *data);
 void		handle_pipe(int original_fd_out, t_global *data,
 				t_tkn *current_node, t_tkn **hashtable);
+int			wait_for_child(int child_pid, int is_last_child);
+int			handle_signal_interrupt(int status, int is_last_child);
+int			is_folder(char *command);
+void		external_exit(int exit_status);
 
 /*------------redirections---------*/
 int			handle_redirects(t_global *data, int ori_fds[2]);

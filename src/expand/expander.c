@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 /**
  * It updates the token node with the variable value (*exp_value).
@@ -116,14 +116,15 @@ static int	get_var_value(t_tkn **node, int i, t_global **data)
 	value = NULL;
 	while (is_var_name(node, i, len))
 		len++;
-	if (!ft_strcmp((*node)->content, "$?"))
-		value = ft_itoa((*data)->prev_process_status);
 	if (is_special_variable((*node)->content))
 	{
 		printf("%s\nThis functionality is beyond Minishell's scope, ****@#$@***.\n\n%s", RED, END);
 		return (0);
 	}
-	value = search_value(data, &(*node)->content, i, len);
+	if (!ft_strcmp((*node)->content, "$?"))
+		value = ft_itoa((*data)->ret);
+	else
+		value = search_value(data, &(*node)->content, i, len);
 	if (!value)
 	{
 		handle_expand_fail(node);

@@ -51,8 +51,7 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 	line = readline("> ");
 	while (line && ft_strncmp(line, eof, (ft_strlen(eof) + 1)))
 	{
-		//expand_exit_status(&line, *exit_status);
-		expand_heredoc(data, &line);
+		expand_heredoc(data, &line); // ADD EXPANSÃO DE $?
 		ft_putstr_fd(line, tmp_file_fd);
 		ft_putchar_fd('\n', tmp_file_fd);
 		free(line);
@@ -70,22 +69,23 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 
 void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
 {
-	int 	status;
 	int		pid;
 
 	pid = fork();
 	define_heredoc_signals(pid);
-	if (pid < 0)
+	if (pid == -1)
 	{
 		perror("fork");
         exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
 		write_in_heredoc(data, heredoc_number, eof);
-	else if (waitpid(pid, &status, 0) == -1)
+	else
 	{
-		perror("waitpid");
-		exit(EXIT_FAILURE);
+		// perror("waitpid");
+		// exit(EXIT_FAILURE);
+		data->ret = wait_for_child(pid, TRUE);
+		define_prompt_signals();
 	}
 	//salvar histórico heredoc
 }

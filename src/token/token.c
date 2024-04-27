@@ -1,25 +1,5 @@
 #include "../includes/minishell.h"
 
-void	prt_hashtable(t_tkn *hashtable[TABLE_SIZE])
-{
-	int		i;
-	t_tkn	*temp;
-
-	i = 0;
-	while (hashtable[i])
-	{
-		temp = hashtable[i];
-		while (hashtable[i])
-		{
-			// printf("'%s%s%s'	-	type: %s\n", YELLOW, hashtable[i]->content, END,
-			// 	hashtable[i]->type);
-			hashtable[i] = hashtable[i]->next;
-		}
-		hashtable[i] = temp;
-		i++;
-	}
-}
-
 int	check_quotes(char *input, int i)
 {
 	int		len;
@@ -86,8 +66,6 @@ int	tokenize(t_global **data)
 	int		i;
 	int		len;
 
-	if (check_exit_input(&(*data)->usr_input, *data)) // só deve ser chamado se não houver pipe
-		return (-1);
 	i = 0;
 	while ((*data)->usr_input[i])
 	{

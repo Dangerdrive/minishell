@@ -88,14 +88,3 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	}
 	add_node(&(*data)->hashtable[i], &token);
 }
-
-int			check_exit_input(char **input, t_global *data)
-{
-	if (*input && ft_strncmp(*input, "exit", 5) == 0)
-	{
-		//*exit = 1;
-		ft_exit(NULL, 1, data);
-		return (TRUE);
-	}
-	return (FALSE);
-}
