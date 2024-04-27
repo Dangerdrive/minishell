@@ -3,16 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strarr_stradd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 20:52:11 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/04/09 15:25:37 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/04/27 12:01:42 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char **ft_strarr_dup_extend(char **array, int len, const char *new_str)
+/**
+ * Duplicates an array of strings and appends a new string.
+ *
+ * @param[in] array The original array of strings to duplicate.
+ * @param[in] len The length of the original array.
+ * @param[in] new_str The new string to append to the array.
+ * @return A new array with the original strings and the new string
+ *         appended, or NULL if an allocation fails.
+ */
+static char	**ft_strarr_dup_extend(char **array, int len, const char *new_str)
 {
 	char	**new_array;
 	int		i;
@@ -32,17 +41,20 @@ static char **ft_strarr_dup_extend(char **array, int len, const char *new_str)
 		i++;
 	}
 	new_array[i] = ft_strdup(new_str);
-	// new_array[i] = ft_calloc(ft_strlen(new_str), sizeof(char));
-	// ft_strlcpy(new_array[i], new_str, ft_strlen(new_str));
 	new_array[++i] = NULL;
 	return (new_array);
 }
 
-// Function to add a string to a string array.
+/**
+ * Adds a new string to the end of a dynamically allocated string array.
+ *
+ * @param[in, out] strarr A pointer to the array of strings to modify.
+ * @param[in] str The string to add to the array.
+ */
 void	ft_strarr_stradd(char ***strarr, const char *str)
 {
 	int		len;
-	char 	**new_arr;
+	char	**new_arr;
 
 	if (!str)
 		return ;

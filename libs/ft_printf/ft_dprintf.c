@@ -18,8 +18,8 @@
  * This function iterates over the format string and processes each formatting
  * directive it encounters. It supports a range of format specifiers (like %c,
  * %s, %d, %i, %u, %x, %X, and %p). The function also handles flags for certain
- * format specifiers. It sends output to the file descriptor defined by the FD
- * macro. The function is versatile and capable of printing various data types to
+ * format specifiers. It sends output to the file descriptor defined by the fd.
+ * The function is versatile and capable of printing various data types to
  * a specified file descriptor.
  *
  * @param[in] args Variable arguments list containing the data to be printed.

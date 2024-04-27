@@ -13,34 +13,52 @@
 #include "libft.h"
 
 /**
- * Sorts an array of strings in lexicographical order.
+ * Sorts an array of strings using the bubble sort algorithm.
+ *
+ * @param[in, out] arr Array of strings to be sorted.
+ * @param[in] len Length of the string array.
  */
-char **ft_strarr_sort(char **strarr)
+static void	sort_str_array(char **arr, int len)
 {
 	int		ordered;
 	int		i;
-	int		strarr_len;
 	char	*tmp;
-	char	**sorted_strarr;
 
-	strarr_len = ft_strarr_len(strarr);
-	sorted_strarr = ft_strarr_dup(strarr);
 	ordered = 0;
 	while (!ordered)
 	{
 		ordered = 1;
 		i = 0;
-		while (i < strarr_len - 1) {
-			if (ft_strcmp(sorted_strarr[i], sorted_strarr[i + 1]) > 0)
+		while (i < len - 1)
+		{
+			if (ft_strcmp(arr[i], arr[i + 1]) > 0)
 			{
-				tmp = sorted_strarr[i];
-				sorted_strarr[i] = sorted_strarr[i + 1];
-				sorted_strarr[i + 1] = tmp;
+				tmp = arr[i];
+				arr[i] = arr[i + 1];
+				arr[i + 1] = tmp;
 				ordered = 0;
 			}
 			i++;
 		}
-		strarr_len--;
+		len--;
 	}
+}
+
+/**
+ * Creates a sorted copy of the input string array.
+ *
+ * @param[in] strarr The input array of strings to be sorted.
+ * @return A new sorted array of strings or NULL if allocation fails.
+ */
+char	**ft_strarr_sort(char **strarr)
+{
+	int		strarr_len;
+	char	**sorted_strarr;
+
+	strarr_len = ft_strarr_len(strarr);
+	sorted_strarr = ft_strarr_dup(strarr);
+	if (!sorted_strarr)
+		return (NULL);
+	sort_str_array(sorted_strarr, strarr_len);
 	return (sorted_strarr);
 }

@@ -6,12 +6,11 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:38:40 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/03/28 18:07:06 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/04/27 12:02:19 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 /**
  * Duplicates an array of strings.

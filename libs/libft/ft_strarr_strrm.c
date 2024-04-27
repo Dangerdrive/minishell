@@ -12,31 +12,39 @@
 
 #include "libft.h"
 
-char **ft_strarr_strrm(char **strarr, const char *str)
+/**
+ * Removes all occurrences of a specified string from an array of strings.
+ *
+ * @param[in] strarr The input array of strings.
+ * @param[in] str The string to remove from the array.
+ * @return A new array of strings with the specified string removed,
+ *         or NULL if memory allocation fails.
+ */
+char	**ft_strarr_strrm(char **strarr, const char *str)
 {
-    int 	len;
+	int		len;
 	int		i;
 	int		j;
-    char 	**new_arr;
+	char	**new_arr;
 
-    len = ft_strarr_len(strarr);
-    i = 0;
-    j = 0;
-    new_arr = (char **)malloc(sizeof(char *) * (len + 1));
-    if (!new_arr)
-        return (NULL);
-    while (strarr[i] != NULL)
+	len = ft_strarr_len(strarr);
+	i = 0;
+	j = 0;
+	new_arr = (char **)malloc(sizeof(char *) * (len + 1));
+	if (!new_arr)
+		return (NULL);
+	while (strarr[i] != NULL)
 	{
-        if (ft_strncmp(strarr[i], str, ft_strlen(str)) != 0)
+		if (ft_strncmp(strarr[i], str, ft_strlen(str)) != 0)
 		{
-            new_arr[j] = strarr[i];
-            j++;
-        }
+			new_arr[j] = strarr[i];
+			j++;
+		}
 		else
-		    free(strarr[i]);
-        i++;
-    }
-    new_arr[j] = NULL;
-    free(strarr);
-    return (new_arr);
+			free(strarr[i]);
+		i++;
+	}
+	new_arr[j] = NULL;
+	free(strarr);
+	return (new_arr);
 }

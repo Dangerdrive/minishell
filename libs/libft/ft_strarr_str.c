@@ -12,6 +12,14 @@
 
 #include "libft.h"
 
+/**
+ * Searches for a string within an array of strings and returns its index.
+ *
+ * @param[in] strarr The array of strings to search.
+ * @param[in] target The string to search for within the array.
+ * @return The index of the first occurrence of the target string,
+ *         or -1 if the target is not found or on error.
+ */
 int	ft_strarr_str(char **strarr, const char *target)
 {
 	int	i;
