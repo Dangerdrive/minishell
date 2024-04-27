@@ -23,8 +23,8 @@ void	fill_args(t_tkn	**node, char **args, int i)
 	char	*arg_tmp;
 
 	arg_tmp = NULL;
-	if ((*node)->prev && !ft_strcmp((*node)->prev->content,
-			"") && (*node)->prev->space_after == TRUE)
+	if ((*node)->prev && ((*node)->prev->content
+		&& !ft_strcmp((*node)->prev->content, "") && (*node)->prev->space_after == TRUE))
 		args[i] = ft_strjoin(" ", (*node)->content);
 	else if ((*node)->space_after == TRUE && (*node)->content)
 		args[i] = ft_strdup((*node)->content);

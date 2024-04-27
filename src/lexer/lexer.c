@@ -19,26 +19,18 @@ int	check_valid_input(t_tkn **node, int i)
 
 void	check_redirects(t_tkn **node)
 {
-	//t_tkn	*temp_node;
-	t_tkn	*temp;
+	t_tkn	*head;
 
-	temp = *node;
-	//temp_node = NULL;
+	head = *node;
 	while (*node)
 	{
-		parse_redir(node, &temp);
+		if (is_redir((*node)->content) && (*node)->next)
+		{
+			parse_redir(node, &head);
+		}
 		*node = (*node)->next;
 	}
-	// if (temp_node && !temp_node->prev)
-	// 	*node = temp_node;
-	// else
-	// {
-	// 	*node = temp;
-	// 	while ((*node)->next != NULL)
-	// 		*node = (*node)->next;
-	// 	*node = temp_node;
-		*node = temp;
-	//}
+		*node = head;
 }
 
 int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])

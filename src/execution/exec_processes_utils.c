@@ -31,7 +31,7 @@ int	wait_for_children(int children_pid[1024])
 		i++;
 	}
 	close_extra_fds();
-	free(children_pid);
+	//free(children_pid);
 	return (exit_status);
 }
 

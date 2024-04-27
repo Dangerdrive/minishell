@@ -15,9 +15,6 @@ void	init_redir_args(char *(*args)[TABLE_SIZE])
 
 void	check_heredoc(t_tkn **node)
 {
-	t_tkn	*temp;
-
-	temp = NULL;
 	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
 		&& (*node)->next && !is_special_token((*node)->next->content))
 	{
@@ -81,34 +78,47 @@ void	update_node_after_redir(t_tkn **node)
 	free((*node)->content);
 	(*node)->content = NULL;
 	if ((*node)->prev)
+	{
 		temp = (*node)->prev;
+		*node = (*node)->next;
+		free((*node)->prev);
+		free((*node)->content);
+		temp->next = (*node)->next;
+		free(*node);
+	}
+	else if (!(*node)->prev && (*node)->next && (*node)->next->next)
+	{
+		temp = (*node)->next;
+		free(*node);
+		*node = temp;
+		temp = (*node)->next;
+		free((*node)->content);
+		free(*node);
+		temp->prev = NULL;
+	}
 	else
+	{
 		temp = *node;
-	temp->next = (*node)->next->next;
-	if ((*node)->next->next)
+		free((*node)->next->content);
+		free((*node)->next);
+	}
+	if (temp->next)
 		temp->next->prev = temp;
-	free((*node)->next->content);
-	free((*node)->next);
-	free((*node));
 	*node = temp;
 }
 
-void	parse_redir(t_tkn **node, t_tkn **temp_node)
+void	parse_redir(t_tkn **node, t_tkn **head)
 {
 	if (is_heredoc((*node)->content))
 		check_heredoc(node);
-	if (is_redir((*node)->content) && (*node)->next)
-	{
-		if (!(*temp_node) && (*node)->prev)
-			*temp_node = (*node)->prev;
-		else if (!(*temp_node))
-			*temp_node = *node;
-		if (!(*temp_node)->redir[0])
-			init_redir_args(&(*temp_node)->redir);
-		update_redir_files_list(&(*temp_node)->redir, (*node)->content, (*node)->next->content);
-		if (is_heredoc((*node)->content))
-			update_node_after_heredoc(node);
-		else
-			update_node_after_redir(node);
-	}
+	if (!ft_strcmp((*head)->content, (*node)->content)
+		&& (*node)->next && (*node)->next->next)
+		*head = (*node)->next->next;
+	if (!(*head)->redir[0])
+		init_redir_args(&(*head)->redir);
+	update_redir_files_list(&(*head)->redir, (*node)->content, (*node)->next->content);
+	if (is_heredoc((*node)->content))
+		update_node_after_heredoc(node);
+	else
+		update_node_after_redir(node);
 }

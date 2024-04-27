@@ -59,13 +59,13 @@ void	clean_stuff(t_global **data)
 	ft_memdel(*data);
 	*data = NULL;
 }
-// void	restore_fds(t_global *data)
-// {
-// 	dup2(data->original_stdin, STDIN_FILENO);
-// 	close(data->original_stdin);
-// 	dup2(data->original_stdout, STDOUT_FILENO);
-// 	close(data->original_stdout);
-// }
+void	restore_fds_close(t_global *data)
+{
+	dup2(data->original_stdin, STDIN_FILENO);
+	close(data->original_stdin);
+	dup2(data->original_stdout, STDOUT_FILENO);
+	close(data->original_stdout);
+}
 
 void	clean_input_and_hashtable(t_global **data)
 {
@@ -75,8 +75,8 @@ void	clean_input_and_hashtable(t_global **data)
 
 	ft_memdel((*data)->usr_input);
 	free_hashtable(&(*data)->hashtable);
-	//restore_fds(*data);
-	restore_fds((*data)->original_fds);
+	restore_fds_close(*data);
+	//restore_fds((*data)->original_fds);
 	i = 0;
 	while (i < 100)
 	{

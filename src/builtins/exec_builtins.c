@@ -43,6 +43,6 @@ int	exec_builtin(char **args, int args_len, t_global *data)
 		result = ft_unset(args, args_len, data);
 	if (ft_strcmp(args[0], "exit") == 0)
 		result = ft_exit(args, args_len, data);
-	return (result);
 	restore_original_fds(data->original_fds);//
+	return (result);
 }

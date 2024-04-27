@@ -23,9 +23,9 @@ t_bool	is_append(char *c)
 
 t_bool	is_heredoc(char *content)
 {
-	if (strcmp(content, DOUBLE_LESS_THAN) == 0)
-		return (true);
-	return (false);
+	if (content && strcmp(content, DOUBLE_LESS_THAN) == 0)
+		return (TRUE);
+	return (FALSE);
 }
 
 t_bool	is_redir(char *sig)

@@ -21,17 +21,17 @@ char *print_cwd(t_global **data)
 	if (!cwd)
 		return (cwd_error());
 	home = ft_strlen(ft_getenv("HOME", data));
+	ft_strlcat(prompt, BLUE, PATH_MAX);
 	if (ft_strncmp(cwd, ft_getenv("HOME", data), home) == 0)
 	{
-		ft_strlcat(prompt, BLUE, PATH_MAX);
 		ft_strlcat(prompt, (*data)->usr, PATH_MAX);
 		ft_strlcat(prompt, ":~", PATH_MAX);
 		ft_strlcat(prompt, &cwd[home], PATH_MAX);
-		ft_strlcat(prompt, "$ ", PATH_MAX);
-		ft_strlcat(prompt, END, PATH_MAX);
 	}
 	else
 		ft_strlcat(prompt, cwd, PATH_MAX);
+	ft_strlcat(prompt, "$ ", PATH_MAX);
+	ft_strlcat(prompt, END, PATH_MAX);
 	free(cwd);
 	return (prompt);
 }
@@ -46,10 +46,7 @@ int	handle_prompt(t_global **data)
 	if (!(*data)->usr_input)
 		return (-1);
 	if (!(*data)->usr_input[0])
-	{
-		//printf("\n");
 		return (0);
-	}
 	add_history((*data)->usr_input);
 	input = tokenize(data);
 	if (input == -1)
