@@ -1,0 +1,12 @@
+Makefile
+README.md
+allowed_functions.txt
+includes
+libs
+minishell
+qwe
+readline.supp
+src
+test
+test.c
+tests

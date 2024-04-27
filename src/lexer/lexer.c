@@ -24,13 +24,14 @@ void	check_redirects(t_tkn **node)
 	head = *node;
 	while (*node)
 	{
-		if (is_redir((*node)->content) && (*node)->next)
+		if ((*node)->content && is_redir((*node)->content)
+			&& (*node)->next)
 		{
 			parse_redir(node, &head);
 		}
 		*node = (*node)->next;
 	}
-		*node = head;
+	*node = head;
 }
 
 int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
@@ -62,9 +63,9 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 
 
 // TESTS
-// ls > qwe | < 123
-// ls > 123 | echo
-// ls | < 123 echo
-// ls | < 123 wc
+// ls > qwe | < 123 --> NÃO FUNCIONA
+// ls > 123 | echo --> PARA NO PRIMEIRO execve (exec_one_process.c) e não executa o echo.
+// ls | < 123 echo --> PARA NO PRIMEIRO execve (exec_one_process.c) e não executa o echo.
+// ls | < 123 wc --> NÃO FUNCIONA
 // < 123 wc
 // < 123

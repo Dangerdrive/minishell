@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	init_redir_args(char *(*args)[TABLE_SIZE])
 {
@@ -57,12 +57,11 @@ void	update_node_after_heredoc(t_tkn **node)
 	}
 	temp->next = (*node)->next;
 	if (temp && temp->next)
-	{
 		temp->next->prev = temp;
-	}
 	if (*node)
 	{
 		free((*node)->content);
+		(*node)->content = NULL;
 		free(*node);
 	}
 	if (temp->prev && temp->prev->prev)
@@ -100,7 +99,9 @@ void	update_node_after_redir(t_tkn **node)
 	{
 		temp = *node;
 		free((*node)->next->content);
+		(*node)->next->content = NULL;
 		free((*node)->next);
+		temp->next = NULL;
 	}
 	if (temp->next)
 		temp->next->prev = temp;

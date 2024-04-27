@@ -3,11 +3,14 @@
 void	exec_nonbuiltin(char **args, t_global *data)
 {
 	char	*cmd;
+	int		exec;
 
 	cmd = get_cmd(args[0], data);
 	if (cmd)
 	{
-		if (execve(cmd, args, data->env) == -1)
+		exec = execve(cmd, args, data->env);
+		printf("execve = %d\n", exec);
+		if (exec == -1)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n",
 				args[0], strerror(errno));

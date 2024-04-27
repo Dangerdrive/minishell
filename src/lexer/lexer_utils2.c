@@ -2,21 +2,21 @@
 
 t_bool	is_redir_in(char *c)
 {
-	if (!ft_strcmp(c, LESS_THAN))
+	if (c && !ft_strcmp(c, LESS_THAN))
 		return (true);
 	return (false);
 }
 
 t_bool	is_redir_out(char *c)
 {
-	if (!ft_strcmp(c, GREATER_THAN))
+	if (c && !ft_strcmp(c, GREATER_THAN))
 		return (true);
 	return (false);
 }
 
 t_bool	is_append(char *c)
 {
-	if (!ft_strcmp(c, DOUBLE_GREATER_THAN))
+	if (c && !ft_strcmp(c, DOUBLE_GREATER_THAN))
 		return (true);
 	return (false);
 }
