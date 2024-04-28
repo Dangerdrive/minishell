@@ -9,6 +9,7 @@ void	exec_nonbuiltin(char **args, t_global *data)
 	// if (is_folder(args[0]))
 	// 	external_exit(NOT_EXECUTABLE);
 	cmd = get_cmd(args[0], data);
+	//printf("fd0: %d | fd1: %d\n", data->original_fds[0], data->original_fds[1]);
 	if (cmd)
 	{
 		//printf("ENTROU AQUI %s\n", args[0]);
@@ -110,7 +111,7 @@ int	exec_one_process(t_global *data)
 
 	ret = 1;
 	args = NULL;
-	// ESSA VERIFICAÇÃO DOS REDIRECTS JÁ É CHAMADA DENTRO DAS FUNÇÕES DE EXEC_BUILTIN E EXEC_NONBUILTIN_ONFORK.
+	// ADD VERIFICAÇÃO DE CONTENT PARA PASSAR AQUI SÓ EM CASO DO COMANDO TER APENAS REDIR.
 	if (!data->hashtable[0]->content && handle_redirects(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);

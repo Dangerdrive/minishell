@@ -63,11 +63,12 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 
 
 // TESTS
-// ls > qwe | < 123 --> NÃO FUNCIONA
-// ls > 123 | echo --> PARA NO PRIMEIRO execve (exec_one_process.c) e não executa o echo.
-// ls | < 123 echo --> PARA NO PRIMEIRO execve (exec_one_process.c) e não executa o echo.
-// ls | < 123 wc --> EXECUTA, MAS FECHA O MINISHELL EM SEGUIDA.
+// ls > 123 | echo --> executa o redir, mas não pula linha no 'echo'
 // cat 007 | wc --> DÁ MENSAGEM DE ERRO MAS PRINTA '0	0	0' NA LINHA SEGUINTE (testar com arquivo q não existe)
-// echo > 1 -n > 2 hahahahaha
-// < 123 wc
+
+// echo > 1 -n > 2 hahahahaha -- ok
+// ls | < 123 echo -- ok
+// ls > qwe | < 123 -- ok
+// ls | < 123 wc -- ok
+// < 123 wc -- ok
 // < 123

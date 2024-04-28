@@ -1,0 +1,13 @@
+123
+Makefile
+README.md
+allowed_functions.txt
+includes
+libs
+minishell
+original_fds
+original_fds[0],
+readline.supp
+src
+test
+tests

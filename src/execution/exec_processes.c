@@ -42,21 +42,24 @@ static void	execute_forked_command(t_global *data, int idx)
 	if (is_builtin(args[0]))
 		execute_forked_builtin(args, idx, data);
 	else
+	{
+		//printf("fd0: %d | fd1: %d\n", data->original_fds[0], data->original_fds[1]);
 		exec_nonbuiltin(args, data);
+	}
 }
 
 int	exec_processes(t_global *data)
 {
-	int	original_fds[2];
+	//int	original_fds[2];
 	int	*children_pid;
 	int	i;
 
-	save_original_fds(original_fds);
+	save_original_fds(data->original_fds);
 	children_pid = init_children_pid(data);
 	i = 0;
 	while (data->hashtable[i])
 	{
-		handle_pipe(original_fds[OUT], data,
+		handle_pipe(data->original_fds[OUT], data,
 			data->hashtable[i], data->hashtable);
 		children_pid[i] = fork();
 		define_exec_signals(children_pid[i]);
@@ -65,11 +68,12 @@ int	exec_processes(t_global *data)
 		else if (children_pid[i] == 0)
 		{
 			//free(children_pid);
-			handle_redirects_for_pipes(data, data->hashtable[i]->redir);
+			handle_redirects_for_pipes(data, &data->hashtable[i]->redir);
 			execute_forked_command(data, i);
 		}
 		i++;
 	}
-	restore_fds(original_fds);
+	restore_fds(data->original_fds);
+	//printf("fd0: %d | fd1: %d\n", original_fds[0], original_fds[1]);
 	return (wait_for_children(children_pid));
 }
