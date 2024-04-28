@@ -1,24 +1,5 @@
 #include "../../includes/minishell.h"
 
-// static void	handle_expand_fail(char **line, int i, int len)
-// {
-// 	char	*new_line;
-// 	int		j;
-
-// 	j = 0;
-// 	new_line = ft_calloc((ft_strlen(*line) - len + 1), sizeof(char));
-// 	while ((*line)[j])
-// 	{
-// 		new_line[j] = (*line)[j];
-// 		j++;
-// 		if (j == i)
-// 			j += len;
-// 	}
-// 	free(*line);
-// 	*line = ft_strdup(new_line);
-// 	free(new_line);
-// }
-
 static void	update_line(char **line, int len, char **value)
 {
 	char	*new_line;
@@ -55,12 +36,15 @@ static int	get_var_value(t_global **data, char **line, int i)
 	value = NULL;
 	while ((*line)[i + len] && !is_special_var_char((*line)[i + len]))
 		len++;
-	if (is_special_variable(*line))
+	if (((*line)[i] == '?' && !(*line)[i + 1]) || !ft_strncmp((*line) + i, "? ", 2))
+		value = ft_itoa((*data)->ret);
+	else if (is_special_variable(*line))
 	{
 		printf("%s\nThis functionality is beyond Minishell's scope.\n\n%s", RED, END);
 		return (0);
 	}
-	value = search_value(data, line, i, len);
+	else
+		value = search_value(data, line, i, len);
 	update_line(line, len, &value);
 	return (1);
 }

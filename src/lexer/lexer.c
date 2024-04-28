@@ -64,9 +64,10 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 
 // TESTS
 // ls > 123 | echo --> executa o redir, mas não pula linha no 'echo'
-// cat 007 | wc --> DÁ MENSAGEM DE ERRO MAS PRINTA '0	0	0' NA LINHA SEGUINTE (testar com arquivo q não existe)
+// cat 007 | wc --> (bug com arquivo q não existe) DÁ MENSAGEM DE ERRO MAS PRINTA '0	0	0' NA LINHA SEGUINTE
+// export myvar=hello | echo $myvar --> era para pular uma linha apenas, mas tem 3 errors no valgrind.
 
-// echo > 1 -n > 2 hahahahaha -- ok
+// echo > 1 -n > 2 hahahahaha -- ok - mas no valgrind aparece uma mensagem de "invalid fd"
 // ls | < 123 echo -- ok
 // ls > qwe | < 123 -- ok
 // ls | < 123 wc -- ok
