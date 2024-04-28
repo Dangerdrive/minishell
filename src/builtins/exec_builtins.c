@@ -24,7 +24,7 @@ int	exec_builtin(char **args, int args_len, t_global *data)
 	int		result;
 
 	result = 0;
-	if (handle_redirects(data, data->original_fds) == 0)//
+	if (handle_redirects(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
 		return (1);

@@ -1,18 +1,21 @@
 #include "../../includes/minishell.h"
 
-void	exec_nonbuiltin(char **args, t_global *data)
+int	exec_nonbuiltin(char **args, t_global *data)
 {
 	char	*cmd;
 
-	// if (args[0][0])
-	// 	external_exit(EXIT_SUCCESS);
-	// if (is_folder(args[0]))
-	// 	external_exit(NOT_EXECUTABLE);
+	if (!args[0][0])
+		external_exit(EXIT_SUCCESS);
+	if (is_folder(args[0]))
+		external_exit(NOT_EXECUTABLE);
 	cmd = get_cmd(args[0], data);
-	//printf("fd0: %d | fd1: %d\n", data->original_fds[0], data->original_fds[1]);
+	if (cmd == NULL)
+	{
+		ft_strarr_free(args, ft_strarr_len(args));
+		external_exit(CMD_NOT_FOUND);
+	}
 	if (cmd)
 	{
-		//printf("ENTROU AQUI %s\n", args[0]);
 		if (execve(cmd, args, data->env) == -1)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n",
@@ -20,14 +23,7 @@ void	exec_nonbuiltin(char **args, t_global *data)
 			exit(EXIT_FAILURE);
 		}
 	}
-	else
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: %s: command not found\n", args[0]);
-		rl_clear_history();
-		ft_strarr_free(args, ft_strarr_len(args));
-		close_all_fds();
-		exit(CMD_NOT_FOUND);
-	}
+	return (data->ret);
 }
 
 static int	handle_redirects_one_cmd(t_global *data, int ori_fds[2])
@@ -69,7 +65,7 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 		perror("minishell: fork");
 	else if (pid == 0)
 	{
-		exec_nonbuiltin(args, data);
+		ret = exec_nonbuiltin(args, data);
 		exit(EXIT_FAILURE);
 	}
 	else

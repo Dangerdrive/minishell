@@ -103,7 +103,7 @@ char		*get_cmd(char *cmd, t_global *data);
 char		*get_cmd_path(char *cmd, char **paths);
 int			exec_one_process(t_global *data);
 int			exec_processes(t_global *data);
-void		exec_nonbuiltin(char **args, t_global *data);
+int			exec_nonbuiltin(char **args, t_global *data);
 int			pipecount(t_global *data);
 void		handle_pipe(int original_fd_out, t_global *data,
 				t_tkn *current_node, t_tkn **hashtable);

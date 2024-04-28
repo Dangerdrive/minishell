@@ -43,14 +43,12 @@ static void	execute_forked_command(t_global *data, int idx)
 		execute_forked_builtin(args, idx, data);
 	else
 	{
-		//printf("fd0: %d | fd1: %d\n", data->original_fds[0], data->original_fds[1]);
 		exec_nonbuiltin(args, data);
 	}
 }
 
 int	exec_processes(t_global *data)
 {
-	//int	original_fds[2];
 	int	*children_pid;
 	int	i;
 
@@ -74,6 +72,5 @@ int	exec_processes(t_global *data)
 		i++;
 	}
 	restore_fds(data->original_fds);
-	//printf("fd0: %d | fd1: %d\n", original_fds[0], original_fds[1]);
 	return (wait_for_children(children_pid));
 }
