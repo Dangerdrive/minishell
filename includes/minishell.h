@@ -30,6 +30,7 @@
 t_global	*init_data(void);
 void		clean_stuff(t_global **data);
 void		clean_input_and_hashtable(t_global **data);
+void		free_redir_args(char *(*args)[TABLE_SIZE]);
 int			handle_prompt(t_global **data);
 char		*print_cwd(t_global **data);
 
@@ -113,8 +114,7 @@ void		external_exit(int exit_status);
 
 /*------------redirections---------*/
 int			handle_redirects(t_global *data, int ori_fds[2]);
-void		handle_redirects_for_pipes(t_global *data, char **redirects);
-
+void		handle_redirects_for_pipes(t_global *data, char *(*redirects)[TABLE_SIZE]);
 void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect);
 int			redirect_output(char *output_redirect);

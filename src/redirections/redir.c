@@ -98,12 +98,10 @@ int	redirect_input(char *input_redirect)
 	if (fd == -1)
 	{
 		ft_dprintf(STDERR_FILENO, "open: %s: %s\n", &input_redirect[2], strerror(errno));
-		// free(input_redirect);
 		return (0);
 	}
 	else
 		redirect_fd(fd, STDIN_FILENO);
-	// free(input_redirect);
 	return (1);
 }
 

@@ -77,8 +77,7 @@ void	clean_input_and_hashtable(t_global **data)
 	free_hashtable(&(*data)->hashtable);
 	restore_fds_close(*data);
 	restore_fds((*data)->original_fds);
-	(*data)->original_fds[1] = STDOUT_FILENO;
-	printf("ori_fds0: %d | ori_fds1: %d\n", (*data)->original_fds[0], (*data)->original_fds[1]);
+	//printf("ori_fds0: %d | ori_fds1: %d\n", (*data)->original_fds[0], (*data)->original_fds[1]);
 	i = 0;
 	while (i < 100)
 	{

@@ -12,33 +12,33 @@ int	pipecount(t_global *data)
 	return (result - 1);
 }
 
-static void	quit_child(char **args)
+static void	quit_child(char *(*args)[TABLE_SIZE])
 {
 	rl_clear_history();
-	ft_strarr_free(args, ft_strarr_len(args));
+	free_redir_args(args);
 	close_all_fds();
 	exit(EXIT_FAILURE);
 }
 
-void	handle_redirects_for_pipes(t_global *data, char **redirects)
+void	handle_redirects_for_pipes(t_global *data, char *(*redirects)[TABLE_SIZE])
 {
 	int	i;
 
 	i = 0;
-	while (redirects[i])
+	while ((*redirects)[i])
 	{
-		if (ft_strncmp(redirects[i], "< ", 2) == 0)
+		if (ft_strncmp((*redirects)[i], "< ", 2) == 0)
 		{
-			if (redirect_input(&redirects[i][2]) == 0)
+			if (redirect_input((*redirects)[i]) == 0)
 				quit_child(redirects);
 		}
-		if (redirects[i][0] == '>')
+		if ((*redirects)[i][0] == '>')
 		{
-			if (redirect_output(redirects[i]) == 0)
+			if (redirect_output((*redirects)[i]) == 0)
 				quit_child(redirects);
 		}
-		if (ft_strncmp(redirects[i], "<<", 2) == 0)
-			redirect_heredoc(data, i, &redirects[i][2]);
+		if (ft_strncmp((*redirects)[i], "<<", 2) == 0)
+			redirect_heredoc(data, i, &(*redirects)[i][2]);
 		i++;
 	}
 }

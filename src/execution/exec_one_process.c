@@ -11,6 +11,7 @@ void	exec_nonbuiltin(char **args, t_global *data)
 	cmd = get_cmd(args[0], data);
 	if (cmd)
 	{
+		//printf("ENTROU AQUI %s\n", args[0]);
 		if (execve(cmd, args, data->env) == -1)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n",
@@ -109,10 +110,11 @@ int	exec_one_process(t_global *data)
 
 	ret = 1;
 	args = NULL;
-	if (handle_redirects(data, data->original_fds) == 0)
+	// ESSA VERIFICAÇÃO DOS REDIRECTS JÁ É CHAMADA DENTRO DAS FUNÇÕES DE EXEC_BUILTIN E EXEC_NONBUILTIN_ONFORK.
+	if (!data->hashtable[0]->content && handle_redirects(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	if (data->hashtable[0]->content)
 		args = hash_to_args(data->hashtable[0]);
