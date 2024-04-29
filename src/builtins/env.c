@@ -75,4 +75,3 @@ int	ft_env(char **args, int args_len, t_global **data)
 	}
 	return (0);
 }
-

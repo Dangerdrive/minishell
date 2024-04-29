@@ -37,7 +37,8 @@ char		*print_cwd(t_global **data);
 /*------------BUILTINS-------------*/
 int			exec_builtin(char **args, int args_len, t_global *data);
 t_bool		is_builtin(char *command);
-
+t_bool		unset_identifier_is_valid(char *str);
+int			key_matches_target(const char *strarr_elem, const char *tgt);
 
 /*---------------env----------------*/
 int			init_env(t_global **data);
@@ -56,11 +57,11 @@ int			ft_exit(char **args, int args_len, t_global *data);
 
 /*--------------expand--------------*/
 int			expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
-char	    *search_value(t_global **data, char **str, int i, int len);
+char		*search_value(t_global **data, char **str, int i, int len);
 void		add_node_before(t_tkn **node, int i);
 t_tkn		*add_node_after(t_tkn **node, int i);
 t_bool		is_var_name(t_tkn **node, int i, int len);
-t_bool		is_special_variable(char *var);
+t_bool		is_special_variable(char *var, t_bool print);
 t_bool		is_special_var_char(char c);
 
 /*--------------token--------------*/
@@ -72,7 +73,7 @@ int			check_exit_input(char **input, t_global *data);
 
 /*--------------parse--------------*/
 int			parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data);
-t_bool  	is_export_var(char *content);
+t_bool		is_export_var(char *content);
 t_bool		is_pipe(char *token);
 t_bool		is_and_or(char *token);
 t_bool		is_special_token(char *token);
@@ -114,7 +115,8 @@ void		external_exit(int exit_status);
 
 /*------------redirections---------*/
 int			handle_redirects(t_global *data, int ori_fds[2]);
-void		handle_redirects_for_pipes(t_global *data, char *(*redirects)[TABLE_SIZE]);
+void		handle_redirects_for_pipes(t_global *data,
+				char *(*redirects)[TABLE_SIZE]);
 void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect);
 int			redirect_output(char *output_redirect);
@@ -130,4 +132,7 @@ void		save_original_fd_in(int original_fds[2]);
 void		save_original_fd_out(int original_fds[2]);
 int			handle_input_redirect(char *command, int original_fds[2]);
 int			handle_output_redirect(char *command, int original_fds[2]);
+char		*tmp_filename(int heredoc_number);
+t_bool		ends_with_linebreak(char *line);
+int			get_fd(char *filename);
 #endif

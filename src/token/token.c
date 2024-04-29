@@ -1,5 +1,13 @@
 #include "../includes/minishell.h"
 
+/**
+ * Checks for closed quotes starting from a given index in a string.
+ * 
+ * @param[in] input The input string to check.
+ * @param[in] i The index to start checking from.
+ * @return Length of the quoted segment if properly closed, -1 if not closed,
+ *         0 if no quotes are found.
+ */
 int	check_quotes(char *input, int i)
 {
 	int		len;
@@ -24,6 +32,13 @@ int	check_quotes(char *input, int i)
 	return (0);
 }
 
+/**
+ * Determines if a character is considered special character for tokenization.
+ * 
+ * @param[in] c The character to evaluate.
+ * @return True if the character is special ('|', '&', '<', '>'),
+ *  false otherwise.
+ */
 t_bool	is_special_char(char c)
 {
 	if (c == '|' || c == '&' || c == '<' || c == '>')
@@ -32,9 +47,11 @@ t_bool	is_special_char(char c)
 }
 
 /**
- * Counts the length of the 'input'(char *) parameter, starting on the 'i'(index).
- *
- * Returns the lenght of the token started in the position 'input[i]'.
+ * Calculates the length of the token starting from the specified index.
+ * 
+ * @param[in] input The string to parse.
+ * @param[in] i The start index for token measurement.
+ * @return The length of the token.
  */
 int	get_token_len(char *input, int i)
 {
@@ -54,13 +71,20 @@ int	get_token_len(char *input, int i)
 		if (input[i + len] == '$')
 			len++;
 		while (input[i + len] && input[i + len] != ' ' && input[i + len] != '$'
-		&& !is_special_char(input[i + len]) && input[i + len] != SIMPLE_QUOTE
-		&& input[i + len] != DOUBLE_QUOTE)
+			&& !is_special_char(input[i + len])
+			&& input[i + len] != SIMPLE_QUOTE
+			&& input[i + len] != DOUBLE_QUOTE)
 			len++;
 	}
 	return (len);
 }
 
+/**
+ * Tokenizes the user input stored in global data.
+ * 
+ * @param[in, out] data The global data structure containing user input.
+ * @return 1 on successful tokenization, 0 on error (e.g., open quote).
+ */
 int	tokenize(t_global **data)
 {
 	int		i;

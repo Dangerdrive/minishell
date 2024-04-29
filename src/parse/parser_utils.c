@@ -10,7 +10,7 @@ t_bool	is_pipe(char *token)
 t_bool	is_and_or(char *token)
 {
 	if (token && (ft_strcmp(token, "&&") == 0
-		|| ft_strcmp(token, "||") == 0))
+			|| ft_strcmp(token, "||") == 0))
 		return (true);
 	return (false);
 }
@@ -18,8 +18,8 @@ t_bool	is_and_or(char *token)
 t_bool	is_pipe_and_or(char *token)
 {
 	if (token && (ft_strcmp(token, PIPE) == 0
-		|| ft_strcmp(token, "&&") == 0
-		|| ft_strcmp(token, "||") == 0))
+			|| ft_strcmp(token, "&&") == 0
+			|| ft_strcmp(token, "||") == 0))
 		return (true);
 	return (false);
 }
@@ -42,7 +42,8 @@ t_bool	is_special_token(char *token)
 
 t_bool	is_double_special_token(t_tkn *node)
 {
-	if ((!node->next || is_special_token(node->next->content)) && is_special_token(node->content)
+	if ((!node->next || is_special_token(node->next->content))
+		&& is_special_token(node->content)
 		&& (!is_pipe(node->content) && !is_redir_in(node->next->content)))
 		return (true);
 	return (false);

@@ -20,7 +20,8 @@ static void	quit_child(char *(*args)[TABLE_SIZE])
 	exit(EXIT_FAILURE);
 }
 
-void	handle_redirects_for_pipes(t_global *data, char *(*redirects)[TABLE_SIZE])
+void	handle_redirects_for_pipes(t_global *data,
+			char *(*redirects)[TABLE_SIZE])
 {
 	int	i;
 
@@ -53,7 +54,7 @@ void	handle_pipe(int original_fd_out, t_global *data,
 
 	last_node = hashtable[pipecount(data)];
 	is_first_node = (current_node == hashtable[0]);
-	has_next_node = (current_node != last_node); // Nessa comparação ele tá considerando a hashtable inteira e não apenas um índice dela (uma única lista). É isso mesmo?
+	has_next_node = (current_node != last_node);
 	if (!is_first_node)
 		redirect_fd(pipe_fds[IN], STDIN_FILENO);
 	if (has_next_node)

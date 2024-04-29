@@ -10,11 +10,11 @@ char	*cwd_error(void)
 	return (prompt);
 }
 
-char *print_cwd(t_global **data)
+char	*print_cwd(t_global **data)
 {
 	static char	prompt[PATH_MAX];
-	char	*cwd;
-	int		home;
+	char		*cwd;
+	int			home;
 
 	cwd = getcwd(NULL, 0);
 	ft_bzero(prompt, sizeof(prompt));

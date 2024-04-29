@@ -21,7 +21,8 @@ t_bool	check_there_is_var(char *content)
 	i = 0;
 	while (content[i])
 	{
-		if (content[i] == '$' && (ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
+		if (content[i] == '$' && (ft_isalpha(content[i + 1])
+				|| content[i + 1] == '_'))
 			return (true);
 		i++;
 	}

@@ -21,11 +21,11 @@ int	ft_pwd(void)
 	{
 		ft_printf("%s\n", cwd);
 		free(cwd);
-		return (1);
+		return (0);
 	}
 	else
 	{
 		free(cwd);
-		return (0);
+		return (1);
 	}
 }

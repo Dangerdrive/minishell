@@ -28,7 +28,7 @@ int	wait_for_child(int child_pid, int is_last_child)
 	if (waitpid(child_pid, &status, 0) == -1)
 		ft_dprintf(2, "minishell: waitpid: %s\n", strerror(errno));
 	if (WIFSIGNALED(status))
-		return (handle_signal_interrupt(status, is_last_child)); //handle signals
+		return (handle_signal_interrupt(status, is_last_child));
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (EXIT_FAILURE);
@@ -49,12 +49,6 @@ int	wait_for_children(int children_pid[1024])
 		i++;
 	}
 	close_extra_fds();
-	//free(children_pid);
+	free(children_pid);
 	return (exit_status);
-}
-
-void	restore_fds(int original_fds[2])
-{
-	redirect_fd(original_fds[IN], STDIN_FILENO);
-	redirect_fd(original_fds[OUT], STDOUT_FILENO);
 }

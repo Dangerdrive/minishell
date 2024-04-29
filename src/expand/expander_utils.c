@@ -10,12 +10,15 @@ t_bool	is_special_var_char(char c)
 	return (false);
 }
 
-t_bool	is_special_variable(char *var)
+t_bool	is_special_variable(char *var, t_bool print)
 {
-	if (!ft_strcmp(var, "$#")  || !ft_strcmp(var, "$!") || !ft_strcmp(var, "$@")
-		|| !ft_strcmp(var, "$$") || !ft_strcmp(var, "$0") || !ft_strcmp(var, "$-")
-		|| !ft_strcmp(var, "$*"))
+	if (!ft_strcmp(var, "$#") || !ft_strcmp(var, "$!") || !ft_strcmp(var, "$@")
+		|| !ft_strcmp(var, "$$") || !ft_strcmp(var, "$0")
+		|| !ft_strcmp(var, "$-") || !ft_strcmp(var, "$*"))
 	{
+		if (print)
+			ft_dprintf(2, "%s\nThis functionality is beyond Minishell's \
+			scope, ****@#$@***.\n\n%s", RED, END);
 		return (true);
 	}
 	return (false);
@@ -24,7 +27,7 @@ t_bool	is_special_variable(char *var)
 t_bool	is_var_name(t_tkn **node, int i, int len)
 {
 	if (((*node)->type[0] == 'v' && (*node)->content[i + len]
-		&& !is_special_var_char((*node)->content[i + len]))
+			&& !is_special_var_char((*node)->content[i + len]))
 		|| ((*node)->type[0] == 's' && (*node)->content[i + len]
 			&& !is_special_var_char((*node)->content[i + len])))
 		return (true);

@@ -107,8 +107,8 @@ int	exec_one_process(t_global *data)
 
 	ret = 1;
 	args = NULL;
-	// ADD VERIFICAÇÃO DE CONTENT PARA PASSAR AQUI SÓ EM CASO DO COMANDO TER APENAS REDIR.
-	if (!data->hashtable[0]->content && handle_redirects(data, data->original_fds) == 0)
+	if (!data->hashtable[0]->content
+		&& handle_redirects(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
 		return (EXIT_FAILURE);

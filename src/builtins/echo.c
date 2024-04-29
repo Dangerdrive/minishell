@@ -26,6 +26,3 @@ int	ft_echo(char **args, int args_len)
 		ft_dprintf(STDOUT_FILENO, "\n");
 	return (0);
 }
-
-//in a case like echo $USER$USER, the result have a space in between
-//export test test1=123 && echo $test results in 123. Expansion is being ambiguos.

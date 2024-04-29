@@ -1,34 +1,12 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
-t_bool	unset_identifier_is_valid(char *str)
-{
-	int		i;
-
-	if (str == NULL)
-		return (FALSE);
-	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (FALSE);
-	i = 1;
-	while (str[i])
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (FALSE);
-		i++;
-	}
-	return (TRUE);
-}
-
-static int	key_matches_target(const char *strarr_elem, const char *tgt)
-{
-	char	*key;
-	int		result;
-
-	key = strndup(strarr_elem, ft_strchr_i(strarr_elem, '='));
-	result = ft_strcmp(key, tgt);
-	free(key);
-	return (result == 0);
-}
-
+/**
+ * Removes strings matching a target from an array of strings.
+ * 
+ * @param[in] strarr Array of strings to filter.
+ * @param[in] tgt Target string to match for removal.
+ * @return New array without the matching strings or NULL on failure.
+ */
 char	**ft_strarr_strrm_unset(char **strarr, const char *tgt)
 {
 	int		len;
@@ -58,6 +36,13 @@ char	**ft_strarr_strrm_unset(char **strarr, const char *tgt)
 	return (new_arr);
 }
 
+/**
+ * Searches for a target string in an array and returns its index.
+ * 
+ * @param[in] strarr Array of strings.
+ * @param[in] target Target string to find.
+ * @return Index of the matching string or -1 if not found.
+ */
 static int	ft_strarr_str_unset(char **strarr, const char *target)
 {
 	int		i;
@@ -81,6 +66,12 @@ static int	ft_strarr_str_unset(char **strarr, const char *target)
 	return (-1);
 }
 
+/**
+ * Removes a specified environment variable from two arrays.
+ * 
+ * @param[in] arg Environment variable to remove.
+ * @param[in, out] data Global data containing the environment arrays.
+ */
 static void	remove_variable(char *arg, t_global *data)
 {
 	int		position;
@@ -103,10 +94,18 @@ static void	remove_variable(char *arg, t_global *data)
 	}
 }
 
+/**
+ * Unsets environment variables specified in args.
+ * 
+ * @param[in] args Array of environment variables to unset.
+ * @param[in] args_len Number of elements in args.
+ * @param[in, out] data Global data structure.
+ * @return 0 on success, 1 on error or invalid arguments.
+ */
 int	ft_unset(char **args, int args_len, t_global *data)
 {
-	int		i;
-	int 	ret;
+	int	i;
+	int	ret;
 
 	ret = 0;
 	i = 1;

@@ -10,8 +10,10 @@ char	*get_tkn_type(t_tkn *node)
 			return (STRING_STD);
 		else if (is_special_token(node->content))
 			return (SPECIAL_CHAR);
-		else if ((node->content[0] == '$' && identifier_is_valid(node->content + 1))
-			|| !strcmp(node->content, "$?") || is_special_variable(node->content))
+		else if ((node->content[0] == '$'
+				&& identifier_is_valid(node->content + 1))
+			|| !strcmp(node->content, "$?")
+			|| is_special_variable(node->content, FALSE))
 			return (VARIABLE);
 		else if (is_export_var(node->content))
 			return (EXPT_VARIABLE);
@@ -25,9 +27,9 @@ char	*get_tkn_type(t_tkn *node)
 
 void	remove_quotes(char **content)
 {
-	char *new_content;
-	int	len;
-	int	i;
+	char	*new_content;
+	int		len;
+	int		i;
 
 	len = ft_strlen(*content) - 1;
 	if (ft_strcmp(*content, PIPE)
@@ -89,7 +91,7 @@ int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 		}
 		(*hashtable)[i] = temp;
 		if (!ft_strcmp((*hashtable)[i]->content, "export"))
-			handle_export(hashtable[i]);		
+			handle_export(hashtable[i]);
 		i++;
 	}
 	syntax = 0;

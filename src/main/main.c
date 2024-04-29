@@ -30,7 +30,6 @@ int	main(void)
 
 	data = init_data();
 	data->usr_input = NULL;
-	// data->exit = handle_signal();
 	while (!data->exit)
 	{
 		define_prompt_signals();

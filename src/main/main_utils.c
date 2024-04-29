@@ -58,6 +58,7 @@ void	clean_stuff(t_global **data)
 	ft_memdel(*data);
 	*data = NULL;
 }
+
 void	restore_fds_close(t_global *data)
 {
 	dup2(data->original_stdin, STDIN_FILENO);

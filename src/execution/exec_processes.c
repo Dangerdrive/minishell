@@ -65,7 +65,6 @@ int	exec_processes(t_global *data)
 			ft_dprintf(2, "minishell: %s: %s\n", "fork", strerror(errno));
 		else if (children_pid[i] == 0)
 		{
-			//free(children_pid);
 			handle_redirects_for_pipes(data, &data->hashtable[i]->redir);
 			execute_forked_command(data, i);
 		}

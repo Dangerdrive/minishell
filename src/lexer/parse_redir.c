@@ -1,46 +1,9 @@
 #include "../../includes/minishell.h"
 
-void	init_redir_args(char *(*args)[TABLE_SIZE])
-{
-	int	i;
-
-	i = 0;
-	while (i < TABLE_SIZE)
-	{
-		(*args)[i] = NULL;
-		i++;
-	}
-	return ;
-}
-
-void	check_heredoc(t_tkn **node)
-{
-	if (strncmp((*node)->content, DOUBLE_LESS_THAN, 2) == 0
-		&& (*node)->next && !is_special_token((*node)->next->content))
-	{
-		(*node)->delimiter = ft_strdup((*node)->next->content);
-	}
-}
-
-void	update_redir_files_list(char *(*redir)[TABLE_SIZE], char *sig, char *new_arg)
-{
-	int		i;
-	char	*new_sig;
-
-	i = 0;
-	if (is_redir_in(sig) || is_redir_out(sig))
-		new_sig = ft_strjoin(sig, " ");
-	else
-		new_sig = ft_strdup(sig);
-	if ((*redir)[i])
-	{
-		while ((*redir)[i])
-			i++;
-	}
-	(*redir)[i] = ft_strjoin(new_sig, new_arg);
-	free(new_sig);
-	return ;
-}
+void	init_redir_args(char *(*args)[TABLE_SIZE]);
+void	check_heredoc(t_tkn **node);
+void	update_redir_files_list(char *(*redir)[TABLE_SIZE],
+			char *sig, char *new_arg);
 
 void	update_node_after_heredoc(t_tkn **node)
 {
@@ -69,23 +32,50 @@ void	update_node_after_heredoc(t_tkn **node)
 	(*node) = temp;
 }
 
-void	update_node_after_redir(t_tkn **node)
+// void	update_node_after_redir(t_tkn **node)
+// {
+// 	t_tkn	*temp;
+
+// 	temp = NULL;
+// 	free((*node)->content);
+// 	(*node)->content = NULL;
+// 	if ((*node)->prev)
+// 	{
+// 		temp = (*node)->prev;
+// 		*node = (*node)->next;
+// 		free((*node)->prev);
+// 		free((*node)->content);
+// 		temp->next = (*node)->next;
+// 		free(*node);
+// 	}
+// 	else if (!(*node)->prev && (*node)->next && (*node)->next->next)
+// 	{
+// 		temp = (*node)->next;
+// 		free(*node);
+// 		*node = temp;
+// 		temp = (*node)->next;
+// 		free((*node)->content);
+// 		free(*node);
+// 		temp->prev = NULL;
+// 	}
+// 	else
+// 	{
+// 		temp = *node;
+// 		free((*node)->next->content);
+// 		(*node)->next->content = NULL;
+// 		free((*node)->next);
+// 		temp->next = NULL;
+// 	}
+// 	if (temp->next)
+// 		temp->next->prev = temp;
+// 	*node = temp;
+// }
+
+static void	handle_no_prev_node(t_tkn **node)
 {
 	t_tkn	*temp;
 
-	temp = NULL;
-	free((*node)->content);
-	(*node)->content = NULL;
-	if ((*node)->prev)
-	{
-		temp = (*node)->prev;
-		*node = (*node)->next;
-		free((*node)->prev);
-		free((*node)->content);
-		temp->next = (*node)->next;
-		free(*node);
-	}
-	else if (!(*node)->prev && (*node)->next && (*node)->next->next)
+	if ((*node)->next && (*node)->next->next)
 	{
 		temp = (*node)->next;
 		free(*node);
@@ -108,6 +98,29 @@ void	update_node_after_redir(t_tkn **node)
 	*node = temp;
 }
 
+static void	handle_prev_node(t_tkn **node)
+{
+	t_tkn	*temp;
+
+	temp = (*node)->prev;
+	*node = (*node)->next;
+	free((*node)->prev);
+	free((*node)->content);
+	temp->next = (*node)->next;
+	free(*node);
+	if (temp->next)
+		temp->next->prev = temp;
+	*node = temp;
+}
+
+static void	update_node_after_redir(t_tkn **node)
+{
+	if ((*node)->prev)
+		handle_prev_node(node);
+	else
+		handle_no_prev_node(node);
+}
+
 void	parse_redir(t_tkn **node, t_tkn **head)
 {
 	if (is_heredoc((*node)->content))
@@ -117,7 +130,8 @@ void	parse_redir(t_tkn **node, t_tkn **head)
 		*head = (*node)->next->next;
 	if (!(*head)->redir[0])
 		init_redir_args(&(*head)->redir);
-	update_redir_files_list(&(*head)->redir, (*node)->content, (*node)->next->content);
+	update_redir_files_list(&(*head)->redir,
+		(*node)->content, (*node)->next->content);
 	if (is_heredoc((*node)->content))
 		update_node_after_heredoc(node);
 	else

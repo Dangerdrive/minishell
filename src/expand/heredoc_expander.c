@@ -8,7 +8,7 @@ static void	update_line(char **line, int len, char **value)
 
 	line_len = 0;
 	temp = NULL;
-	while((*line)[line_len] != '$')
+	while ((*line)[line_len] != '$')
 		line_len++;
 	new_line = ft_strndup((*line), line_len);
 	if ((*line)[line_len] == '$')
@@ -36,11 +36,13 @@ static int	get_var_value(t_global **data, char **line, int i)
 	value = NULL;
 	while ((*line)[i + len] && !is_special_var_char((*line)[i + len]))
 		len++;
-	if (((*line)[i] == '?' && !(*line)[i + 1]) || !ft_strncmp((*line) + i, "? ", 2))
+	if (((*line)[i] == '?' && !(*line)[i + 1])
+			|| !ft_strncmp((*line) + i, "? ", 2))
 		value = ft_itoa((*data)->ret);
-	else if (is_special_variable(*line))
+	else if (is_special_variable(*line, FALSE))
 	{
-		printf("%s\nThis functionality is beyond Minishell's scope.\n\n%s", RED, END);
+		printf("%s\nThis functionality is beyond \
+		Minishell's scope.\n\n%s", RED, END);
 		return (0);
 	}
 	else

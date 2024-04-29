@@ -82,7 +82,8 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	{
 		if ((*data)->hashtable[i]
 			&& strcmp((*data)->hashtable[i]->content, "echo") == 0)
-			check_non_spaced_var((*data)->usr_input, idx, &(*data)->hashtable[i]);
+			check_non_spaced_var((*data)->usr_input, idx,
+				&(*data)->hashtable[i]);
 		while ((*data)->hashtable[i + 1] != NULL)
 			i++;
 	}
