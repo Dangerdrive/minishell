@@ -110,15 +110,12 @@ int	ft_unset(char **args, int args_len, t_global *data)
 	ret = 0;
 	i = 1;
 	if (args_len <= 1)
-	{
-		ft_printf("unset: not enough arguments\n");
-		ret = 1;
-	}
+		return (0);
 	while (i < args_len)
 	{
 		if (!unset_identifier_is_valid(args[i]))
 		{
-			ft_printf("unset: `%s': not a valid identifier\n", args[i]);
+			ft_dprintf(2, "unset: `%s': not a valid identifier\n", args[i]);
 			ret = 1;
 		}
 		else if (unset_identifier_is_valid(args[i]))

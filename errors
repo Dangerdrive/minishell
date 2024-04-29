@@ -1,3 +1,7 @@
+cd minishell_tester && ./tester | grep -v ✅ && cd .. 
+cd minishell_tester && ./tester | grep -v ✅ | grep Test && cd .. 
+
+
 Test   5: ❌ echo hello""world 
 mini output = (hello world)
 bash output = (helloworld)
