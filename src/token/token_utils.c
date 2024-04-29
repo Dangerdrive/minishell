@@ -34,7 +34,7 @@ t_tkn	*add_node(t_tkn **tkn_node, char **content)
 	temp = NULL;
 	if (!new_node)
 		return (NULL);
-	new_node->content = *content;
+	new_node->content = ft_strdup(*content);
 	new_node->space_after = TRUE;
 	new_node->next = NULL;
 	if (!(*tkn_node))
@@ -88,4 +88,5 @@ void	populate_hashtable(t_global **data, int idx, int len)
 			i++;
 	}
 	add_node(&(*data)->hashtable[i], &token);
+	free(token);
 }

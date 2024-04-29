@@ -27,7 +27,7 @@ static void	update_line(char **line, int len, char **value)
 	free(new_line);
 }
 
-static int	get_var_value(t_global **data, char **line, int i)
+int	get_var_value1(t_global **data, char **line, int i)
 {
 	int		len;
 	char	*value;
@@ -61,8 +61,7 @@ void	expand_heredoc(t_global *data, char **line)
 		if ((*line)[i] == '$')
 		{
 			i++;
-			get_var_value(&data, line, i);
-			break ;
+			get_var_value1(&data, line, i);
 		}
 		i++;
 	}

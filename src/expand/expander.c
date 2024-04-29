@@ -49,7 +49,7 @@ static void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
 }
 
 /**
- * Searches for the variable value in the arrays 
+ * Searches for the variable value in the arrays
  * (*data)->env and (*data)->exported.
  * Then, it updates the token hashtable with the founded value.
  *
@@ -67,7 +67,8 @@ static int	get_var_value(t_tkn **node, int i, t_global **data)
 		len++;
 	if (is_special_variable((*node)->content, TRUE))
 		return (0);
-	if (!ft_strcmp((*node)->content, "$?"))
+	if (((*node)->content[i] == '?' && !(*node)->content[i + 1])
+		|| !ft_strncmp((*node)->content + i, "? ", 2))
 		value = ft_itoa((*data)->ret);
 	else
 		value = search_value(data, &(*node)->content, i, len);
@@ -96,7 +97,8 @@ int	check_if_expandable(t_tkn **node, t_global **data)
 
 	result = 1;
 	if (!ft_strcmp((*node)->type, VARIABLE)
-		|| !ft_strcmp((*node)->type, STRING_STD))
+		|| !ft_strcmp((*node)->type, STRING_STD)
+		|| !ft_strcmp((*node)->type, EXPT_VARIABLE))
 	{
 		i = 0;
 		while ((*node)->content[i] != '\0')
@@ -105,7 +107,6 @@ int	check_if_expandable(t_tkn **node, t_global **data)
 			{
 				i++;
 				result = get_var_value(node, i, data);
-				break ;
 			}
 			i++;
 		}

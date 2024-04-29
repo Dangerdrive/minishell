@@ -135,4 +135,5 @@ int			handle_output_redirect(char *command, int original_fds[2]);
 char		*tmp_filename(int heredoc_number);
 t_bool		ends_with_linebreak(char *line);
 int			get_fd(char *filename);
+int			get_var_value1(t_global **data, char **line, int i);
 #endif

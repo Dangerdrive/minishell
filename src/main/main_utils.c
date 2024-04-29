@@ -28,7 +28,10 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 		{
 			temp = (*hashtable)[i]->next;
 			if ((*hashtable)[i]->content)
+			{
+				//printf("%s\n", (*hashtable)[i]->content);
 				free((*hashtable)[i]->content);
+			}
 			if ((*hashtable)[i]->delimiter)
 				free((*hashtable)[i]->delimiter);
 			free_redir_args(&(*hashtable)[i]->redir);
@@ -75,8 +78,9 @@ void	clean_input_and_hashtable(t_global **data)
 
 	ft_memdel((*data)->usr_input);
 	free_hashtable(&(*data)->hashtable);
-	restore_fds_close(*data);
-	restore_fds((*data)->original_fds);
+	// restore_fds_close(*data);
+	// restore_fds((*data)->original_fds);
+	restore_original_fds((*data)->original_fds);
 	i = 0;
 	while (i < 100)
 	{

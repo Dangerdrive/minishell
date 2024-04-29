@@ -13,6 +13,8 @@ int	exec_nonbuiltin(char **args, t_global *data)
 		ft_strarr_free(args, ft_strarr_len(args));
 		external_exit(CMD_NOT_FOUND);
 	}
+	if (is_folder(args[0]))
+		external_exit(NOT_EXECUTABLE);
 	if (cmd)
 	{
 		if (execve(cmd, args, data->env) == -1)

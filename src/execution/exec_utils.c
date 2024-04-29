@@ -24,13 +24,9 @@ t_bool	check_empty_str(t_tkn **node)
 			&& (*node)->prev->space_after == TRUE)
 		&& (*node)->prev->prev && (*node)->prev->prev->space_after == TRUE)
 		return (TRUE);
-	if ((*node)->content && !ft_strcmp((*node)->content, "")
-		&& (*node)->prev->space_after == TRUE)
-		return (TRUE);
 	return (FALSE);
 }
 
-// REVISAR SITUAÇÃO STRING VAZIA (echo lala"" haha)
 void	fill_args(t_tkn	**node, char **args, int i)
 {
 	char	*arg_tmp;
@@ -38,9 +34,9 @@ void	fill_args(t_tkn	**node, char **args, int i)
 	arg_tmp = NULL;
 	if (check_empty_str(node))
 		args[i] = ft_strjoin(" ", (*node)->content);
-	if (!(*node)->prev
+	else if (!(*node)->prev
 		|| ((*node)->prev && ((*node)->prev->space_after == TRUE)
-		&& (*node)->content))
+			&& (*node)->content))
 		args[i] = ft_strdup((*node)->content);
 	if (((*node)->space_after == FALSE) && (*node)->next)
 	{
