@@ -7,18 +7,13 @@
  * @param[in] i Index in the token array.
  * @return 1 if valid command found, 0 otherwise, with error message output.
  */
-int	check_valid_input(t_tkn **node, int i)
+int	check_valid_input(t_tkn **node)
 {
-	if (!input_starts_with_command((*node), i))
-	{
-		printf("%s: command not found\n", (*node)->content);
-		return (0);
-	}
 	if ((is_double_special_token((*node)) && !(*node)->delimiter)
 		|| (!(*node)->next && !ft_strcmp((*node)->type, SPECIAL_CHAR)
 			&& !(*node)->delimiter) || is_and_or((*node)->content))
 	{
-		printf("Syntax error.\n");
+		ft_dprintf(2, "Syntax error.\n");
 		return (0);
 	}
 	return (1);
@@ -64,7 +59,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 		temp = (*hashtable)[i];
 		while ((*hashtable)[i])
 		{
-			if (!check_valid_input(&(*hashtable)[i], i))
+			if (!check_valid_input(&(*hashtable)[i]))
 			{
 				(*hashtable)[i] = temp;
 				return (0);
