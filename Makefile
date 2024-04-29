@@ -19,6 +19,7 @@ SRC = 	./src/builtins/cd.c \
 		./src/builtins/echo.c \
 		./src/builtins/env.c \
 		./src/builtins/export.c \
+		./src/builtins/export_utils.c \
 		./src/builtins/exec_builtins.c \
 		./src/builtins/exit.c \
 		./src/builtins/pwd.c \

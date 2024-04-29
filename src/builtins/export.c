@@ -1,5 +1,8 @@
 #include "../includes/minishell.h"
 
+void	ft_strarr_str_exp_rplc(char **strarr, char *target, char *replcmt);
+int		ft_strarr_str_exp(char **strarr, const char *target);
+
 void	print_exp(char **sorted_arr)
 {
 	char	*key;
@@ -73,18 +76,17 @@ void	replace_or_add(char *arg, t_global *data)
 	if (ft_strchr_i(arg, '=') != -1)
 	{
 		key = ft_strndup(arg, ft_strchr_i(arg, '=') + 1);
-		ft_strarr_str_replace(data->env, key, arg);
-		ft_strarr_str_replace(data->exported, key, arg);
+		ft_strarr_str_exp_rplc(data->env, key, arg);
+		ft_strarr_str_exp_rplc(data->exported, key, arg);
 	}
 	else if (ft_strchr_i(arg, '=') == -1)
 		key = ft_strdup(arg);
-	if (ft_strarr_str(data->env, key) == -1
-		&& ft_strarr_str(data->exported, key) == -1
-		&& ft_strarr_str(__environ, key) == -1)
+	if (ft_strarr_str_exp(data->env, key) == -1
+		&& ft_strarr_str_exp(data->exported, key) == -1
+		&& ft_strarr_str_exp(__environ, key) == -1)
 		ft_strarr_stradd(&data->exported, arg);
-	if (ft_strarr_str(data->env, key) == -1
-		&& ft_strarr_str(data->exported, key) == -1
-		&& ft_strarr_str(__environ, key) != -1)
+	else if (ft_strarr_str_exp(data->env, key) == -1
+		&& ft_strarr_str_exp(data->exported, key) == -1)
 		ft_strarr_stradd(&data->env, arg);
 	if (key != NULL)
 		free(key);
@@ -105,8 +107,7 @@ int	ft_export(char **args, int args_len, t_global *data)
 		{
 			if (!identifier_is_valid(args[i]))
 			{
-				ft_dprintf(2, "export: `%s': not a valid identifier\n",
-					args[i]);
+				ft_dprintf(2, "export: `%s': not a valid identifier\n", args[i]);
 				ret = 1;
 			}	
 			else if (identifier_is_valid(args[i]))

@@ -51,13 +51,44 @@ char	*get_cmd_path(char*cmd, char**paths)
 	return (NULL);
 }
 
+// char	*get_cmd(char *cmd, t_global *data)
+// {
+// 	char	**env_paths;
+// 	char	*cmd_path;
+
+// 	if (access(cmd, F_OK | X_OK) == 0)
+// 		return (ft_strdup(cmd));
+// 	env_paths = get_env_paths(data);
+// 	if (!env_paths)
+// 		return (NULL);
+// 	cmd_path = get_cmd_path(cmd, env_paths);
+// 	if (!cmd_path)
+// 	{
+// 		ft_strarr_free(env_paths, ft_strarr_len(env_paths));
+// 		return (NULL);
+// 	}
+// 	ft_strarr_free(env_paths, ft_strarr_len(env_paths));
+// 	return (cmd_path);
+// }
+
 char	*get_cmd(char *cmd, t_global *data)
 {
-	char	**env_paths;
-	char	*cmd_path;
+	struct stat	statbuf;
+	char		**env_paths;
+	char		*cmd_path;
 
-	if (access(cmd, F_OK | X_OK) == 0)
-		return (ft_strdup(cmd));
+	if (stat(cmd, &statbuf) == 0)
+	{
+		if (S_ISDIR(statbuf.st_mode))
+		{
+			ft_dprintf(2, "minishell: %s: Is a directory\n", cmd);
+			external_exit(126);
+		}
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		ft_dprintf(2, "minishell: %s: Permission denied\n", cmd);
+		external_exit(126);
+	}
 	env_paths = get_env_paths(data);
 	if (!env_paths)
 		return (NULL);

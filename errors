@@ -1,5 +1,28 @@
+export A B C D E - C e D não adicionados
+export A
+export A="ola" não trocou valor do A que já existia
+export oi2=$oi - expandir o oi
+fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr$ unset PATH
+fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr$ ls - não printou
+cat << eof - lento e com dois > >
+cat << eof - ctrl D
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls | exit
+exit
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls | exit | wc
+      1       1       5
+
+redir.c
+int	redirect_input(char *input_redirect)
+
+
 cd minishell_tester && ./tester | grep -v ✅ && cd .. 
 cd minishell_tester && ./tester | grep -v ✅ | grep Test && cd .. 
+
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo <123 <456 hi | echo 42
+open: 456: No such file or directory
+open: 456: No such file or directory
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo hi | echo 42
+42
 
 
 Test   5: ❌ echo hello""world 

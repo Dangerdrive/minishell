@@ -31,7 +31,8 @@ int	ft_exit(char **args, int args_len, t_global *data)
 {
 	if (args_len == 1)
 	{
-		ft_printf("exit\n");
+		if (pipecount(data) == 0)
+			ft_printf("exit\n");
 		data->ret = 0;
 		data->exit = TRUE;
 	}

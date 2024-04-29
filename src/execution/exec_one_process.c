@@ -6,11 +6,10 @@ int	exec_nonbuiltin(char **args, t_global *data)
 
 	if (!args[0][0])
 		external_exit(EXIT_SUCCESS);
-	if (is_folder(args[0]))
-		external_exit(NOT_EXECUTABLE);
 	cmd = get_cmd(args[0], data);
 	if (cmd == NULL)
 	{
+		ft_dprintf(STDERR_FILENO, "minishell: %s: command not found\n", args[0]);
 		ft_strarr_free(args, ft_strarr_len(args));
 		external_exit(CMD_NOT_FOUND);
 	}
@@ -90,7 +89,7 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 	if (handle_redirects_one_cmd(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
-		return (EXIT_FAILURE);
+		external_exit(EXIT_FAILURE);
 	}
 	if (args && args[0] && !is_builtin(args[0]))
 	{

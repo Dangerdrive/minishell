@@ -20,10 +20,6 @@ int	is_folder(char *command)
 
 void	external_exit(int exit_status)
 {
-	if (exit_status == NOT_EXECUTABLE)
-		perror("minishell: it is a directory");
-	if (exit_status == CMD_NOT_FOUND)
-		perror("minishell: command not found");
 	rl_clear_history();
 	close_all_fds();
 	exit(exit_status);

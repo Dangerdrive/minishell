@@ -48,9 +48,45 @@ void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
 	}
 }
 
+// int	redirect_input(char *input_redirect)
+// {
+// 	int		fd;
+
+// 	fd = open(&input_redirect[2], O_RDONLY, FD_CLOEXEC);
+// 	if (fd == -1)
+// 	{
+// 		ft_dprintf(STDERR_FILENO, "open: %s: %s\n",
+// 			&input_redirect[2], strerror(errno));
+// 		return (0);
+// 	}
+// 	else
+// 		redirect_fd(fd, STDIN_FILENO);
+// 	return (1);
+// }
+
+// int	redirect_output(char *output_redirect)
+// {
+// 	int		fd;
+
+// 	if (output_redirect[1] == '>')
+// 		fd = open(&output_redirect[2], O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 	else
+// 		fd = open(&output_redirect[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 	if (fd == -1)
+// 	{
+// 		ft_dprintf(STDERR_FILENO, "open: %s: %s\n",
+// 			&output_redirect[2], strerror(errno));
+// 		return (0);
+// 	}
+// 	else
+// 		redirect_fd(fd, STDOUT_FILENO);
+// 	return (1);
+// }
+
+
 int	redirect_input(char *input_redirect)
 {
-	int		fd;
+	int	fd;
 
 	fd = open(&input_redirect[2], O_RDONLY, FD_CLOEXEC);
 	if (fd == -1)
@@ -60,13 +96,15 @@ int	redirect_input(char *input_redirect)
 		return (0);
 	}
 	else
+	{
 		redirect_fd(fd, STDIN_FILENO);
+	}
 	return (1);
 }
 
 int	redirect_output(char *output_redirect)
 {
-	int		fd;
+	int	fd;
 
 	if (output_redirect[1] == '>')
 		fd = open(&output_redirect[2], O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -79,6 +117,8 @@ int	redirect_output(char *output_redirect)
 		return (0);
 	}
 	else
+	{
 		redirect_fd(fd, STDOUT_FILENO);
+	}
 	return (1);
 }
