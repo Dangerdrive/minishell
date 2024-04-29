@@ -2,7 +2,7 @@
 
 /**
  * Checks if the input at a specific index starts with a valid command.
- * 
+ *
  * @param[in] node Pointer to the token node being checked.
  * @param[in] i Index in the token array.
  * @return 1 if valid command found, 0 otherwise, with error message output.
@@ -21,7 +21,7 @@ int	check_valid_input(t_tkn **node)
 
 /**
  * Traverses through token nodes and processes redirections.
- * 
+ *
  * @param[in, out] node Pointer to the current token node to check.
  */
 void	check_redirects(t_tkn **node)
@@ -44,7 +44,7 @@ void	check_redirects(t_tkn **node)
 /**
  * Performs lexical analysis on a hashtable of tokens, checking commands
  * and processing redirections.
- * 
+ *
  * @param[in, out] hashtable Pointer to the hashtable of token nodes.
  * @return 1 on successful analysis, 0 on finding an error.
  */
@@ -78,10 +78,10 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 // ls > 123 | echo --> executa o redir, mas não pula linha no 'echo'
 // cat 007 | wc --> (bug com arquivo q não existe)
 // DÁ MENSAGEM DE ERRO MAS PRINTA '0	0	0' NA LINHA SEGUINTE
-// export myvar=hello | echo $myvar --> 
+// export myvar=hello | echo $myvar -->
 //era para pular uma linha apenas, mas tem 3 errors no valgrind.
 
-// echo > 1 -n > 2 hahahahaha -- ok - 
+// echo > 1 -n > 2 hahahahaha -- ok -
 //mas no valgrind aparece uma mensagem de "invalid fd"
 // ls | < 123 echo -- ok
 // ls > qwe | < 123 -- ok
@@ -91,7 +91,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 
 // ECHO:
 //in a case like echo $USER$USER, the result have a space in between
-//export test test1=123 && echo $test 
+//export test test1=123 && echo $test
 //results in 123. Expansion is being ambiguos.
 
 //EXPORT:

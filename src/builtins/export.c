@@ -68,8 +68,12 @@ t_bool	identifier_is_valid(char *str)
 void	replace_or_add(char *arg, t_global *data)
 {
 	char	*key;
+	int		i;
 
 	key = NULL;
+	i = 0;
+	// while (arg[i] && !is_special_var_char(arg[i]))
+	// 	i++;
 	if (ft_strchr_i(arg, '=') != -1)
 	{
 		key = ft_strndup(arg, ft_strchr_i(arg, '=') + 1);
@@ -108,7 +112,7 @@ int	ft_export(char **args, int args_len, t_global *data)
 				ft_dprintf(2, "export: `%s': not a valid identifier\n",
 					args[i]);
 				ret = 1;
-			}	
+			}
 			else if (identifier_is_valid(args[i]))
 				replace_or_add(args[i], data);
 		i++;

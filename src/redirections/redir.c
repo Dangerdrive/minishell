@@ -74,8 +74,7 @@ int	redirect_output(char *output_redirect)
 		fd = open(&output_redirect[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		ft_dprintf(STDERR_FILENO, "open: %s: %s\n",
-			&output_redirect[2], strerror(errno));
+		ft_dprintf(STDERR_FILENO, "open: %s\n", strerror(errno));
 		return (0);
 	}
 	else

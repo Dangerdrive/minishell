@@ -30,8 +30,11 @@ t_bool	is_var_name(t_tkn **node, int i, int len)
 			&& !is_special_var_char((*node)->content[i + len]))
 		|| ((*node)->type[0] == 's' && (*node)->content[i + len]
 			&& !is_special_var_char((*node)->content[i + len])))
-		return (true);
-	return (false);
+		return (TRUE);
+	if (!ft_strcmp((*node)->type, EXPT_VARIABLE) && (*node)->content[i + len]
+		&& !is_special_var_char((*node)->content[i + len]))
+		return (TRUE);
+	return (FALSE);
 }
 
 void	add_node_before(t_tkn **node, int i)
