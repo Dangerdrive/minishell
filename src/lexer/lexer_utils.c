@@ -1,14 +1,14 @@
 #include "../includes/minishell.h"
 
-t_bool	input_starts_with_command(t_tkn	*node, int i)
-{
-	if ((i == 0 && !node->prev
-			&& !is_redir(node->content) && ft_strcmp(node->type, COMMAND))
-		|| (i > 0 && node->prev && is_pipe(node->prev->content)
-			&& ft_strcmp(node->type, COMMAND) && !is_redir_in(node->content)))
-		return (FALSE);
-	return (TRUE);
-}
+// t_bool	input_starts_with_command(t_tkn	*node, int i)
+// {
+// 	if ((i == 0 && !node->prev
+// 			&& !is_redir(node->content) && ft_strcmp(node->type, COMMAND))
+// 		|| (i > 0 && node->prev && is_pipe(node->prev->content)
+// 			&& ft_strcmp(node->type, COMMAND) && !is_redir_in(node->content)))
+// 		return (FALSE);
+// 	return (TRUE);
+// }
 
 void	remove_pipe(t_tkn **node, int i)
 {

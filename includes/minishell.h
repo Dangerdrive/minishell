@@ -85,7 +85,7 @@ t_bool		is_redir_in(char *c);
 t_bool		is_redir_out(char *c);
 t_bool		is_heredoc(char *content);
 t_bool		is_redir(char *sig);
-t_bool		input_starts_with_command(t_tkn	*node, int i);
+//t_bool		input_starts_with_command(t_tkn	*node, int i);
 void		check_redirects(t_tkn **node);
 void		remove_pipe(t_tkn **node, int i);
 void		parse_redir(t_tkn **node, t_tkn **temp_node);
