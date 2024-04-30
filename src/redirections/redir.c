@@ -46,6 +46,7 @@ void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
 		data->ret = wait_for_child(pid, TRUE);
 		define_prompt_signals();
 	}
+	external_exit(EXIT_SUCCESS);
 }
 
 // int	redirect_input(char *input_redirect)

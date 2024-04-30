@@ -27,28 +27,30 @@ int	exec_nonbuiltin(char **args, t_global *data)
 	return (data->ret);
 }
 
-static int	handle_redirects_one_cmd(t_global *data, int ori_fds[2])
+static int	handle_redirects_one_cmd(t_global *data, int (*ori_fds)[2])
 {
 	int		i;
 
 	i = 0;
-	ori_fds[IN] = -1;
-	ori_fds[OUT] = -1;
+	(*ori_fds)[IN] = -1;
+	(*ori_fds)[OUT] = -1;
+	data->original_fds[IN] = -1;
+	data->original_fds[OUT] = -1;
 	while (data->hashtable[0]->redir[i])
 	{
 		if (ft_strncmp(data->hashtable[0]->redir[i], "< ", 2) == 0)
 		{
-			if (!handle_input_redirect(data->hashtable[0]->redir[i], ori_fds))
+			if (!handle_input_redirect(data->hashtable[0]->redir[i], data->original_fds))
 				return (0);
 		}
 		if (data->hashtable[0]->redir[i][0] == '>')
 		{
-			if (!handle_output_redirect(data->hashtable[0]->redir[i], ori_fds))
+			if (!handle_output_redirect(data->hashtable[0]->redir[i], data->original_fds))
 				return (0);
 		}
 		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
 		{
-			save_original_fd_in(ori_fds);
+			save_original_fd_in(data->original_fds);
 			redirect_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
 		}
 		i++;
@@ -81,24 +83,25 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	return (ret);
 }
 
-int	exec_nonbuiltin_onfork(t_global *data, char **args)
+void	exec_nonbuiltin_onfork(t_global *data, char **args)
 {
 	int		pid;
-	int		ret;
+	//int		ret;
 
-	ret = 1;
+	data->ret = 1;
 	pid = fork();
-	if (handle_redirects_one_cmd(data, data->original_fds) == 0)
+	if (handle_redirects_one_cmd(data, &data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
 		external_exit(EXIT_FAILURE);
 	}
 	if (args && args[0] && !is_builtin(args[0]))
 	{
-		ret = exec_nonbuiltin_and_wait(data, args, pid);
+		data->ret = exec_nonbuiltin_and_wait(data, args, pid);
 		restore_original_fds(data->original_fds);
 	}
-	return (ret);
+	//return (ret);
+	external_exit(EXIT_SUCCESS);
 }
 
 int	exec_one_process(t_global *data)
@@ -108,18 +111,24 @@ int	exec_one_process(t_global *data)
 
 	ret = 1;
 	args = NULL;
-	if (!data->hashtable[0]->content
-		&& handle_redirects(data, data->original_fds) == 0)
-	{
-		restore_original_fds(data->original_fds);
-		return (EXIT_FAILURE);
-	}
+	// if (!data->hashtable[0]->content
+	// 	&& handle_redirects(data, data->original_fds) == 0)
+	// {
+	// 	restore_original_fds(data->original_fds);
+	// 	return (EXIT_FAILURE);
+	// }
 	if (data->hashtable[0]->content)
 		args = hash_to_args(data->hashtable[0]);
 	if (args && args[0] && is_builtin(args[0]))
 		ret = exec_builtin(args, hashsize(data->hashtable[0]), data);
 	else if (args && args[0])
-		ret = exec_nonbuiltin_onfork(data, args);
+		exec_nonbuiltin_onfork(data, args);
+	else if (!data->hashtable[0]->content
+		&& handle_redirects(data, data->original_fds) == 0)
+	{
+		restore_original_fds(data->original_fds);
+		return (EXIT_FAILURE);
+	}
 	if (data->hashtable[0]->content)
 		ft_strarr_free(args, ft_strarr_len(args));
 	restore_original_fds(data->original_fds);

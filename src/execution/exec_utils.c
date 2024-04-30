@@ -38,7 +38,7 @@ void	fill_args(t_tkn	**node, char **args, int i)
 		|| ((*node)->prev && ((*node)->prev->space_after == TRUE)
 			&& (*node)->content))
 		args[i] = ft_strdup((*node)->content);
-	if (((*node)->space_after == FALSE) && (*node)->next)
+	while (((*node)->space_after == FALSE) && (*node)->next)
 	{
 		if (!ft_strcmp((*node)->next->content, "") && (*node)->next->next
 			&& (*node)->next->space_after == FALSE)

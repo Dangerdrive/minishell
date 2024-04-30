@@ -56,7 +56,7 @@ void	expand_heredoc(t_global *data, char **line)
 	int		i;
 
 	i = 0;
-	while ((*line)[i] != '\0')
+	while (i < (int)ft_strlen(*line))
 	{
 		if ((*line)[i] == '$')
 		{
