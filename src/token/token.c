@@ -98,21 +98,19 @@ int	tokenize(t_global **data)
 
 	i = 0;
 	len = 0;
-	if (!ft_strcmp((*data)->usr_input, " "))
-		populate_hashtable(data, 0, 1);
-	else
+	while ((*data)->usr_input[i])
 	{
-		while ((*data)->usr_input[i])
+		while ((*data)->usr_input[i] == ' ')
+			i++;
+		len = get_token_len((*data)->usr_input, i);
+		if (len == -1)
 		{
-			while ((*data)->usr_input[i] == ' ')
-				i++;
-			len = get_token_len((*data)->usr_input, i);
-			if (len == -1)
-				return (error_open_quote());
-			if (len > 0)
-				populate_hashtable(data, i, len);
-			i += len;
+			printf("Error: open quote.\n");
+			return (0);
 		}
+		if (len > 0)
+			populate_hashtable(data, i, len);
+		i += len;
 	}
 	if (len == 0)
 		return (0);
