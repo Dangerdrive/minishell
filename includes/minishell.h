@@ -115,10 +115,11 @@ void		external_exit(int exit_status);
 
 /*------------redirections---------*/
 int			handle_redirects(t_global *data, int ori_fds[2]);
-void		handle_redirects_for_pipes(t_global *data,
-				char *(*redirects)[TABLE_SIZE]);
+// void		handle_redirects_for_pipes(t_global *data,
+// 				char *(*redirects)[TABLE_SIZE]);
+void		handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE]);
 void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
-int			redirect_input(char *input_redirect);
+int			redirect_input(char *input_redirect, int i);
 int			redirect_output(char *output_redirect);
 void		expand_heredoc(t_global *data, char **line);
 void		redirect_fd(int fd_to_redirect, int fd_location);
@@ -130,7 +131,7 @@ void		restore_fds(int original_fds[2]);
 //int			handle_redirects(t_global *data, int ori_fds[2]);
 void		save_original_fd_in(int original_fds[2]);
 void		save_original_fd_out(int original_fds[2]);
-int			handle_input_redirect(char *command, int original_fds[2]);
+int			handle_input_redirect(char *redir, int here_num, int original_fds[2]);
 int			handle_output_redirect(char *command, int original_fds[2]);
 char		*tmp_filename(int heredoc_number);
 t_bool		ends_with_linebreak(char *line);

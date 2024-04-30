@@ -85,11 +85,18 @@ void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
 // }
 
 
-int	redirect_input(char *input_redirect)
+int	redirect_input(char *input_redirect, int i)
 {
-	int	fd;
+	int		fd;
+	char 	*filename;
 
-	fd = open(&input_redirect[2], O_RDONLY, FD_CLOEXEC);
+	if (input_redirect[1] == '<')
+	{
+		filename = tmp_filename(i);
+		fd = open(filename, O_RDONLY, FD_CLOEXEC);
+	}
+	else
+		fd = open(&input_redirect[2], O_RDONLY, FD_CLOEXEC);
 	if (fd == -1)
 	{
 		ft_dprintf(STDERR_FILENO, "open: %s: %s\n",
@@ -97,9 +104,7 @@ int	redirect_input(char *input_redirect)
 		return (0);
 	}
 	else
-	{
 		redirect_fd(fd, STDIN_FILENO);
-	}
 	return (1);
 }
 

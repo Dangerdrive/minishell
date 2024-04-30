@@ -95,6 +95,8 @@ static void	handle_no_prev_node(t_tkn **node)
 	}
 	if (temp->next)
 		temp->next->prev = temp;
+	free((*node)->content);
+	(*node)->content = NULL;
 	*node = temp;
 }
 
@@ -104,6 +106,7 @@ static void	handle_prev_node(t_tkn **node)
 
 	temp = (*node)->prev;
 	*node = (*node)->next;
+	free((*node)->prev->content);
 	free((*node)->prev);
 	free((*node)->content);
 	temp->next = (*node)->next;
