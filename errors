@@ -4,21 +4,9 @@ grep: $: No such file or directory
 -> erro no primeiro comando não trava a execução.
 
 
-|-------------------------------------------------------------------------|
-fde-alen:~/Documents/Projects/minishell/minishell29Apr/minishell_tester$ echo "exit_code ->$? user ->$USER home -> $HOME"
--> não printa nada. Não expande váriaveis quando é mais de uma variável.
 
-|-------------------------------------------------------------------------|
-fde-alen $HOMEfde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "$USER $HOME"
-fde-alen $HOME
--> nesse caso expande só a primeira variável
 
-|-------------------------------------------------------------------------|
-~/Documents/Projects/minishell/minishell29Apr (feature/heredoc*) » ./minishell                                       fde-alen@c1r6p2
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ^C
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ 
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ %   
--> após ctrl+C no prompt, dar Enter sai do programa
+
 
 |-------------------------------------------------------------------------|
 fde-alen:~/Documents/Projects/minishell/minishell29Apr$ wc
@@ -390,6 +378,25 @@ bash error = ( command not found)
 
 FIXED ---------------------------
 
+|-------------------------------------------------------------------------|
+fde-alen:~/Documents/Projects/minishell/minishell29Apr/minishell_tester$ echo "exit_code ->$? user ->$USER home -> $HOME"
+-> não printa nada. Não expande váriaveis quando é mais de uma variável.
+
+
+|-------------------------------------------------------------------------|
+fde-alen $HOMEfde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "$USER $HOME"
+fde-alen $HOME
+-> nesse caso expande só a primeira variável
+
+
+|-------------------------------------------------------------------------|
+~/Documents/Projects/minishell/minishell29Apr (feature/heredoc*) » ./minishell                                       fde-alen@c1r6p2
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ^C
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ 
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ %   
+-> após ctrl+C no prompt, dar Enter sai do programa
+
+
 export A B C D E - C e D não adicionados
 export A
 export A="ola" não trocou valor do A que já existia
@@ -408,6 +415,8 @@ bash exit code = 0
 Test  23: ❌ pwd oi 
 mini exit code = 1
 bash exit code = 0
+
+
 
 
 
