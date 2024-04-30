@@ -1,7 +1,19 @@
-#include "../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_utils2.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:24:02 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:24:07 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 /**
- * Searches for the key that matches the 
+ * Searches for the key that matches the
  * token's variable and then returns its value.
  */
 static char	*fetch_in_array(char **str, int i, int len, char *arr)

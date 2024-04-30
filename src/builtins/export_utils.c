@@ -1,4 +1,16 @@
-#include "../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:25:36 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:25:37 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 void	ft_strarr_str_exp_rplc(char **strarr, char *target, char *replcmt)
 {

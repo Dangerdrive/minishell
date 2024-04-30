@@ -52,19 +52,22 @@ fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo $PATH
 fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls
 minishell: ls: command not found
 
+
+/nfs/homes/gde-souz/bin:/nfs/homes/gde-souz/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
 cat << eof - lento e com dois > >
 cat << eof - ctrl D
 
- 	 
+
 
 redir.c
 int	redirect_input(char *input_redirect)
-   
 
 
 
-cd minishell_tester && ./tester | grep -v ✅ && cd .. 
-cd minishell_tester && ./tester | grep -v ✅ | grep Test && cd .. 
+
+cd minishell_tester && ./tester | grep -v ✅ && cd ..
+cd minishell_tester && ./tester | grep -v ✅ | grep Test && cd ..
 
 
 
@@ -77,35 +80,35 @@ fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo hi | echo 42
 42
 
 
-Test   5: ❌ echo hello""world 
+Test   5: ❌ echo hello""world
 mini output = (hello world)
 bash output = (helloworld)
 
 
-Test  13: ❌ echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<" 
+Test  13: ❌ echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<"
 mini output = ()
 bash output = (> >> < bash_outfiles bash.supp bonus bonus_bonus builtins extras local.supp loop.out manual_tests mini_outfiles os_specific outfiles pipes README.md redirects syntax tester test_files wildcards ? [ ] | ; [ ] || && ( ) & # $ <<)
 mini exit code = 139
 bash exit code = 0
 
 
-Test  14: ❌ echo '> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<' 
+Test  14: ❌ echo '> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<'
 mini output = ()
 bash output = (> >> < bash_outfiles bash.supp bonus bonus_bonus builtins extras local.supp loop.out manual_tests mini_outfiles os_specific outfiles pipes README.md redirects syntax tester test_files wildcards ? [ ] | ; [ ] || && ( ) & # $ <<)
 mini exit code = 139
 bash exit code = 0
 
 
-Test  15: ❌ echo "exit_code ->$? user ->$USER home -> $HOME" 
+Test  15: ❌ echo "exit_code ->$? user ->$USER home -> $HOME"
 mini output = ()
 bash output = (exit_code ->0 user ->fde-alen home -> /nfs/homes/fde-alen)
 
-Test  17: ❌ echo "$" 
+Test  17: ❌ echo "$"
 mini output = (/bin/zsh)
 bash output = ($)
 
 
-Test  21: ❌ echo $?HELLO 
+Test  21: ❌ echo $?HELLO
 mini output = ($?HELLO)
 bash output = (0HELLO)
 
@@ -121,56 +124,56 @@ mini exit code = 1
 bash exit code = 0
 
 
-Test  36: ❌ unset HOME 
+Test  36: ❌ unset HOME
 mini output = (/nfs/homes/fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr/minishell_tester$ )
 bash output = ()
 mini exit code = /nfs/homes/fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr/minishell_tester$ exit
 bash exit code = 0
 
 
-Test  49: ❌ exit -"100" 
+Test  49: ❌ exit -"100"
 mini exit code = 1
 bash exit code = 156
 mini error = ( too many arguments)
 bash error = ()
 
-Test  52: ❌  
+Test  52: ❌
 mini exit code =
 bash exit code = 0
 
 
-Test  55: ❌ cat minishell.h | grep ");"$ 
+Test  55: ❌ cat minishell.h | grep ");"$
 mini exit code = 2
 bash exit code = 1
 mini error = ( No such file or directory No such file or directory)
 bash error = ( No such file or directory)
 
 
-Test  78: ❌ cat <missing | echo oi 
+Test  78: ❌ cat <missing | echo oi
 mini output = ()
 bash output = (oi)
 mini exit code = 1
 bash exit code = 0
 
 
-Test  80: ❌ echo <123 <456 hi | echo 42 
+Test  80: ❌ echo <123 <456 hi | echo 42
 mini output = ()
 bash output = (42)
 mini exit code = 1
 bash exit code = 0
 
 
-Test  91: ❌ echo hi >./outfiles/outfile01 | echo bye 
+Test  91: ❌ echo hi >./outfiles/outfile01 | echo bye
 mini output = ()
 bash output = (bye)
 
 
-Test  92: ❌ echo hi >./outfiles/outfile01 >./outfiles/outfile02 | echo bye 
+Test  92: ❌ echo hi >./outfiles/outfile01 >./outfiles/outfile02 | echo bye
 mini output = ()
 bash output = (bye)
 
 
-Test  95: ❌ echo hi >./outfiles/outfile01 | echo bye >./outfiles/outfile02 
+Test  95: ❌ echo hi >./outfiles/outfile01 | echo bye >./outfiles/outfile02
 Files ./mini_outfiles/outfile02 and ./bash_outfiles/outfile02 differ
 mini outfiles:
 hi
@@ -179,7 +182,7 @@ hi
 bye
 
 
-Test  96: ❌ echo hi >./outfiles/outfile01 >./test_files/invalid_permission | echo bye 
+Test  96: ❌ echo hi >./outfiles/outfile01 >./test_files/invalid_permission | echo bye
 mini output = ()
 bash output = (bye)
 mini exit code = 1
@@ -188,7 +191,7 @@ mini error = ( Permission denied Permission denied)
 bash error = ( Permission denied)
 
 
-Test  97: ❌ echo hi >./test_files/invalid_permission | echo bye 
+Test  97: ❌ echo hi >./test_files/invalid_permission | echo bye
 mini output = ()
 bash output = (bye)
 mini exit code = 1
@@ -197,7 +200,7 @@ mini error = ( Permission denied Permission denied)
 bash error = ( Permission denied)
 
 
-Test  98: ❌ echo hi >./test_files/invalid_permission >./outfiles/outfile01 | echo bye 
+Test  98: ❌ echo hi >./test_files/invalid_permission >./outfiles/outfile01 | echo bye
 mini output = ()
 bash output = (bye)
 mini exit code = 1
@@ -206,7 +209,7 @@ mini error = ( Permission denied Permission denied)
 bash error = ( Permission denied)
 
 
-Test 100: ❌ echo hi | >./outfiles/outfile01 echo bye >./test_files/invalid_permission 
+Test 100: ❌ echo hi | >./outfiles/outfile01 echo bye >./test_files/invalid_permission
 Only in ./bash_outfiles: outfile01
 mini outfiles:
 cat: './mini_outfiles/*': No such file or directory
@@ -219,21 +222,21 @@ mini error = ()
 bash error = ( Permission denied)
 
 
-Test 103: ❌ cat >./test_files/invalid_permission <"./test_files/infile" 
+Test 103: ❌ cat >./test_files/invalid_permission <"./test_files/infile"
 mini exit code = xt
 bash exit code = 1
 mini error = ( Permission denied Permission denied)
 bash error = ( Permission denied)
 
 
-Test 119: ❌ ls <missing >>./test_files/invalid_permission >>./outfiles/outfile02 
+Test 119: ❌ ls <missing >>./test_files/invalid_permission >>./outfiles/outfile02
 mini exit code = o$?exit
 bash exit code = 1
 mini error = ( No such file or directory No such file or directory)
 bash error = ( No such file or directory)
 
 
-Test 121: ❌ echo hi >>./outfiles/outfile01 | echo bye 
+Test 121: ❌ echo hi >>./outfiles/outfile01 | echo bye
 Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
 mini outfiles:
 bye
@@ -244,7 +247,7 @@ mini output = ()
 bash output = (bye)
 
 
-Test 122: ❌ echo hi >>./outfiles/outfile01 >>./outfiles/outfile02 | echo bye 
+Test 122: ❌ echo hi >>./outfiles/outfile01 >>./outfiles/outfile02 | echo bye
 Files ./mini_outfiles/outfile02 and ./bash_outfiles/outfile02 differ
 mini outfiles:
 bye
@@ -255,7 +258,7 @@ mini output = ()
 bash output = (bye)
 
 
-Test 125: ❌ echo hi >>./outfiles/outfile01 | echo bye >>./outfiles/outfile02 
+Test 125: ❌ echo hi >>./outfiles/outfile01 | echo bye >>./outfiles/outfile02
 Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
 Files ./mini_outfiles/outfile02 and ./bash_outfiles/outfile02 differ
 mini outfiles:
@@ -266,7 +269,7 @@ hi
 bye
 
 
-Test 126: ❌ echo hi >>./test_files/invalid_permission | echo bye 
+Test 126: ❌ echo hi >>./test_files/invalid_permission | echo bye
 mini output = ()
 bash output = (bye)
 mini exit code = 1
@@ -275,7 +278,7 @@ mini error = ( Permission denied Permission denied)
 bash error = ( Permission denied)
 
 
-Test 127: ❌ echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye 
+Test 127: ❌ echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye
 mini output = ()
 bash output = (bye)
 mini exit code = 1
@@ -284,7 +287,7 @@ mini error = ( Permission denied Permission denied)
 bash error = ( Permission denied)
 
 
-Test 133: ❌ $PWD 
+Test 133: ❌ $PWD
 mini output = (/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr/minishell_tester: command not found)
 bash output = ()
 mini exit code = /nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr/minishell_tester: command not found
@@ -293,28 +296,28 @@ mini error = ()
 bash error = ( Is a directory)
 
 
-Test 134: ❌ $EMPTY 
+Test 134: ❌ $EMPTY
 mini output = ($EMPTY: command not found)
 bash output = ()
 mini exit code = $EMPTY: command not found
 bash exit code = 0
 
 
-Test 135: ❌ $EMPTY echo hi 
+Test 135: ❌ $EMPTY echo hi
 mini output = ($EMPTY: command not found)
 bash output = (hi)
 mini exit code = $EMPTY: command not found
 bash exit code = 0
 
 
-Test 136: ❌ ./test_files/invalid_permission 
+Test 136: ❌ ./test_files/invalid_permission
 mini exit code = 127
 bash exit code = 126
 mini error = ( No such file or directory)
 bash error = ( Permission denied)
 
 
-Test 139: ❌ "aaa" 
+Test 139: ❌ "aaa"
 mini output = (aaa: command not found)
 bash output = ()
 mini exit code = aaa: command not found
@@ -323,14 +326,14 @@ mini error = ()
 bash error = ( command not found)
 
 
-Test 140: ❌ test_files 
+Test 140: ❌ test_files
 mini exit code = 1
 bash exit code = 127
 mini error = ( Permission denied)
 bash error = ( command not found)
 
 
-Test 145: ❌ $? 
+Test 145: ❌ $?
 mini output = (0: command not found)
 bash output = ()
 mini exit code = 0: command not found
@@ -392,8 +395,8 @@ fde-alen $HOME
 |-------------------------------------------------------------------------|
 ~/Documents/Projects/minishell/minishell29Apr (feature/heredoc*) » ./minishell                                       fde-alen@c1r6p2
 fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ^C
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ 
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ %   
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ %
 -> após ctrl+C no prompt, dar Enter sai do programa
 
 
@@ -408,11 +411,11 @@ exit
 fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls | exit | wc
       1       1       5
 
-Test  22: ❌ pwd 
+Test  22: ❌ pwd
 mini exit code = 1
 bash exit code = 0
 
-Test  23: ❌ pwd oi 
+Test  23: ❌ pwd oi
 mini exit code = 1
 bash exit code = 0
 
@@ -427,22 +430,22 @@ fde-alen:~/Documents/Projects/minishell/minishell29Apr$ exit
 exit
 ==144784== Warning: invalid file descriptor -1 in syscall close()
 ==144784== Warning: invalid file descriptor -1 in syscall close()
-==144784== 
+==144784==
 ==144784== FILE DESCRIPTORS: 3 open at exit.
 ==144784== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
 ==144784==    <inherited from parent>
-==144784== 
+==144784==
 ==144784== Open file descriptor 39: /usr/share/code/resources/app/node_modules.asar
 ==144784==    <inherited from parent>
-==144784== 
+==144784==
 ==144784== Open file descriptor 37: /nfs/homes/fde-alen/.config/Code/logs/20240429T104413/ptyhost.log
 ==144784==    <inherited from parent>
-==144784== 
-==144784== 
+==144784==
+==144784==
 ==144784== HEAP SUMMARY:
 ==144784==     in use at exit: 204,724 bytes in 216 blocks
 ==144784==   total heap usage: 753 allocs, 537 frees, 247,423 bytes allocated
-==144784== 
+==144784==
 ==144784== 2 bytes in 1 blocks are definitely lost in loss record 1 of 59
 ==144784==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
 ==144784==    by 0x4096F3: ft_calloc (ft_calloc.c:31)
@@ -451,13 +454,13 @@ exit
 ==144784==    by 0x403159: tokenize (token.c:105)
 ==144784==    by 0x4066D6: handle_prompt (prompt.c:51)
 ==144784==    by 0x406008: main (main.c:36)
-==144784== 
+==144784==
 ==144784== LEAK SUMMARY:
 ==144784==    definitely lost: 2 bytes in 1 blocks
 ==144784==    indirectly lost: 0 bytes in 0 blocks
 ==144784==      possibly lost: 0 bytes in 0 blocks
 ==144784==    still reachable: 0 bytes in 0 blocks
 ==144784==         suppressed: 204,722 bytes in 215 blocks
-==144784== 
+==144784==
 ==144784== For lists of detected and suppressed errors, rerun with: -s
 ==144784== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

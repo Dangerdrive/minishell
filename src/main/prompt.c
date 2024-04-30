@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:21:53 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:31:21 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 char	*cwd_error(void)
@@ -47,7 +59,6 @@ int	handle_prompt(t_global **data)
 		return (-1);
 	if ((*data)->usr_input[0])
 	{
-		//external_exit(EXIT_SUCCESS);
 		add_history((*data)->usr_input);
 		input = tokenize(data);
 		if (input == -1)
