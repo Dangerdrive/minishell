@@ -27,34 +27,36 @@ int	exec_nonbuiltin(char **args, t_global *data)
 	return (data->ret);
 }
 
-static int	handle_redirects_one_cmd(t_global *data, int (*ori_fds)[2])
-{
-	int		i;
+// static int	handle_redirects_one_cmd(t_global *data, int (*ori_fds)[2])
+// {
+// 	int		i;
 
-	i = 0;
-	(*ori_fds)[IN] = -1;
-	(*ori_fds)[OUT] = -1;
-	while (data->hashtable[0]->redir[i])
-	{
-		if (ft_strncmp(data->hashtable[0]->redir[i], "< ", 2) == 0)
-		{
-			if (!handle_input_redirect(data->hashtable[0]->redir[i], *ori_fds))
-				return (0);
-		}
-		if (data->hashtable[0]->redir[i][0] == '>')
-		{
-			if (!handle_output_redirect(data->hashtable[0]->redir[i], *ori_fds))
-				return (0);
-		}
-		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
-		{
-			save_original_fd_in(*ori_fds);
-			redirect_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
-		}
-		i++;
-	}
-	return (1);
-}
+// 	i = 0;
+// 	(*ori_fds)[IN] = -1;
+// 	(*ori_fds)[OUT] = -1;
+// 	data->original_fds[IN] = -1;
+// 	data->original_fds[OUT] = -1;
+// 	while (data->hashtable[0]->redir[i])
+// 	{
+// 		if (ft_strncmp(data->hashtable[0]->redir[i], "< ", 2) == 0)
+// 		{
+// 			if (!handle_input_redirect(data->hashtable[0]->redir[i], data->original_fds))
+// 				return (0);
+// 		}
+// 		if (data->hashtable[0]->redir[i][0] == '>')
+// 		{
+// 			if (!handle_output_redirect(data->hashtable[0]->redir[i], data->original_fds))
+// 				return (0);
+// 		}
+// 		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
+// 		{
+// 			save_original_fd_in(data->original_fds);
+// 			redirect_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
+// 		}
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
 int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 {
@@ -90,7 +92,7 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 
 	ret = 1;
 	pid = fork();
-	if (handle_redirects_one_cmd(data, &data->original_fds) == 0)
+	if (handle_redirects(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
 		external_exit(EXIT_FAILURE);
@@ -111,12 +113,12 @@ int	exec_one_process(t_global *data)
 
 	ret = 1;
 	args = NULL;
-	if (!data->hashtable[0]->content
-		&& handle_redirects(data, data->original_fds) == 0)
-	{
-		restore_original_fds(data->original_fds);
-		return (EXIT_FAILURE);
-	}
+	// if (!data->hashtable[0]->content
+	// 	&& handle_redirects(data, data->original_fds) == 0)
+	// {
+	// 	restore_original_fds(data->original_fds);
+	// 	return (EXIT_FAILURE);
+	// }
 	if (data->hashtable[0]->content)
 		args = hash_to_args(data->hashtable[0]);
 	if (args && args[0] && is_builtin(args[0]))
