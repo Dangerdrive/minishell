@@ -45,17 +45,19 @@ int	handle_prompt(t_global **data)
 	(*data)->usr_input = readline(print_cwd(data));
 	if (!(*data)->usr_input)
 		return (-1);
-	if (!(*data)->usr_input[0])
-		return (0);
-	add_history((*data)->usr_input);
-	input = tokenize(data);
-	if (input == -1)
-		return (-1);
-	if (input == 1)
+	if ((*data)->usr_input[0])
 	{
-		input = parse(&(*data)->hashtable, data);
+		//external_exit(EXIT_SUCCESS);
+		add_history((*data)->usr_input);
+		input = tokenize(data);
+		if (input == -1)
+			return (-1);
 		if (input == 1)
-			(*data)->ret = handle_execution(*data);
+		{
+			input = parse(&(*data)->hashtable, data);
+			if (input == 1)
+				(*data)->ret = handle_execution(*data);
+		}
 	}
 	return (1);
 }

@@ -4,7 +4,7 @@ int	exec_nonbuiltin(char **args, t_global *data)
 {
 	char	*cmd;
 
-	if (!args[0][0])
+	if (!args[0][0] || !ft_strcmp(*args, " "))
 		external_exit(EXIT_SUCCESS);
 	cmd = get_cmd(args[0], data);
 	if (cmd == NULL)

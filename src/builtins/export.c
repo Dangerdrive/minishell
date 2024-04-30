@@ -71,12 +71,8 @@ t_bool	identifier_is_valid(char *str)
 void	replace_or_add(char *arg, t_global *data)
 {
 	char	*key;
-	int		i;
 
 	key = NULL;
-	i = 0;
-	// while (arg[i] && !is_special_var_char(arg[i]))
-	// 	i++;
 	if (ft_strchr_i(arg, '=') != -1)
 	{
 		key = ft_strndup(arg, ft_strchr_i(arg, '=') + 1);
