@@ -24,8 +24,8 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 	close(tmp_file_fd);
 	free(filename);
 	free(line);
-	redirect_fd(tmp_file_fd, STDIN_FILENO);
-	exit(EXIT_SUCCESS);
+	// redirect_fd(tmp_file_fd, STDIN_FILENO);
+	// exit(EXIT_SUCCESS);
 }
 
 void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
@@ -46,7 +46,7 @@ void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
 		data->ret = wait_for_child(pid, TRUE);
 		define_prompt_signals();
 	}
-	external_exit(EXIT_SUCCESS);
+	//external_exit(EXIT_SUCCESS);
 }
 
 // int	redirect_input(char *input_redirect)

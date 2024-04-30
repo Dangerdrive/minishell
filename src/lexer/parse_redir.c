@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:22:24 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/04/30 18:33:22 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/04/30 20:24:19 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,28 +87,27 @@ static void	handle_no_prev_node(t_tkn **node)
 {
 	t_tkn	*temp;
 
+	free((*node)->content);
+	(*node)->content = NULL;
 	if ((*node)->next && (*node)->next->next)
 	{
 		temp = (*node)->next;
-		free(*node);
+		ft_memdel(*node);
 		*node = temp;
 		temp = (*node)->next;
-		free((*node)->content);
-		free(*node);
+		ft_memdel((*node)->content);
+		ft_memdel(*node);
 		temp->prev = NULL;
 	}
 	else
 	{
 		temp = *node;
-		free((*node)->next->content);
-		(*node)->next->content = NULL;
-		free((*node)->next);
+		ft_memdel((*node)->next->content);
+		ft_memdel((*node)->next);
 		temp->next = NULL;
 	}
 	if (temp->next)
 		temp->next->prev = temp;
-	free((*node)->content);
-	(*node)->content = NULL;
 	*node = temp;
 }
 

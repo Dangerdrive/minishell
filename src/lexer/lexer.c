@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:22:36 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/04/30 17:30:05 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/04/30 20:18:58 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	check_redirects(t_tkn **node)
 	head = *node;
 	while (*node)
 	{
-		if ((*node)->content && is_redir((*node)->content)
+		while ((*node)->content && is_redir((*node)->content)
 			&& (*node)->next)
 		{
 			parse_redir(node, &head);
