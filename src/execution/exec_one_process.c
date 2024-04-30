@@ -60,14 +60,14 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 	int		ret;
 
 	ret = 1;
-	if (handle_redirects(data, data->original_fds) == 0)
+	if (data->hashtable[0]->redir[0])
 	{
+		ret = handle_redirects(data, data->original_fds);
 		restore_original_fds(data->original_fds);
-		return(ret);
 	}
-	pid = fork();
 	if (args && args[0] && !is_builtin(args[0]))
 	{
+		pid = fork();	
 		define_exec_signals(pid);
 		ret = exec_nonbuiltin_and_wait(data, args, pid);
 		restore_original_fds(data->original_fds);
