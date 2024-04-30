@@ -34,23 +34,21 @@ static int	handle_redirects_one_cmd(t_global *data, int (*ori_fds)[2])
 	i = 0;
 	(*ori_fds)[IN] = -1;
 	(*ori_fds)[OUT] = -1;
-	data->original_fds[IN] = -1;
-	data->original_fds[OUT] = -1;
 	while (data->hashtable[0]->redir[i])
 	{
 		if (ft_strncmp(data->hashtable[0]->redir[i], "< ", 2) == 0)
 		{
-			if (!handle_input_redirect(data->hashtable[0]->redir[i], data->original_fds))
+			if (!handle_input_redirect(data->hashtable[0]->redir[i], *ori_fds))
 				return (0);
 		}
 		if (data->hashtable[0]->redir[i][0] == '>')
 		{
-			if (!handle_output_redirect(data->hashtable[0]->redir[i], data->original_fds))
+			if (!handle_output_redirect(data->hashtable[0]->redir[i], *ori_fds))
 				return (0);
 		}
 		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
 		{
-			save_original_fd_in(data->original_fds);
+			save_original_fd_in(*ori_fds);
 			redirect_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
 		}
 		i++;
@@ -64,21 +62,24 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	int	ret;
 
 	ret = 1;
+	status = 0;
 	if (pid == -1)
 		perror("minishell: fork");
 	else if (pid == 0)
 	{
-		ret = exec_nonbuiltin(args, data);
+		status = exec_nonbuiltin(args, data);
 		//exit(EXIT_FAILURE);
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
-			ret = handle_signal_interrupt(status, TRUE);
-		else if (WIFEXITED(status))
-			ret = WEXITSTATUS(status);
 	}
+	if (WIFSIGNALED(status))
+		ret = handle_signal_interrupt(status, TRUE);
+	else if (WIFEXITED(status))
+		ret = WEXITSTATUS(status);
+	if (ret == 1 && status != 0)
+		ret = status;
 	return (ret);
 }
 
@@ -96,6 +97,7 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 	}
 	if (args && args[0] && !is_builtin(args[0]))
 	{
+		define_exec_signals(pid);
 		ret = exec_nonbuiltin_and_wait(data, args, pid);
 		restore_original_fds(data->original_fds);
 	}

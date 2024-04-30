@@ -26,16 +26,23 @@ void	define_prompt_signals(void)
 
 void	define_exec_signals(int pid)
 {
-	struct sigaction	sa;
+	struct sigaction	sa_sigint;
+	struct sigaction	sa_sigquit;
 
-	sa.sa_flags = 0;
-	sigemptyset(&sa.sa_mask);
+	sa_sigint.sa_flags = 0;
+	sigemptyset(&sa_sigint.sa_mask);
 	if (pid == 0)
-		sa.sa_handler = SIG_DFL;
+		sa_sigint.sa_handler = SIG_DFL;
 	else
-		sa.sa_handler = SIG_IGN;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+		sa_sigint.sa_handler = SIG_IGN;
+	sigaction(SIGINT, &sa_sigint, NULL);
+	sa_sigquit.sa_flags = 0;
+	sigemptyset(&sa_sigquit.sa_mask);
+	if (pid == 0)
+		sa_sigquit.sa_handler = SIG_DFL;
+	else
+		sa_sigquit.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sa_sigquit, NULL);
 }
 
 void	define_heredoc_signals(int pid)
