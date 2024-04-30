@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:26:06 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:26:07 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /**
  * Removes strings matching a target from an array of strings.
- * 
+ *
  * @param[in] strarr Array of strings to filter.
  * @param[in] tgt Target string to match for removal.
  * @return New array without the matching strings or NULL on failure.
@@ -38,7 +50,7 @@ char	**ft_strarr_strrm_unset(char **strarr, const char *tgt)
 
 /**
  * Searches for a target string in an array and returns its index.
- * 
+ *
  * @param[in] strarr Array of strings.
  * @param[in] target Target string to find.
  * @return Index of the matching string or -1 if not found.
@@ -68,7 +80,7 @@ static int	ft_strarr_str_unset(char **strarr, const char *target)
 
 /**
  * Removes a specified environment variable from two arrays.
- * 
+ *
  * @param[in] arg Environment variable to remove.
  * @param[in, out] data Global data containing the environment arrays.
  */
@@ -96,7 +108,7 @@ static void	remove_variable(char *arg, t_global *data)
 
 /**
  * Unsets environment variables specified in args.
- * 
+ *
  * @param[in] args Array of environment variables to unset.
  * @param[in] args_len Number of elements in args.
  * @param[in, out] data Global data structure.

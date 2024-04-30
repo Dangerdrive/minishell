@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_redir_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:22:30 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:22:31 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /**
  * Initializes an array of redirection arguments to NULL.
- * 
+ *
  * @param[out] args Pointer to the array of redirection arguments.
  */
 void	init_redir_args(char *(*args)[TABLE_SIZE])
@@ -20,7 +32,7 @@ void	init_redir_args(char *(*args)[TABLE_SIZE])
 
 /**
  * Checks if the current token is a heredoc delimiter and updates accordingly.
- * 
+ *
  * @param[in, out] node Pointer to the token node to check and update.
  */
 void	check_heredoc(t_tkn **node)
@@ -35,7 +47,7 @@ void	check_heredoc(t_tkn **node)
 /**
  * Updates a list of redirection file paths based on the
  *  given signal and new argument.
- * 
+ *
  * @param[out] redir Array of redirection paths to update.
  * @param[in] sig The redirection signal ('<', '>', '<<', '>>').
  * @param[in] new_arg The new file path or delimiter to add.

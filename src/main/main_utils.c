@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:21:59 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:27:24 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	free_redir_args(char *(*args)[TABLE_SIZE])
@@ -29,7 +41,6 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 			temp = (*hashtable)[i]->next;
 			if ((*hashtable)[i]->content)
 			{
-				//printf("%s\n", (*hashtable)[i]->content);
 				free((*hashtable)[i]->content);
 			}
 			if ((*hashtable)[i]->delimiter)

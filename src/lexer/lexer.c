@@ -1,4 +1,16 @@
-#include "../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:22:36 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:30:05 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 /**
  * Checks if the input at a specific index starts with a valid command.
@@ -101,7 +113,3 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 // 	//123test deve ser invalido (começa com numero)
 // 	//PATH não deve ser alterado, pois não tem igual.
 // 	//XMODIFIERS deve ser modificado para valor vazio
-
-
-
-// cat seguido de Ctrl-\

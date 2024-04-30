@@ -1,14 +1,16 @@
-#include "../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:23:26 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:24:16 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// t_bool	input_starts_with_command(t_tkn	*node, int i)
-// {
-// 	if ((i == 0 && !node->prev
-// 			&& !is_redir(node->content) && ft_strcmp(node->type, COMMAND))
-// 		|| (i > 0 && node->prev && is_pipe(node->prev->content)
-// 			&& ft_strcmp(node->type, COMMAND) && !is_redir_in(node->content)))
-// 		return (FALSE);
-// 	return (TRUE);
-// }
+#include "../../includes/minishell.h"
 
 void	remove_pipe(t_tkn **node, int i)
 {

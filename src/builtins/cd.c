@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/30 17:24:58 by gde-souz          #+#    #+#             */
+/*   Updated: 2024/04/30 17:24:59 by gde-souz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /**
- * Replaces an existing environment variable or adds a new one based 
+ * Replaces an existing environment variable or adds a new one based
  * on the argument.
- * 
+ *
  * @param[in] arg The environment variable in "key=value" format.
- * @param[in, out] data The global data structure containing 
+ * @param[in, out] data The global data structure containing
  * environment variables.
  */
 static void	replace_or_add_env(char *arg, t_global *data)
@@ -30,7 +42,7 @@ static void	replace_or_add_env(char *arg, t_global *data)
 /**
  * Updates the current working directory and optionally the
  *  old working directory.
- * 
+ *
  * @param[in, out] data The global data structure with environment settings.
  * @param[in] option Determines whether to update "OLDPWD" (1) or "PWD" (0).
  * @return 0 on success, 1 if unable to retrieve or update the working
@@ -56,7 +68,7 @@ static int	update_pwds(t_global *data, int option)
 
 /**
  * Changes the current directory to the previous directory and updates "OLDPWD".
- * 
+ *
  * @param[in, out] data The global data structure with environment settings.
  * @return 0 on success, 1 if "OLDPWD" is not set or the directory change fails.
  */
@@ -85,7 +97,7 @@ static int	go_oldpwd(t_global *data)
 
 /**
  * Changes the current directory to the home directory defined by "HOME".
- * 
+ *
  * @param[in, out] data The global data structure with environment settings.
  * @return 0 on success, 1 if "HOME" is not set or the directory change fails.
  */
@@ -107,7 +119,7 @@ static int	go_home(t_global *data)
 
 /**
  * Processes the "cd" command with arguments to change the current directory.
- * 
+ *
  * @param[in] args The array of command arguments.
  * @param[in] args_len The length of the args array.
  * @param[in, out] data The global data structure with environment settings.
@@ -121,7 +133,7 @@ int	ft_cd(char **args, int args_len, t_global *data)
 	{
 		result = 1;
 		ft_dprintf(2, "minishell : cd: too many arguments");
-	}	
+	}
 	else if (args_len == 1)
 		result = go_home(data);
 	else if (ft_strcmp(args[1], "-") == 0)
