@@ -20,17 +20,21 @@ static void	quit_child(char *(*args)[TABLE_SIZE])
 	exit(EXIT_FAILURE);
 }
 
-void	handle_redirects_for_pipes(t_global *data,
-			char *(*redirects)[TABLE_SIZE])
+void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE])
 {
 	int	i;
 
 	i = 0;
 	while ((*redirects)[i])
 	{
-		if (ft_strncmp((*redirects)[i], "< ", 2) == 0)
+		// if (ft_strncmp((*redirects)[i], "< ", 2) == 0)
+		// {
+		// 	if (redirect_input((*redirects)[i]) == 0)
+		// 		quit_child(redirects);
+		// }
+		if ((*redirects)[i][0] == '<')
 		{
-			if (redirect_input((*redirects)[i]) == 0)
+			if (redirect_input((*redirects)[i], i) == 0)
 				quit_child(redirects);
 		}
 		if ((*redirects)[i][0] == '>')
@@ -38,8 +42,8 @@ void	handle_redirects_for_pipes(t_global *data,
 			if (redirect_output((*redirects)[i]) == 0)
 				quit_child(redirects);
 		}
-		if (ft_strncmp((*redirects)[i], "<<", 2) == 0)
-			redirect_heredoc(data, i, &(*redirects)[i][2]);
+		// if (ft_strncmp((*redirects)[i], "<<", 2) == 0)
+		// 	redirect_heredoc(data, i, &(*redirects)[i][2]);
 		i++;
 	}
 }
