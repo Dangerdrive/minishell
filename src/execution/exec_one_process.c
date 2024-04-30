@@ -69,7 +69,7 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	else if (pid == 0)
 	{
 		ret = exec_nonbuiltin(args, data);
-		exit(EXIT_FAILURE);
+		//exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -83,12 +83,12 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	return (ret);
 }
 
-void	exec_nonbuiltin_onfork(t_global *data, char **args)
+int	exec_nonbuiltin_onfork(t_global *data, char **args)
 {
 	int		pid;
-	//int		ret;
+	int		ret;
 
-	data->ret = 1;
+	ret = 1;
 	pid = fork();
 	if (handle_redirects_one_cmd(data, &data->original_fds) == 0)
 	{
@@ -97,11 +97,10 @@ void	exec_nonbuiltin_onfork(t_global *data, char **args)
 	}
 	if (args && args[0] && !is_builtin(args[0]))
 	{
-		data->ret = exec_nonbuiltin_and_wait(data, args, pid);
+		ret = exec_nonbuiltin_and_wait(data, args, pid);
 		restore_original_fds(data->original_fds);
 	}
-	//return (ret);
-	external_exit(EXIT_SUCCESS);
+	return (ret);
 }
 
 int	exec_one_process(t_global *data)
@@ -111,24 +110,18 @@ int	exec_one_process(t_global *data)
 
 	ret = 1;
 	args = NULL;
-	// if (!data->hashtable[0]->content
-	// 	&& handle_redirects(data, data->original_fds) == 0)
-	// {
-	// 	restore_original_fds(data->original_fds);
-	// 	return (EXIT_FAILURE);
-	// }
-	if (data->hashtable[0]->content)
-		args = hash_to_args(data->hashtable[0]);
-	if (args && args[0] && is_builtin(args[0]))
-		ret = exec_builtin(args, hashsize(data->hashtable[0]), data);
-	else if (args && args[0])
-		exec_nonbuiltin_onfork(data, args);
-	else if (!data->hashtable[0]->content
+	if (!data->hashtable[0]->content
 		&& handle_redirects(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
 		return (EXIT_FAILURE);
 	}
+	if (data->hashtable[0]->content)
+		args = hash_to_args(data->hashtable[0]);
+	if (args && args[0] && is_builtin(args[0]))
+		ret = exec_builtin(args, hashsize(data->hashtable[0]), data);
+	else if (args && args[0])
+		ret = exec_nonbuiltin_onfork(data, args);
 	if (data->hashtable[0]->content)
 		ft_strarr_free(args, ft_strarr_len(args));
 	restore_original_fds(data->original_fds);
