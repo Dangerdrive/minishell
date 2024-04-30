@@ -71,9 +71,8 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	}
 	else
 	{
-		if (waitpid(pid, &status, 0) == -1)
-			ft_dprintf(STDERR_FILENO, "waitpid: %s\n", strerror(errno));
-		else if (WIFSIGNALED(status))
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
 			ret = handle_signal_interrupt(status, TRUE);
 		else if (WIFEXITED(status))
 			ret = WEXITSTATUS(status);
