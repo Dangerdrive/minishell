@@ -101,3 +101,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 // 	//123test deve ser invalido (começa com numero)
 // 	//PATH não deve ser alterado, pois não tem igual.
 // 	//XMODIFIERS deve ser modificado para valor vazio
+
+
+
+// cat seguido de Ctrl-\

@@ -2,7 +2,7 @@
 
 /**
  * Checks for closed quotes starting from a given index in a string.
- * 
+ *
  * @param[in] input The input string to check.
  * @param[in] i The index to start checking from.
  * @return Length of the quoted segment if properly closed, -1 if not closed,
@@ -34,7 +34,7 @@ int	check_quotes(char *input, int i)
 
 /**
  * Determines if a character is considered special character for tokenization.
- * 
+ *
  * @param[in] c The character to evaluate.
  * @return True if the character is special ('|', '&', '<', '>'),
  *  false otherwise.
@@ -48,7 +48,7 @@ t_bool	is_special_char(char c)
 
 /**
  * Calculates the length of the token starting from the specified index.
- * 
+ *
  * @param[in] input The string to parse.
  * @param[in] i The start index for token measurement.
  * @return The length of the token.
@@ -79,9 +79,15 @@ int	get_token_len(char *input, int i)
 	return (len);
 }
 
+int	error_open_quote(void)
+{
+	printf("Error: open quote.\n");
+	return (0);
+}
+
 /**
  * Tokenizes the user input stored in global data.
- * 
+ *
  * @param[in, out] data The global data structure containing user input.
  * @return 1 on successful tokenization, 0 on error (e.g., open quote).
  */
