@@ -5,7 +5,7 @@ int	handle_execution(t_global *data)
 	char	**args;
 
 	args = NULL;
-	if (data->hashtable[0]->content)
+	if (data->hashtable[0] && data->hashtable[0]->content)
 		args = hash_to_args(data->hashtable[0]);
 	if (pipecount(data) == 0)
 		data->ret = exec_one_process(data);

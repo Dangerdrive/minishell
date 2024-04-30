@@ -105,5 +105,7 @@ int	tokenize(t_global **data)
 			populate_hashtable(data, i, len);
 		i += len;
 	}
+	if (len == 0)
+		return (0);
 	return (1);
 }

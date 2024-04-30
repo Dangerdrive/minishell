@@ -1,22 +1,86 @@
-export A B C D E - C e D não adicionados
-export A
-export A="ola" não trocou valor do A que já existia
-export oi2=$oi - expandir o oi
-fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr$ unset PATH
-fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr$ ls - não printou
+fde-alen:~/Documents/Projects/minishell/minishell29Apr/minishell_tester$ cat minishell.h | grep ");"$
+cat: minishell.h: No such file or directory
+grep: $: No such file or directory
+-> erro no primeiro comando não trava a execução.
+
+
+|-------------------------------------------------------------------------|
+fde-alen:~/Documents/Projects/minishell/minishell29Apr/minishell_tester$ echo "exit_code ->$? user ->$USER home -> $HOME"
+-> não printa nada. Não expande váriaveis quando é mais de uma variável.
+
+|-------------------------------------------------------------------------|
+fde-alen $HOMEfde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "$USER $HOME"
+fde-alen $HOME
+-> nesse caso expande só a primeira variável
+
+|-------------------------------------------------------------------------|
+~/Documents/Projects/minishell/minishell29Apr (feature/heredoc*) » ./minishell                                       fde-alen@c1r6p2
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ^C
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ 
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ %   
+-> após ctrl+C no prompt, dar Enter sai do programa
+
+|-------------------------------------------------------------------------|
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ wc
+123a^M^M^M123^M
+
+|-------------------------------------------------------------------------|
+|~/Documents/Projects/minishell/minishell29Apr (feature/heredoc*) » ./minishell                                       fde-alen@c1r6p2
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ cat
+|
+|
+|^C
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ waitpid: Interrupted system call
+|-> ctrl+C no meio do comando em bloco printa msg e não devia printar
+
+|-------------------------------------------------------------------------|
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ cat
+|
+|^\^\^\^\
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ grep something
+|
+|^\^\
+|-> ctrl+\ não dá quit no comando em bloco
+
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes""""te"
+|[1]    436794 segmentation fault (core dumped)  ./minishell
+|-------------------------------------------------------------------------------------------------------------------------------------
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes"te
+|tes
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes""te"
+|tes
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "123""tes""te"
+|123tes
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "123""i""te89""asdasd""""dfsd"
+|[1]    437642 segmentation fault (core dumped)  ./minishell
+|->
+
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ unset PATH
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls
+minishell: ls: command not found
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ export PATH=/usr/local/bin:/usr/bin:/bin
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo $PATH
+/usr/local/bin:/usr/bin:/bin
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls
+minishell: ls: command not found
+
 cat << eof - lento e com dois > >
 cat << eof - ctrl D
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls | exit
-exit
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls | exit | wc
-      1       1       5
+
+ 	 
 
 redir.c
 int	redirect_input(char *input_redirect)
+   
+
 
 
 cd minishell_tester && ./tester | grep -v ✅ && cd .. 
 cd minishell_tester && ./tester | grep -v ✅ | grep Test && cd .. 
+
+
+
+
 
 fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo <123 <456 hi | echo 42
 open: 456: No such file or directory
@@ -325,6 +389,17 @@ bash error = ( command not found)
 
 
 FIXED ---------------------------
+
+export A B C D E - C e D não adicionados
+export A
+export A="ola" não trocou valor do A que já existia
+export oi2=$oi - expandir o oi
+fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr$ unset PATH
+fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr$ ls - não printou
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls | exit
+exit
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls | exit | wc
+      1       1       5
 
 Test  22: ❌ pwd 
 mini exit code = 1

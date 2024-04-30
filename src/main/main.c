@@ -12,8 +12,8 @@ t_global	*init_data(void)
 	data->cur_path = getcwd(NULL, 0);
 	data->ret = 0;
 	data->exit = 0;
-	data->original_stdin = dup(STDIN_FILENO);
-	data->original_stdout = dup(STDOUT_FILENO);
+	// data->original_stdin = dup(STDIN_FILENO);
+	// data->original_stdout = dup(STDOUT_FILENO);
 	data->env = ft_strarr_dup(__environ);
 	data->is_exec = FALSE;
 	data->is_heredoc = FALSE;
