@@ -6,7 +6,7 @@
 /*   By: gde-souz <gde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:22:24 by gde-souz          #+#    #+#             */
-/*   Updated: 2024/04/30 17:22:25 by gde-souz         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:33:22 by gde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ static void	handle_no_prev_node(t_tkn **node)
 	}
 	if (temp->next)
 		temp->next->prev = temp;
+	free((*node)->content);
+	(*node)->content = NULL;
 	*node = temp;
 }
 
@@ -116,6 +118,7 @@ static void	handle_prev_node(t_tkn **node)
 
 	temp = (*node)->prev;
 	*node = (*node)->next;
+	free((*node)->prev->content);
 	free((*node)->prev);
 	free((*node)->content);
 	temp->next = (*node)->next;

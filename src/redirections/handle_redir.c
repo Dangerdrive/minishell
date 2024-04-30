@@ -90,10 +90,9 @@ int	handle_redirects(t_global *data, int ori_fds[2])
 	int	i;
 
 	i = 0;
-	
+
 	ori_fds[IN] = -1;
 	ori_fds[OUT] = -1;
-
 	while (data->hashtable[0]->redir[i])
 	{
 		if (ft_strncmp(data->hashtable[0]->redir[i], "< ", 2) == 0)
