@@ -561,3 +561,462 @@ exit
 ==289619== 
 ==289619== For lists of detected and suppressed errors, rerun with: -s
 		(*node)->delimiter = ft_strdup((*node)->next->content);
+
+
+
+
+
+invalid read em << eof << eof
+
+fde-alen:~/Documents/minishell$ << eof << eof
+==42830== Invalid read of size 8
+==42830==    at 0x40736B: handle_execution (exec.c:8)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a4e0 is 0 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x407C43: exec_one_process (exec_one_process.c:95)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a4e0 is 0 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x407B0A: exec_nonbuiltin_onfork (exec_one_process.c:67)
+==42830==    by 0x407CC4: exec_one_process (exec_one_process.c:100)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x407B22: exec_nonbuiltin_onfork (exec_one_process.c:69)
+==42830==    by 0x407CC4: exec_one_process (exec_one_process.c:100)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x407B57: exec_nonbuiltin_onfork (exec_one_process.c:70)
+==42830==    by 0x407CC4: exec_one_process (exec_one_process.c:100)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+> 
+
+
+
+
+> test
+> eof
+> test2
+> eof
+==42830== Invalid read of size 8
+==42830==    at 0x406C18: handle_redirects (handle_redir.c:46)
+==42830==    by 0x407B86: exec_nonbuiltin_onfork (exec_one_process.c:73)
+==42830==    by 0x407CC4: exec_one_process (exec_one_process.c:100)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x406C30: handle_redirects (handle_redir.c:48)
+==42830==    by 0x407B86: exec_nonbuiltin_onfork (exec_one_process.c:73)
+==42830==    by 0x407CC4: exec_one_process (exec_one_process.c:100)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x406C4D: handle_redirects (handle_redir.c:50)
+==42830==    by 0x407B86: exec_nonbuiltin_onfork (exec_one_process.c:73)
+==42830==    by 0x407CC4: exec_one_process (exec_one_process.c:100)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x406C84: handle_redirects (handle_redir.c:53)
+==42830==    by 0x407B86: exec_nonbuiltin_onfork (exec_one_process.c:73)
+==42830==    by 0x407CC4: exec_one_process (exec_one_process.c:100)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x407CD0: exec_one_process (exec_one_process.c:101)
+==42830==    by 0x4073A0: handle_execution (exec.c:11)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a4e0 is 0 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x4073E6: handle_execution (exec.c:14)
+==42830==    by 0x40699A: handle_prompt (prompt.c:59)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Address 0x4b1a4e0 is 0 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x4063C2: free_hashtable (main_utils.c:29)
+==42830==    by 0x40662E: clean_input_and_hashtable (main_utils.c:80)
+==42830==    by 0x4062C5: main (main.c:38)
+==42830==  Address 0x4b1a6b0 is 464 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x4063D9: free_hashtable (main_utils.c:30)
+==42830==    by 0x40662E: clean_input_and_hashtable (main_utils.c:80)
+==42830==    by 0x4062C5: main (main.c:38)
+==42830==  Address 0x4b1a4e0 is 0 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x406403: free_hashtable (main_utils.c:35)
+==42830==    by 0x40662E: clean_input_and_hashtable (main_utils.c:80)
+==42830==    by 0x4062C5: main (main.c:38)
+==42830==  Address 0x4b1a508 is 40 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x40641A: free_hashtable (main_utils.c:36)
+==42830==    by 0x40662E: clean_input_and_hashtable (main_utils.c:80)
+==42830==    by 0x4062C5: main (main.c:38)
+==42830==  Address 0x4b1a508 is 40 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x40631B: free_redir_args (main_utils.c:8)
+==42830==    by 0x406437: free_hashtable (main_utils.c:37)
+==42830==    by 0x40662E: clean_input_and_hashtable (main_utils.c:80)
+==42830==    by 0x4062C5: main (main.c:38)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x406333: free_redir_args (main_utils.c:10)
+==42830==    by 0x406437: free_hashtable (main_utils.c:37)
+==42830==    by 0x40662E: clean_input_and_hashtable (main_utils.c:80)
+==42830==    by 0x4062C5: main (main.c:38)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid read of size 8
+==42830==    at 0x406346: free_redir_args (main_utils.c:12)
+==42830==    by 0x406437: free_hashtable (main_utils.c:37)
+==42830==    by 0x40662E: clean_input_and_hashtable (main_utils.c:80)
+==42830==    by 0x4062C5: main (main.c:38)
+==42830==  Address 0x4b1a510 is 48 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
+==42830== Invalid free() / delete / delete[] / realloc()
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x406448: free_hashtable (main_utils.c:38)
+==42830==    by 0x40662E: clean_input_and_hashtable (main_utils.c:80)
+==42830==    by 0x4062C5: main (main.c:38)
+==42830==  Address 0x4b1a4e0 is 0 bytes inside a block of size 472 free'd
+==42830==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x404829: update_node_after_heredoc (parse_redir.c:27)
+==42830==    by 0x40498D: parse_redir (parse_redir.c:98)
+==42830==    by 0x4043BF: check_redirects (lexer.c:37)
+==42830==    by 0x4044D0: lexer (lexer.c:71)
+==42830==    by 0x403D57: parse (parser.c:99)
+==42830==    by 0x406981: handle_prompt (prompt.c:57)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830==  Block was alloc'd at
+==42830==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==42830==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==42830==    by 0x40351E: add_node (token_utils.c:33)
+==42830==    by 0x403811: populate_hashtable (token_utils.c:90)
+==42830==    by 0x4033F0: tokenize (token.c:112)
+==42830==    by 0x40694A: handle_prompt (prompt.c:52)
+==42830==    by 0x4062A8: main (main.c:36)
+==42830== 
