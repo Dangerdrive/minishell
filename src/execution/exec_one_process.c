@@ -1,5 +1,7 @@
 #include "../../includes/minishell.h"
 
+void	write_in_heredoc(t_global *data, int heredoc_number, char *eof);
+
 int	exec_nonbuiltin(char **args, t_global *data)
 {
 	char	*cmd;
@@ -54,12 +56,6 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	return (ret);
 }
 
-
-void	write_in_heredoc(t_global *data, int heredoc_number, char *eof);
-
-
-
-
 int	exec_nonbuiltin_onfork(t_global *data, char **args)
 {
 	int		pid;
@@ -79,9 +75,9 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 		restore_original_fds(data->original_fds);
 		return(ret);
 	}
-	pid = fork();
 	if (args && args[0] && !is_builtin(args[0]))
 	{
+		pid = fork();
 		define_exec_signals(pid);
 		ret = exec_nonbuiltin_and_wait(data, args, pid);
 		restore_original_fds(data->original_fds);

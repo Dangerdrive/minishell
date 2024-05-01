@@ -18,7 +18,7 @@ char	*ft_getenv(char *name, t_global **data)
 	i = 0;
 	while ((*data)->exported && (*data)->exported[i])
 	{
-		if (ft_strncmp((*data)->env[i], name, ft_strlen(name)) == 0)
+		if (ft_strncmp((*data)->exported[i], name, ft_strlen(name)) == 0)
 		{
 			value = ft_strchr((*data)->exported[i], '=') + 1;
 			return (value);

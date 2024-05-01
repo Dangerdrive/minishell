@@ -94,6 +94,7 @@ int	redirect_input(char *input_redirect, int i)
 	{
 		filename = tmp_filename(i);
 		fd = open(filename, O_RDONLY, FD_CLOEXEC);
+		free(filename);
 	}
 	else
 		fd = open(&input_redirect[2], O_RDONLY, FD_CLOEXEC);
