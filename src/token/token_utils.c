@@ -55,8 +55,7 @@ void	check_non_spaced_var(char *input, int i, t_tkn **node)
 {
 	t_tkn	*temp;
 
-	if ((*node) && !strcmp((*node)->content, "echo")
-		&& input[i - 1] != ' ')
+	if ((*node) && input[i - 1] != ' ')
 	{
 		temp = *node;
 		while ((*node)->next != NULL)
@@ -80,10 +79,7 @@ void	populate_hashtable(t_global **data, int idx, int len)
 	}
 	else
 	{
-		if ((*data)->hashtable[i]
-			&& strcmp((*data)->hashtable[i]->content, "echo") == 0)
-			check_non_spaced_var((*data)->usr_input, idx,
-				&(*data)->hashtable[i]);
+		check_non_spaced_var((*data)->usr_input, idx, &(*data)->hashtable[i]);
 		while ((*data)->hashtable[i + 1] != NULL)
 			i++;
 	}

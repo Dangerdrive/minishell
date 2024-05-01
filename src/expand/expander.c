@@ -101,7 +101,7 @@ int	check_if_expandable(t_tkn **node, t_global **data)
 		|| !ft_strcmp((*node)->type, EXPT_VARIABLE))
 	{
 		i = 0;
-		while (i < ft_strlen((*node)->content))
+		while (i < (int)ft_strlen((*node)->content))
 		{
 			if ((*node)->content[i] == '$')
 			{
