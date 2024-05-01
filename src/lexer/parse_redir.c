@@ -31,48 +31,48 @@ void    update_node_after_heredoc(t_tkn **node)
     (*node) = temp;
 }
 
-static void    handle_no_prev_node(t_tkn **node)
+static void	handle_no_prev_node(t_tkn **node)
 {
-    t_tkn    *temp;
+	t_tkn	*temp;
 
-    free((*node)->content);
-    (*node)->content = NULL;
-    if ((*node)->next && (*node)->next->next)
-    {
-        temp = (*node)->next;
-        ft_memdel(*node);
-        *node = temp;
-        temp = (*node)->next;
-        ft_memdel((*node)->content);
-        ft_memdel(*node);
-        temp->prev = NULL;
-    }
-    else
-    {
-        temp = *node;
-        ft_memdel((*node)->next->content);
-        ft_memdel((*node)->next);
-        temp->next = NULL;
-    }
-    if (temp->next)
-        temp->next->prev = temp;
-    *node = temp;
+	free((*node)->content);
+	(*node)->content = NULL;
+	if ((*node)->next && (*node)->next->next)
+	{
+		temp = (*node)->next;
+		ft_memdel(*node);
+		*node = temp;
+		temp = (*node)->next;
+		ft_memdel((*node)->content);
+		ft_memdel(*node);
+		temp->prev = NULL;
+	}
+	else
+	{
+		temp = *node;
+		ft_memdel((*node)->next->content);
+		ft_memdel((*node)->next);
+		temp->next = NULL;
+	}
+	if (temp->next)
+		temp->next->prev = temp;
+	*node = temp;
 }
 
-static void    handle_prev_node(t_tkn **node)
+static void	handle_prev_node(t_tkn **node)
 {
-    t_tkn    *temp;
+	t_tkn	*temp;
 
-    temp = (*node)->prev;
-    *node = (*node)->next;
-    free((*node)->prev->content);
-    free((*node)->prev);
-    free((*node)->content);
-    temp->next = (*node)->next;
-    free(*node);
-    if (temp->next)
-        temp->next->prev = temp;
-    *node = temp;
+	temp = (*node)->prev;
+	*node = (*node)->next;
+	free((*node)->prev->content);
+	free((*node)->prev);
+	free((*node)->content);
+	temp->next = (*node)->next;
+	free(*node);
+	if (temp->next)
+		temp->next->prev = temp;
+	*node = temp;
 }
 
 static void    update_node_after_redir(t_tkn **node)

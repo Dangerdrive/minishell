@@ -19,8 +19,9 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 		line = readline("> ");
 	}
 	if (!line)
-		ft_dprintf(STDOUT_FILENO, "%sminishell: warning: \
-		heredoc delimited by EOF (wanted '%s')%s\n", YELLOW, eof, END);
+		ft_dprintf(STDOUT_FILENO,
+			"%sminishell: warning: heredoc delimited by EOF (wanted '%s')%s\n",
+		YELLOW, eof, END);
 	close(tmp_file_fd);
 	free(filename);
 	free(line);
@@ -33,19 +34,19 @@ void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
 	int		pid;
 
 	pid = fork();
-	define_heredoc_signals(pid);
 	if (pid == -1)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
+	define_heredoc_signals(pid);
 	if (pid == 0)
 		write_in_heredoc(data, heredoc_number, eof);
 	else
 	{
 		data->ret = wait_for_child(pid, TRUE);
-		define_prompt_signals();
 	}
+	define_prompt_signals();
 	external_exit(EXIT_SUCCESS);
 }
 

@@ -31,7 +31,7 @@ void	check_redirects(t_tkn **node)
 	head = *node;
 	while (*node)
 	{
-		if ((*node)->content && is_redir((*node)->content)
+		while ((*node)->content && is_redir((*node)->content)
 			&& (*node)->next)
 		{
 			parse_redir(node, &head);
