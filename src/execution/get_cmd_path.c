@@ -51,26 +51,6 @@ char	*get_cmd_path(char*cmd, char**paths)
 	return (NULL);
 }
 
-// char	*get_cmd(char *cmd, t_global *data)
-// {
-// 	char	**env_paths;
-// 	char	*cmd_path;
-
-// 	if (access(cmd, F_OK | X_OK) == 0)
-// 		return (ft_strdup(cmd));
-// 	env_paths = get_env_paths(data);
-// 	if (!env_paths)
-// 		return (NULL);
-// 	cmd_path = get_cmd_path(cmd, env_paths);
-// 	if (!cmd_path)
-// 	{
-// 		ft_strarr_free(env_paths, ft_strarr_len(env_paths));
-// 		return (NULL);
-// 	}
-// 	ft_strarr_free(env_paths, ft_strarr_len(env_paths));
-// 	return (cmd_path);
-// }
-
 char	*get_cmd(char *cmd, t_global *data)
 {
 	struct stat	statbuf;
@@ -93,11 +73,8 @@ char	*get_cmd(char *cmd, t_global *data)
 	if (!env_paths)
 		return (NULL);
 	cmd_path = get_cmd_path(cmd, env_paths);
-	if (!cmd_path)
-	{
-		ft_strarr_free(env_paths, ft_strarr_len(env_paths));
-		return (NULL);
-	}
 	ft_strarr_free(env_paths, ft_strarr_len(env_paths));
+	if (!cmd_path)
+		return (NULL);
 	return (cmd_path);
 }

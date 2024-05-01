@@ -41,7 +41,6 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	else if (pid == 0)
 	{
 		status = exec_nonbuiltin(args, data);
-		//exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -73,7 +72,7 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 	if (handle_redirects(data, data->original_fds) == 0)
 	{
 		restore_original_fds(data->original_fds);
-		return(ret);
+		return (ret);
 	}
 	if (args && args[0] && !is_builtin(args[0]))
 	{

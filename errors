@@ -1,3 +1,7 @@
+fde-alen:~/Documents/minishell$ export test="echo hello"
+fde-alen:~/Documents/minishell$ $test
+minishell: echo hello: command not found
+
 fde-alen:~/Documents/Projects/minishell/minishell29Apr/minishell_tester$ cat minishell.h | grep ");"$
 cat: minishell.h: No such file or directory
 grep: $: No such file or directory
@@ -23,6 +27,32 @@ fde-alen:~/Documents/minishell$
 .tmp/                  Makefile               errors                 src/
 .vscode/               README.md              includes/
 123                    all_in_one.c           libs/
+->tab não completa o comando e abre prompt de novo (com o mesmo conteudo)
+
+
+
+
+
+==255258== 12 bytes in 1 blocks are definitely lost in loss record 3 of 59
+==255258==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==255258==    by 0x407F1A: init_children_pid (exec_processes.c:18)
+==255258==    by 0x407D94: exec_processes (exec_processes.c:56)
+==255258==    by 0x4073AC: handle_execution (exec.c:13)
+==255258==    by 0x40697A: handle_prompt (prompt.c:59)
+==255258==    by 0x406288: main (main.c:36)
+
+fde-alen:~/Documents/minishell$   
+.git/                  234                    allowed_functions.txt  minishell
+.gitignore             235                    eof                    readline.supp
+.tmp/                  Makefile               errors                 src/
+.vscode/               README.md              includes/              
+123                    all_in_one.c           libs/                  
+fde-alen:~/Documents/minishell$   
+.git/                  234                    allowed_functions.txt  minishell
+.gitignore             235                    eof                    readline.supp
+.tmp/                  Makefile               errors                 src/
+.vscode/               README.md              includes/              
+123                    all_in_one.c           libs/    
 ->tab não completa o comando e abre prompt de novo (com o mesmo conteudo)
 
 
@@ -545,6 +575,7 @@ fde-alen:~/Documents/minishell$ echo $?   -   SOLVED
 ==284234==    by 0x4062A8: main (main.c:36)
 ==284234==
 0
+
 
 
 fde-alen:~/Documents/minishell$ > 123 > 234 > 235

@@ -47,7 +47,6 @@ int	handle_prompt(t_global **data)
 		return (-1);
 	if ((*data)->usr_input[0])
 	{
-		//external_exit(EXIT_SUCCESS);
 		add_history((*data)->usr_input);
 		input = tokenize(data);
 		if (input == -1)

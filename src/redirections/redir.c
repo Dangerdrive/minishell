@@ -21,12 +21,10 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 	if (!line)
 		ft_dprintf(STDOUT_FILENO,
 			"%sminishell: warning: heredoc delimited by EOF (wanted '%s')%s\n",
-		YELLOW, eof, END);
+			YELLOW, eof, END);
 	close(tmp_file_fd);
 	free(filename);
 	free(line);
-	//redirect_fd(tmp_file_fd, STDIN_FILENO);
-	//exit(EXIT_SUCCESS);
 }
 
 void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
@@ -50,46 +48,10 @@ void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
 	external_exit(EXIT_SUCCESS);
 }
 
-// int	redirect_input(char *input_redirect)
-// {
-// 	int		fd;
-
-// 	fd = open(&input_redirect[2], O_RDONLY, FD_CLOEXEC);
-// 	if (fd == -1)
-// 	{
-// 		ft_dprintf(STDERR_FILENO, "open: %s: %s\n",
-// 			&input_redirect[2], strerror(errno));
-// 		return (0);
-// 	}
-// 	else
-// 		redirect_fd(fd, STDIN_FILENO);
-// 	return (1);
-// }
-
-// int	redirect_output(char *output_redirect)
-// {
-// 	int		fd;
-
-// 	if (output_redirect[1] == '>')
-// 		fd = open(&output_redirect[2], O_WRONLY | O_CREAT | O_APPEND, 0644);
-// 	else
-// 		fd = open(&output_redirect[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd == -1)
-// 	{
-// 		ft_dprintf(STDERR_FILENO, "open: %s: %s\n",
-// 			&output_redirect[2], strerror(errno));
-// 		return (0);
-// 	}
-// 	else
-// 		redirect_fd(fd, STDOUT_FILENO);
-// 	return (1);
-// }
-
-
 int	redirect_input(char *input_redirect, int i)
 {
 	int		fd;
-	char 	*filename;
+	char	*filename;
 
 	if (input_redirect[1] == '<')
 	{
