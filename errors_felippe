@@ -1,0 +1,19 @@
+fde-alen:~/Documents/minishell$ export test
+fde-alen:~/Documents/minishell$ unset test
+fde-alen:~/Documents/minishell$ env
+==331307== Process terminating with default action of signal 11 (SIGSEGV)
+==331307==  Access not within mapped region at address 0x50
+==331307==    at 0x40A5F4: ft_strchr_i (ft_strchr_i.c:33)
+==331307==    by 0x401BE5: env_print (env.c:45)
+==331307==    by 0x401A65: ft_env (env.c:61)
+==331307==    by 0x402728: exec_builtin (exec_builtins.c:39)
+==331307==    by 0x407BAF: exec_one_process (exec_one_process.c:98)
+==331307==    by 0x4072A0: handle_execution (exec.c:11)
+==331307==    by 0x40689A: handle_prompt (prompt.c:59)
+==331307==    by 0x4061A8: main (main.c:36)
+==331307==  If you believe this happened as a result of a stack
+==331307==  overflow in your program's main thread (unlikely but
+==331307==  possible), you can try to increase the size of the
+==331307==  main thread stack using the --main-stacksize= flag.
+==331307==  The main thread stack size used in this run was 8388608.
+==331307== 
