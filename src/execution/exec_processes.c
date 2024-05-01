@@ -71,5 +71,7 @@ int	exec_processes(t_global *data)
 		i++;
 	}
 	restore_fds(data->original_fds);
-	return (wait_for_children(children_pid));
+	i = wait_for_children(children_pid);
+	free(children_pid);
+	return (i);
 }
