@@ -1,35 +1,9 @@
 #include "../../includes/minishell.h"
 
-void    init_redir_args(char *(*args)[TABLE_SIZE]);
-void    check_heredoc(t_tkn **node);
-void    update_redir_files_list(char *(*redir)[TABLE_SIZE],
-            char *sig, char *new_arg);
+void	init_redir_args(char *(*args)[TABLE_SIZE]);
+void	check_heredoc(t_tkn **node);
+void	update_redir_files_list(char *(*redir)[TABLE_SIZE], char *sig, char *new_arg);
 
-void    update_node_after_heredoc(t_tkn **node)
-{
-    t_tkn    *temp;
-
-    free((*node)->content);
-    (*node)->content = NULL;
-    if ((*node)->prev)
-        temp = (*node)->prev;
-    else
-    {
-        temp = *node;
-        *node = (*node)->next;
-    }
-    temp->next = (*node)->next;
-    if (temp && temp->next)
-        temp->next->prev = temp;
-    if (*node)
-    {
-        free((*node)->content);
-        free(*node);
-    }
-    if (temp->prev && temp->prev->prev)
-        free(temp->prev->prev);
-    (*node) = temp;
-}
 
 static void	handle_no_prev_node(t_tkn **node)
 {
@@ -64,6 +38,10 @@ static void	handle_prev_node(t_tkn **node)
 	t_tkn	*temp;
 
 	temp = (*node)->prev;
+	if ((*node)->delimiter && temp->delimiter)
+		temp->delimiter = ft_strdup((*node)->delimiter);
+	if ((*node)->delimiter)
+		free((*node)->delimiter);
 	*node = (*node)->next;
 	free((*node)->prev->content);
 	free((*node)->prev);
@@ -75,15 +53,15 @@ static void	handle_prev_node(t_tkn **node)
 	*node = temp;
 }
 
-static void    update_node_after_redir(t_tkn **node)
+static void	update_node_after_redir(t_tkn **node)
 {
-    if ((*node)->prev)
-        handle_prev_node(node);
-    else
-        handle_no_prev_node(node);
+	if ((*node)->prev)
+		handle_prev_node(node);
+	else
+		handle_no_prev_node(node);
 }
 
-void    parse_redir(t_tkn **node, t_tkn **head)
+void	parse_redir(t_tkn **node, t_tkn **head)
 {
     if (is_heredoc((*node)->content))
         check_heredoc(node);
@@ -95,7 +73,7 @@ void    parse_redir(t_tkn **node, t_tkn **head)
     update_redir_files_list(&(*head)->redir,
         (*node)->content, (*node)->next->content);
     if (is_heredoc((*node)->content))
-        update_node_after_heredoc(node);
+        update_node_after_redir(node);
     else
         update_node_after_redir(node);
 }

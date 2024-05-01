@@ -28,10 +28,7 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 		{
 			temp = (*hashtable)[i]->next;
 			if ((*hashtable)[i]->content)
-			{
-				//printf("%s\n", (*hashtable)[i]->content);
 				free((*hashtable)[i]->content);
-			}
 			if ((*hashtable)[i]->delimiter)
 				free((*hashtable)[i]->delimiter);
 			free_redir_args(&(*hashtable)[i]->redir);
