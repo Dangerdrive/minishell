@@ -461,3 +461,103 @@ exit
 ==144784== 
 ==144784== For lists of detected and suppressed errors, rerun with: -s
 ==144784== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fde-alen:~/Documents/minishell$ echo $USER $? $HOME "$PWD $OLDPWD"
+==279763== Invalid read of size 1
+==279763==    at 0x404E55: check_if_expandable (expander.c:104)
+==279763==    by 0x4050EB: expand (expander.c:136)
+==279763==    by 0x403D45: parse (parser.c:98)
+==279763==    by 0x406981: handle_prompt (prompt.c:57)
+==279763==    by 0x4062A8: main (main.c:36)
+==279763==  Address 0x4b22a62 is 0 bytes after a block of size 2 alloc'd
+==279763==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==279763==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==279763==    by 0x40A75A: ft_strdup (ft_strdup.c:30)
+==279763==    by 0x4051D6: update_node (expander.c:47)
+==279763==    by 0x40506D: get_var_value (expander.c:83)
+==279763==    by 0x404E95: check_if_expandable (expander.c:109)
+==279763==    by 0x4050EB: expand (expander.c:136)
+==279763==    by 0x403D45: parse (parser.c:98)
+==279763==    by 0x406981: handle_prompt (prompt.c:57)
+==279763==    by 0x4062A8: main (main.c:36)
+==279763== 
+fde-alen 0 /nfs/homes/fde-alen /nfs/homes/fde-alen/Documents/minishell /nfs/homes/fde-alen/Documents/minishell
+
+Recommendations
+Bound Check for '$': Ensure that when you loop through node->content looking for '$', there is a bounds check to prevent reading beyond the string’s memory allocation.
+Debug the len and var_len Calculations: Use debugging statements to print out the values of len, var_len, and other relevant variables at each step to ensure they are what you expect them to be.
+
+fde-alen:~/Documents/minishell$ echo $?
+==284234== Invalid read of size 1
+==284234==    at 0x404E55: check_if_expandable (expander.c:104)
+==284234==    by 0x4050EB: expand (expander.c:136)
+==284234==    by 0x403D45: parse (parser.c:98)
+==284234==    by 0x406981: handle_prompt (prompt.c:57)
+==284234==    by 0x4062A8: main (main.c:36)
+==284234==  Address 0x4b23692 is 0 bytes after a block of size 2 alloc'd
+==284234==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==284234==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==284234==    by 0x40A75A: ft_strdup (ft_strdup.c:30)
+==284234==    by 0x4051D6: update_node (expander.c:47)
+==284234==    by 0x40506D: get_var_value (expander.c:83)
+==284234==    by 0x404E95: check_if_expandable (expander.c:109)
+==284234==    by 0x4050EB: expand (expander.c:136)
+==284234==    by 0x403D45: parse (parser.c:98)
+==284234==    by 0x406981: handle_prompt (prompt.c:57)
+==284234==    by 0x4062A8: main (main.c:36)
+==284234== 
+0
+
+
+fde-alen:~/Documents/minishell$ > 123 > 234 > 235
+minishell: >: command not found
+
+
+
+
+
+fde-alen:~/Documents/minishell$ cat << eof
+> teste
+> eof
+fde-alen:~/Documents/minishell$ exit
+exit
+==289619== HEAP SUMMARY:
+==289619==     in use at exit: 204,678 bytes in 216 blocks
+==289619==   total heap usage: 761 allocs, 545 frees, 246,493 bytes allocated
+==289619== 
+==289619== 4 bytes in 1 blocks are definitely lost in loss record 1 of 59
+==289619==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==289619==    by 0x409943: ft_calloc (ft_calloc.c:31)
+==289619==    by 0x40A75A: ft_strdup (ft_strdup.c:30)
+==289619==    by 0x404CBC: check_heredoc (parse_redir_utils.c:31)
+==289619==    by 0x4048B0: parse_redir (parse_redir.c:89)
+==289619==    by 0x4043BF: check_redirects (lexer.c:37)
+==289619==    by 0x4044D0: lexer (lexer.c:71)
+==289619==    by 0x403D57: parse (parser.c:99)
+==289619==    by 0x406981: handle_prompt (prompt.c:57)
+==289619==    by 0x4062A8: main (main.c:36)
+==289619== 
+==289619== LEAK SUMMARY:
+==289619==    definitely lost: 4 bytes in 1 blocks
+==289619==    indirectly lost: 0 bytes in 0 blocks
+==289619==      possibly lost: 0 bytes in 0 blocks
+==289619==    still reachable: 0 bytes in 0 blocks
+==289619==         suppressed: 204,674 bytes in 215 blocks
+==289619== 
+==289619== For lists of detected and suppressed errors, rerun with: -s
+		(*node)->delimiter = ft_strdup((*node)->next->content);
