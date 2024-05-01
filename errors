@@ -3,31 +3,32 @@ cat: minishell.h: No such file or directory
 grep: $: No such file or directory
 -> erro no primeiro comando não trava a execução.
 
-fde-alen:~/Documents/minishell$ export test
-fde-alen:~/Documents/minishell$ unset test
-fde-alen:~/Documents/minishell$ env
-==331307== Process terminating with default action of signal 11 (SIGSEGV)
-==331307==  Access not within mapped region at address 0x50
-==331307==    at 0x40A5F4: ft_strchr_i (ft_strchr_i.c:33)
-==331307==    by 0x401BE5: env_print (env.c:45)
-==331307==    by 0x401A65: ft_env (env.c:61)
-==331307==    by 0x402728: exec_builtin (exec_builtins.c:39)
-==331307==    by 0x407BAF: exec_one_process (exec_one_process.c:98)
-==331307==    by 0x4072A0: handle_execution (exec.c:11)
-==331307==    by 0x40689A: handle_prompt (prompt.c:59)
-==331307==    by 0x4061A8: main (main.c:36)
-==331307==  If you believe this happened as a result of a stack
-==331307==  overflow in your program's main thread (unlikely but
-==331307==  possible), you can try to increase the size of the
-==331307==  main thread stack using the --main-stacksize= flag.
-==331307==  The main thread stack size used in this run was 8388608.
-==331307== 
+==255258== 12 bytes in 1 blocks are definitely lost in loss record 3 of 59
+==255258==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==255258==    by 0x407F1A: init_children_pid (exec_processes.c:18)
+==255258==    by 0x407D94: exec_processes (exec_processes.c:56)
+==255258==    by 0x4073AC: handle_execution (exec.c:13)
+==255258==    by 0x40697A: handle_prompt (prompt.c:59)
+==255258==    by 0x406288: main (main.c:36)
+
+fde-alen:~/Documents/minishell$
+.git/                  234                    allowed_functions.txt  minishell
+.gitignore             235                    eof                    readline.supp
+.tmp/                  Makefile               errors                 src/
+.vscode/               README.md              includes/
+123                    all_in_one.c           libs/
+fde-alen:~/Documents/minishell$
+.git/                  234                    allowed_functions.txt  minishell
+.gitignore             235                    eof                    readline.supp
+.tmp/                  Makefile               errors                 src/
+.vscode/               README.md              includes/
+123                    all_in_one.c           libs/
+->tab não completa o comando e abre prompt de novo (com o mesmo conteudo)
 
 
 
-|-------------------------------------------------------------------------|
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ wc
-123a^M^M^M123^M
+
+
 
 |-------------------------------------------------------------------------|
 |~/Documents/Projects/minishell/minishell29Apr (feature/heredoc*) » ./minishell                                       fde-alen@c1r6p2
@@ -76,6 +77,11 @@ cat << eof - ctrl D
 
 redir.c
 int	redirect_input(char *input_redirect)
+=======
+
+
+|-------------------------------------------------------------------------|
+>>>>>>> Stashed changes
 
 
 
@@ -425,11 +431,11 @@ exit
 fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls | exit | wc
       1       1       5
 
-Test  22: ❌ pwd
+Test  22: ❌ pwd   -   SOLVED
 mini exit code = 1
 bash exit code = 0
 
-Test  23: ❌ pwd oi
+Test  23: ❌ pwd oi   -   SOLVED
 mini exit code = 1
 bash exit code = 0
 
@@ -438,9 +444,9 @@ bash exit code = 0
 
 
 VALGRIND ---------------------------
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo hellow > 123
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo hellow > 123  - SOLVED
 ==144784== Warning: invalid file descriptor -1 in syscall close()
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ exit
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ exit   -    SOLVED
 exit
 ==144784== Warning: invalid file descriptor -1 in syscall close()
 ==144784== Warning: invalid file descriptor -1 in syscall close()
@@ -494,7 +500,7 @@ exit
 
 
 
-fde-alen:~/Documents/minishell$ echo $USER $? $HOME "$PWD $OLDPWD"
+fde-alen:~/Documents/minishell$ echo $USER $? $HOME "$PWD $OLDPWD"   -   SOLVED
 ==279763== Invalid read of size 1
 ==279763==    at 0x404E55: check_if_expandable (expander.c:104)
 ==279763==    by 0x4050EB: expand (expander.c:136)
@@ -519,7 +525,7 @@ Recommendations
 Bound Check for '$': Ensure that when you loop through node->content looking for '$', there is a bounds check to prevent reading beyond the string’s memory allocation.
 Debug the len and var_len Calculations: Use debugging statements to print out the values of len, var_len, and other relevant variables at each step to ensure they are what you expect them to be.
 
-fde-alen:~/Documents/minishell$ echo $?
+fde-alen:~/Documents/minishell$ echo $?   -   SOLVED
 ==284234== Invalid read of size 1
 ==284234==    at 0x404E55: check_if_expandable (expander.c:104)
 ==284234==    by 0x4050EB: expand (expander.c:136)
@@ -544,6 +550,8 @@ fde-alen:~/Documents/minishell$ echo $?
 fde-alen:~/Documents/minishell$ > 123 > 234 > 235
 minishell: >: command not found
 
+fde-alen:~/Documents/minishell$ > 123 > 234 > 235   -   SOLVED
+minishell: >: command not found    -   SOLVED
 
 
 
@@ -552,7 +560,7 @@ fde-alen:~/Documents/minishell$ cat << eof
 > teste
 > eof
 fde-alen:~/Documents/minishell$ exit
-exit
+exit - SOLVED
 ==289619== HEAP SUMMARY:
 ==289619==     in use at exit: 204,678 bytes in 216 blocks
 ==289619==   total heap usage: 761 allocs, 545 frees, 246,493 bytes allocated
@@ -577,7 +585,7 @@ exit
 ==289619==         suppressed: 204,674 bytes in 215 blocks
 ==289619==
 ==289619== For lists of detected and suppressed errors, rerun with: -s
-		(*node)->delimiter = ft_strdup((*node)->next->content);
+		(*node)->delimiter = ft_strdup((*node)->next->content); - SOLVED
 
 
 
