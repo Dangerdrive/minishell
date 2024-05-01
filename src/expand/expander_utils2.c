@@ -1,20 +1,25 @@
 #include "../includes/minishell.h"
 
 /**
- * Searches for the key that matches the 
+ * Searches for the key that matches the
  * token's variable and then returns its value.
  */
 static char	*fetch_in_array(char **str, int i, int len, char *arr)
 {
 	char	*value;
+	int		j;
 
+	j = 0;
 	if (ft_strncmp((*str) + i, arr, len) == 0)
 	{
-		while (*arr != '=')
-			arr++;
-		arr++;
-		value = ft_strdup(arr);
-		return (value);
+		while (arr[j] != '=')
+			j++;
+		if (j == len)
+		{
+			j++;
+			value = ft_strdup(arr + j);
+			return (value);
+		}
 	}
 	return (NULL);
 }

@@ -90,7 +90,7 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 // < 123
 
 // ECHO:
-//in a case like echo $USER$USER, the result have a space in between
+//in a case like echo $USER$USER, the result have a space in between - solved
 //export test test1=123 && echo $test
 //results in 123. Expansion is being ambiguos.
 
