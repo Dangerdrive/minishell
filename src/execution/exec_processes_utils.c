@@ -13,9 +13,13 @@ static int	is_control_slash(int status)
 int	handle_signal_interrupt(int status, int is_last_child)
 {
 	if (is_control_c(status))
+	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
+	}
 	if (is_control_slash(status) && is_last_child)
+	{
 		ft_putstr_fd("Quit\n", STDOUT_FILENO);
+	}
 	return (INTERRUPT + WTERMSIG(status));
 }
 

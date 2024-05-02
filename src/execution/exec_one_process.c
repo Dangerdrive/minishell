@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	write_in_heredoc(t_global *data, int heredoc_number, char *eof);
+void	write_in_heredoc(t_global *data, int heredoc_number, int hash_number, char *eof);
 
 int	exec_nonbuiltin(char **args, t_global *data)
 {
@@ -66,7 +66,7 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 	while (data->hashtable[0]->redir[i])
 	{
 		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
-			write_in_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
+			write_in_heredoc(data, i, 0, &data->hashtable[0]->redir[i][2]);
 		i++;
 	}
 	if (handle_redirects(data, data->original_fds) == 0)

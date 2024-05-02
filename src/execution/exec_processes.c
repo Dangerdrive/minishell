@@ -51,10 +51,22 @@ int	exec_processes(t_global *data)
 {
 	int	*children_pid;
 	int	i;
+	int j;
 
-	save_original_fds(data->original_fds);
-	children_pid = init_children_pid(data);
 	i = 0;
+	j = 0;
+	save_original_fds(data->original_fds);
+	while (data->hashtable[j])
+	{
+		while (data->hashtable[j]->redir[i])
+		{
+			if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
+				write_in_heredoc(data, i, j, &data->hashtable[j]->redir[i][2]);
+			i++;
+		}
+		j++;
+	}
+	children_pid = init_children_pid(data);
 	while (data->hashtable[i])
 	{
 		handle_pipe(data->original_fds[OUT], data,

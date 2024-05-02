@@ -39,6 +39,7 @@ void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE])
 		}
 		i++;
 	}
+	printf("redir[%d] %s\n", i, (*redirects)[i]);
 }
 
 void	handle_pipe(int original_fd_out, t_global *data,
