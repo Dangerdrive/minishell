@@ -3,7 +3,8 @@
 /**
  * Prints the current working directory to standard output.
  * 
- * @return 0 if successful, 1 if an error occurred while retrieving the directory.
+ * @return 0 if successful, 1 if an error occurred while retrieving the 
+ * directory.
  */
 int	ft_pwd(void)
 {

@@ -1,5 +1,11 @@
 #include "../../includes/minishell.h"
 
+/**
+ * Retrieves the PATH environment variable and splits it into individual paths.
+ *
+ * @param[in] data Pointer to global data structure.
+ * @return Array of paths or NULL if PATH is not set or memory allocation fails.
+ */
 char	**get_env_paths(t_global *data)
 {
 	char	*env_path_str;
@@ -26,6 +32,13 @@ char	**get_env_paths(t_global *data)
 	return (paths);
 }
 
+/**
+ * Constructs the full path for a command by appending it to each path in paths.
+ *
+ * @param[in] cmd Command to find.
+ * @param[in] paths Array of directories to search.
+ * @return Full path to the executable or NULL if not found or an error occurs.
+ */
 char	*get_cmd_path(char*cmd, char**paths)
 {
 	int		i;
@@ -51,6 +64,14 @@ char	*get_cmd_path(char*cmd, char**paths)
 	return (NULL);
 }
 
+/**
+ * Determines the executable path for a command, checking if it's a directory or
+ * executable directly or within the PATH directories.
+ *
+ * @param[in] cmd Command to resolve.
+ * @param[in] data Pointer to global data structure.
+ * @return Path to the executable or NULL if not found or not executable.
+ */
 char	*get_cmd(char *cmd, t_global *data)
 {
 	struct stat	statbuf;

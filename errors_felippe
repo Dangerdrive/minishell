@@ -1,3 +1,41 @@
+commit 309183c01113171c4f49b7c67f4f5476522fdfbc
+Author: Graziela De Souza Antunes <gde-souz@c1r7p2.42sp.org.br>
+Date:   Wed May 1 16:52:45 2024 -0300
+
+    multiple heredoc and cat heredoc are working
+
+
+> 1 > 2 | echo hi
+segfault só no debugger
+
+adicionei esse if para não ir pra execução se não houver comando (-> content)
+if (args)
+	{
+		if (is_builtin(args[0]))
+			execute_forked_builtin(args, idx, data);
+		else
+		{
+			exec_nonbuiltin(args, data);
+		}
+	}
+e esse else exit
+	else
+		exit(0);
+}
+
+escrever até o final da linha começa a escrever no começo da linha
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------||
 fde-alen:~/Documents/minishell$ export test
 fde-alen:~/Documents/minishell$ unset test
 fde-alen:~/Documents/minishell$ env

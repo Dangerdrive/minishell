@@ -65,12 +65,17 @@ static void	execute_forked_command(t_global *data, int idx)
 
 	close_extra_fds();
 	args = hash_to_args(data->hashtable[idx]);
-	if (is_builtin(args[0]))
-		execute_forked_builtin(args, idx, data);
-	else
+	if (args)
 	{
-		exec_nonbuiltin(args, data);
+		if (is_builtin(args[0]))
+			execute_forked_builtin(args, idx, data);
+		else
+		{
+			exec_nonbuiltin(args, data);
+		}
 	}
+	else
+		exit(0);
 }
 
 // /**
@@ -122,11 +127,10 @@ static void	execute_forked_command(t_global *data, int idx)
 // 	return (i);
 // }
 
-
 void	process_heredocs(t_global *data)
 {
 	int	i;
-	int j;
+	int	j;
 
 	j = 0;
 	while (data->hashtable[j])
@@ -165,7 +169,7 @@ int	handle_child_processes(t_global *data, int *children_pid)
 		}
 		i++;
 	}
-	return i;
+	return (i);
 }
 
 int	exec_processes(t_global *data)

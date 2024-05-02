@@ -70,7 +70,7 @@ static void	update_node_after_redir(t_tkn **node)
 
 void	parse_redir(t_tkn **node, t_tkn **head)
 {
-	int 	i;
+	int		i;
 	t_tkn	*temp;
 
 	i = 0;

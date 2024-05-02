@@ -1,5 +1,11 @@
 #include "../../includes/minishell.h"
 
+/**
+ * Counts the number of command nodes in the global hashtable.
+ *
+ * @param[in] data Pointer to the global data structure.
+ * @return Number of pipes needed based on the count of command nodes.
+ */
 int	pipecount(t_global *data)
 {
 	int	result;
@@ -12,6 +18,11 @@ int	pipecount(t_global *data)
 	return (result - 1);
 }
 
+/**
+ * Cleans up resources and exits the process when a child process needs to quit.
+ *
+ * @param[in] args Pointer to the array of command arguments.
+ */
 static void	quit_child(char *(*args)[TABLE_SIZE])
 {
 	rl_clear_history();
@@ -20,12 +31,16 @@ static void	quit_child(char *(*args)[TABLE_SIZE])
 	exit(EXIT_FAILURE);
 }
 
+/**
+ * Handles input and output redirections for commands involved in piping.
+ *
+ * @param[in, out] redirects Array of redirection commands.
+ */
 void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE])
 {
 	int	i;
 
 	i = 0;
-	//printf("redir[%d]: %s\n", i, (*redirects)[i]);
 	while ((*redirects)[i])
 	{
 		if ((*redirects)[i][0] == '<')
@@ -42,6 +57,14 @@ void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE])
 	}
 }
 
+/**
+ * Manages file descriptors for processes in a pipeline.
+ *
+ * @param[in] original_fd_out Original standard output file descriptor.
+ * @param[in, out] data Pointer to the global data structure.
+ * @param[in] current_node Current command node being processed.
+ * @param[in] hashtable Array of all command nodes.
+ */
 void	handle_pipe(int original_fd_out, t_global *data,
 	t_tkn *current_node, t_tkn **hashtable)
 {

@@ -39,21 +39,10 @@ int	get_fd(char *filename)
 	return (tmp_file_fd);
 }
 
-// void	heredoc_prompt(char **line, int heredoc_number, t_global *data)
-// {
-// 	(void)data;
-// 	(void)heredoc_number;
-// 	// printf("%d", heredoc_number);
-// 	// if (heredoc_number == 0)
-// 		*line = readline("> ");
-// 	// else
-// 	// 	*line = readline("");
-// }
-
 void	handle_heredoc_ctrl_d(t_global *data, char *eof)
 {
 	ft_dprintf(STDOUT_FILENO,
 		"%sminishell: warning: heredoc delimited by EOF (wanted '%s')%s\n",
-	YELLOW, eof, END);
+		YELLOW, eof, END);
 	data->ret = 0;
 }

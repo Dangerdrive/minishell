@@ -1,7 +1,8 @@
 #include "../../includes/minishell.h"
 
 /**
- * Calculates the number of tokens in a linked list representing a command hash table.
+ * Calculates the number of tokens in a linked list representing
+ *  a command hash table.
  * 
  * @param[in] hashtable Pointer to the head of the token linked list.
  * @return The count of tokens or -1 if the hashtable is NULL.

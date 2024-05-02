@@ -3,9 +3,6 @@
 void	handle_expand_fail(t_tkn **node);
 char	*search_value(t_global **data, char **str, int i, int len);
 
-/**
- * It updates the token node with the variable value (*exp_value).
- */
 static char	*prepare_new_content(t_tkn *node, int len,
 	int var_len, char *exp_value)
 {
@@ -48,14 +45,6 @@ static void	update_node(t_tkn **node, int len, int var_len, char **exp_value)
 	free(new_content);
 }
 
-/**
- * Searches for the variable value in the arrays
- * (*data)->env and (*data)->exported.
- * Then, it updates the token hashtable with the founded value.
- *
- * Returns (1) if no problem is found.
- * Otherwise, returns (0).
- */
 static int	get_var_value(t_tkn **node, int i, t_global **data)
 {
 	int		len;
@@ -84,12 +73,6 @@ static int	get_var_value(t_tkn **node, int i, t_global **data)
 	return (1);
 }
 
-/**
- * Check if the token contains a variable to be expanded.
- *
- * Returns (1) if no problem is found.
- * Otherwise, returns (0).
- */
 int	check_if_expandable(t_tkn **node, t_global **data)
 {
 	int		i;
@@ -114,12 +97,6 @@ int	check_if_expandable(t_tkn **node, t_global **data)
 	return (result);
 }
 
-/**
- * Handles variable expansion.
- *
- * Returns (1) if no problem is found during expansion.
- * Otherwise, returns (0).
- */
 int	expand(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;
