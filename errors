@@ -33,6 +33,58 @@ fde-alen:~/Documents/minishell$
 
 
 
+==255258== 12 bytes in 1 blocks are definitely lost in loss record 3 of 59
+==255258==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==255258==    by 0x407F1A: init_children_pid (exec_processes.c:18)
+==255258==    by 0x407D94: exec_processes (exec_processes.c:56)
+==255258==    by 0x4073AC: handle_execution (exec.c:13)
+==255258==    by 0x40697A: handle_prompt (prompt.c:59)
+==255258==    by 0x406288: main (main.c:36)
+
+fde-alen:~/Documents/minishell$
+.git/                  234                    allowed_functions.txt  minishell
+.gitignore             235                    eof                    readline.supp
+.tmp/                  Makefile               errors                 src/
+.vscode/               README.md              includes/
+123                    all_in_one.c           libs/
+fde-alen:~/Documents/minishell$
+.git/                  234                    allowed_functions.txt  minishell
+.gitignore             235                    eof                    readline.supp
+.tmp/                  Makefile               errors                 src/
+.vscode/               README.md              includes/
+123                    all_in_one.c           libs/
+->tab não completa o comando e abre prompt de novo (com o mesmo conteudo)
+
+
+
+
+
+==255258== 12 bytes in 1 blocks are definitely lost in loss record 3 of 59
+==255258==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==255258==    by 0x407F1A: init_children_pid (exec_processes.c:18)
+==255258==    by 0x407D94: exec_processes (exec_processes.c:56)
+==255258==    by 0x4073AC: handle_execution (exec.c:13)
+==255258==    by 0x40697A: handle_prompt (prompt.c:59)
+==255258==    by 0x406288: main (main.c:36)
+
+fde-alen:~/Documents/minishell$
+.git/                  234                    allowed_functions.txt  minishell
+.gitignore             235                    eof                    readline.supp
+.tmp/                  Makefile               errors                 src/
+.vscode/               README.md              includes/
+123                    all_in_one.c           libs/
+fde-alen:~/Documents/minishell$
+.git/                  234                    allowed_functions.txt  minishell
+.gitignore             235                    eof                    readline.supp
+.tmp/                  Makefile               errors                 src/
+.vscode/               README.md              includes/
+123                    all_in_one.c           libs/
+->tab não completa o comando e abre prompt de novo (com o mesmo conteudo)
+
+
+
+
+
 
 |-------------------------------------------------------------------------|
 |~/Documents/Projects/minishell/minishell29Apr (feature/heredoc*) » ./minishell                                       fde-alen@c1r6p2
@@ -43,10 +95,45 @@ fde-alen:~/Documents/minishell$
 |fde-alen:~/Documents/Projects/minishell/minishell29Apr$ waitpid: Interrupted system call
 |-> ctrl+C no meio do comando em bloco printa msg e não devia printar
 
+|-------------------------------------------------------------------------|
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ cat
+|
+|^\^\^\^\
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ grep something
+|
+|^\^\
+|-> ctrl+\ não dá quit no comando em bloco
+
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes""""te"
+|[1]    436794 segmentation fault (core dumped)  ./minishell
+|-------------------------------------------------------------------------------------------------------------------------------------
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes"te
+|tes
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes""te"
+|tes
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "123""tes""te"
+|123tes
+|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "123""i""te89""asdasd""""dfsd"
+|[1]    437642 segmentation fault (core dumped)  ./minishell
+|->
+
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ unset PATH
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls
+minishell: ls: command not found
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ export PATH=/usr/local/bin:/usr/bin:/bin
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo $PATH
+/usr/local/bin:/usr/bin:/bin
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls
+minishell: ls: command not found
+
+cat << eof - lento e com dois > >
+cat << eof - ctrl D
 
 
 
-
+redir.c
+int	redirect_input(char *input_redirect)
+=======
 
 
 |-------------------------------------------------------------------------|
@@ -68,42 +155,306 @@ fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo hi | echo 42
 42
 
 
+Test   5: ❌ echo hello""world
+mini output = (hello world)
+bash output = (helloworld)
+
+
+Test  13: ❌ echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<"
+mini output = ()
+bash output = (> >> < bash_outfiles bash.supp bonus bonus_bonus builtins extras local.supp loop.out manual_tests mini_outfiles os_specific outfiles pipes README.md redirects syntax tester test_files wildcards ? [ ] | ; [ ] || && ( ) & # $ <<)
+mini exit code = 139
+bash exit code = 0
+
+
+Test  14: ❌ echo '> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<'
+mini output = ()
+bash output = (> >> < bash_outfiles bash.supp bonus bonus_bonus builtins extras local.supp loop.out manual_tests mini_outfiles os_specific outfiles pipes README.md redirects syntax tester test_files wildcards ? [ ] | ; [ ] || && ( ) & # $ <<)
+mini exit code = 139
+bash exit code = 0
+
+
+Test  15: ❌ echo "exit_code ->$? user ->$USER home -> $HOME"
+mini output = ()
+bash output = (exit_code ->0 user ->fde-alen home -> /nfs/homes/fde-alen)
+
+Test  17: ❌ echo "$"
+mini output = (/bin/zsh)
+bash output = ($)
+
+
+Test  21: ❌ echo $?HELLO
+mini output = ($?HELLO)
+bash output = (0HELLO)
+
+
+
+
+
+
+
+mini output = (unset: not enough arguments)
+bash output = ()
+mini exit code = 1
+bash exit code = 0
+
+
+Test  36: ❌ unset HOME
+mini output = (/nfs/homes/fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr/minishell_tester$ )
+bash output = ()
+mini exit code = /nfs/homes/fde-alen:~/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr/minishell_tester$ exit
+bash exit code = 0
+
+
+Test  49: ❌ exit -"100"
+mini exit code = 1
+bash exit code = 156
+mini error = ( too many arguments)
+bash error = ()
+
+Test  52: ❌
+mini exit code =
+bash exit code = 0
+
+
+Test  55: ❌ cat minishell.h | grep ");"$
+mini exit code = 2
+bash exit code = 1
+mini error = ( No such file or directory No such file or directory)
+bash error = ( No such file or directory)
+
+
+Test  78: ❌ cat <missing | echo oi
+mini output = ()
+bash output = (oi)
+mini exit code = 1
+bash exit code = 0
+
+
+Test  80: ❌ echo <123 <456 hi | echo 42
+mini output = ()
+bash output = (42)
+mini exit code = 1
+bash exit code = 0
+
+
+Test  91: ❌ echo hi >./outfiles/outfile01 | echo bye
+mini output = ()
+bash output = (bye)
+
+
+Test  92: ❌ echo hi >./outfiles/outfile01 >./outfiles/outfile02 | echo bye
+mini output = ()
+bash output = (bye)
+
+
+Test  95: ❌ echo hi >./outfiles/outfile01 | echo bye >./outfiles/outfile02
+Files ./mini_outfiles/outfile02 and ./bash_outfiles/outfile02 differ
+mini outfiles:
+hi
+bash outfiles:
+hi
+bye
+
+
+Test  96: ❌ echo hi >./outfiles/outfile01 >./test_files/invalid_permission | echo bye
+mini output = ()
+bash output = (bye)
+mini exit code = 1
+bash exit code = 0
+mini error = ( Permission denied Permission denied)
+bash error = ( Permission denied)
+
+
+Test  97: ❌ echo hi >./test_files/invalid_permission | echo bye
+mini output = ()
+bash output = (bye)
+mini exit code = 1
+bash exit code = 0
+mini error = ( Permission denied Permission denied)
+bash error = ( Permission denied)
+
+
+Test  98: ❌ echo hi >./test_files/invalid_permission >./outfiles/outfile01 | echo bye
+mini output = ()
+bash output = (bye)
+mini exit code = 1
+bash exit code = 0
+mini error = ( Permission denied Permission denied)
+bash error = ( Permission denied)
+
+
+Test 100: ❌ echo hi | >./outfiles/outfile01 echo bye >./test_files/invalid_permission
+Only in ./bash_outfiles: outfile01
+mini outfiles:
+cat: './mini_outfiles/*': No such file or directory
+bash outfiles:
+mini output = (>: command not found)
+bash output = ()
+mini exit code = >: command not found
+bash exit code = 1
+mini error = ()
+bash error = ( Permission denied)
+
+
+Test 103: ❌ cat >./test_files/invalid_permission <"./test_files/infile"
+mini exit code = xt
+bash exit code = 1
+mini error = ( Permission denied Permission denied)
+bash error = ( Permission denied)
+
+
+Test 119: ❌ ls <missing >>./test_files/invalid_permission >>./outfiles/outfile02
+mini exit code = o$?exit
+bash exit code = 1
+mini error = ( No such file or directory No such file or directory)
+bash error = ( No such file or directory)
+
+
+Test 121: ❌ echo hi >>./outfiles/outfile01 | echo bye
+Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
+mini outfiles:
+bye
+hi
+bash outfiles:
+hi
+mini output = ()
+bash output = (bye)
+
+
+Test 122: ❌ echo hi >>./outfiles/outfile01 >>./outfiles/outfile02 | echo bye
+Files ./mini_outfiles/outfile02 and ./bash_outfiles/outfile02 differ
+mini outfiles:
+bye
+hi
+bash outfiles:
+hi
+mini output = ()
+bash output = (bye)
+
+
+Test 125: ❌ echo hi >>./outfiles/outfile01 | echo bye >>./outfiles/outfile02
+Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
+Files ./mini_outfiles/outfile02 and ./bash_outfiles/outfile02 differ
+mini outfiles:
+hi
+bye
+bash outfiles:
+hi
+bye
+
+
+Test 126: ❌ echo hi >>./test_files/invalid_permission | echo bye
+mini output = ()
+bash output = (bye)
+mini exit code = 1
+bash exit code = 0
+mini error = ( Permission denied Permission denied)
+bash error = ( Permission denied)
+
+
+Test 127: ❌ echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye
+mini output = ()
+bash output = (bye)
+mini exit code = 1
+bash exit code = 0
+mini error = ( Permission denied Permission denied)
+bash error = ( Permission denied)
+
+
+Test 133: ❌ $PWD
+mini output = (/nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr/minishell_tester: command not found)
+bash output = ()
+mini exit code = /nfs/homes/fde-alen/Documents/Projects/minishell/minishell29Apr/minishell_tester: command not found
+bash exit code = 126
+mini error = ()
+bash error = ( Is a directory)
+
+
+Test 134: ❌ $EMPTY
+mini output = ($EMPTY: command not found)
+bash output = ()
+mini exit code = $EMPTY: command not found
+bash exit code = 0
+
+
+Test 135: ❌ $EMPTY echo hi
+mini output = ($EMPTY: command not found)
+bash output = (hi)
+mini exit code = $EMPTY: command not found
+bash exit code = 0
+
+
+Test 136: ❌ ./test_files/invalid_permission
+mini exit code = 127
+bash exit code = 126
+mini error = ( No such file or directory)
+bash error = ( Permission denied)
+
+
+Test 139: ❌ "aaa"
+mini output = (aaa: command not found)
+bash output = ()
+mini exit code = aaa: command not found
+bash exit code = 127
+mini error = ()
+bash error = ( command not found)
+
+
+Test 140: ❌ test_files
+mini exit code = 1
+bash exit code = 127
+mini error = ( Permission denied)
+bash error = ( command not found)
+
+
+Test 145: ❌ $?
+mini output = (0: command not found)
+bash output = ()
+mini exit code = 0: command not found
+bash exit code = 127
+mini error = ()
+bash error = ( command not found)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 FIXED ---------------------------
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ unset PATH
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls
-minishell: ls: command not found
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ export PATH=/usr/local/bin:/usr/bin:/bin
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo $PATH
-/usr/local/bin:/usr/bin:/bin
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ ls
-minishell: ls: command not found
-
-|-------------------------------------------------------------------------|
-|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ cat
-|
-|^\^\^\^\
-|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ grep something
-|
-|^\^\
-|-> ctrl+\ não dá quit no comando em bloco
-
-
-|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes""""te"
-|[1]    436794 segmentation fault (core dumped)  ./minishell
-|-------------------------------------------------------------------------------------------------------------------------------------
-|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes"te
-|tes
-|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo """tes""te"
-|tes
-|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "123""tes""te"
-|123tes
-|fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo "123""i""te89""asdasd""""dfsd"
-|[1]    437642 segmentation fault (core dumped)  ./minishell
-|->
-
-|-------------------------------------------------------------------------|
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ wc
-123a^M^M^M123^M
 
 |-------------------------------------------------------------------------|
 fde-alen:~/Documents/Projects/minishell/minishell29Apr/minishell_tester$ echo "exit_code ->$? user ->$USER home -> $HOME"
@@ -750,490 +1101,3 @@ fde-alen:~/Documents/minishell$ << eof << eof
 ==42830==    by 0x40694A: handle_prompt (prompt.c:52)
 ==42830==    by 0x4062A8: main (main.c:36)
 ==42830==
-
-
-
-
-
-~/Documents/minishell (agoravai*) » make valgrind                                           fde-alen@c1r7p1
-Running the program with valgrind...
-valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes --suppressions=readline.supp ./minishell
-==59388== Memcheck, a memory error detector
-==59388== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==59388== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==59388== Command: ./minishell
-==59388==
-fde-alen:~/Documents/minishell$ cat minishell.h | grep ");"$
-==59434== Memcheck, a memory error detector
-==59434== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==59434== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==59434== Command: /usr/bin/grep ); $
-==59434==
-==59433== Memcheck, a memory error detector
-==59433== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==59433== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==59433== Command: /usr/bin/cat minishell.h
-==59433==
-/usr/bin/cat: minishell.h: No such file or directory
-==59433==
-==59433== FILE DESCRIPTORS: 5 open at exit.
-==59433== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
-==59433==    <inherited from parent>
-==59433==
-==59433== Open file descriptor 39: /usr/share/code/resources/app/node_modules.asar
-==59433==    <inherited from parent>
-==59433==
-==59433== Open file descriptor 38: /dev/ptmx
-==59433==    <inherited from parent>
-==59433==
-==59433== Open file descriptor 37: /nfs/homes/fde-alen/.config/Code/logs/20240501T110246/ptyhost.log
-==59433==    <inherited from parent>
-==59433==
-==59433== Open file descriptor 0: /dev/pts/1
-==59433==    <inherited from parent>
-==59433==
-==59433==
-==59433== HEAP SUMMARY:
-==59433==     in use at exit: 0 bytes in 0 blocks
-==59433==   total heap usage: 41 allocs, 41 frees, 13,599 bytes allocated
-==59433==
-==59433== All heap blocks were freed -- no leaks are possible
-==59433==
-==59433== For lists of detected and suppressed errors, rerun with: -s
-==59433== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-/usr/bin/grep: $: No such file or directory
-==59434==
-==59434== FILE DESCRIPTORS: 5 open at exit.
-==59434== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
-==59434==    <inherited from parent>
-==59434==
-==59434== Open file descriptor 39: /usr/share/code/resources/app/node_modules.asar
-==59434==    <inherited from parent>
-==59434==
-==59434== Open file descriptor 38: /dev/ptmx
-==59434==    <inherited from parent>
-==59434==
-==59434== Open file descriptor 37: /nfs/homes/fde-alen/.config/Code/logs/20240501T110246/ptyhost.log
-==59434==    <inherited from parent>
-==59434==
-==59434== Open file descriptor 0:
-==59434==    <inherited from parent>
-==59434==
-==59434==
-==59434== HEAP SUMMARY:
-==59434==     in use at exit: 113,819 bytes in 44 blocks
-==59434==   total heap usage: 147 allocs, 103 frees, 140,070 bytes allocated
-==59434==
-==59434== 3 bytes in 1 blocks are possibly lost in loss record 1 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129F68: ??? (in /usr/bin/grep)
-==59434==    by 0x10DDFE: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 4 bytes in 1 blocks are still reachable in loss record 2 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49CFC4F: re_node_set_init_copy (regex_internal.c:1033)
-==59434==    by 0x49CFC4F: create_cd_newstate (regex_internal.c:1681)
-==59434==    by 0x49CFC4F: re_acquire_state_context (regex_internal.c:1553)
-==59434==    by 0x49DA5C4: create_initial_state (regcomp.c:1050)
-==59434==    by 0x49DA5C4: re_compile_internal (regcomp.c:806)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 4 bytes in 1 blocks are still reachable in loss record 3 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49C8952: re_node_set_alloc (regex_internal.c:972)
-==59434==    by 0x49C8952: register_state (regex_internal.c:1574)
-==59434==    by 0x49CFDF5: create_cd_newstate (regex_internal.c:1737)
-==59434==    by 0x49CFDF5: re_acquire_state_context (regex_internal.c:1553)
-==59434==    by 0x49DA5C4: create_initial_state (regcomp.c:1050)
-==59434==    by 0x49DA5C4: re_compile_internal (regcomp.c:806)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 4 bytes in 1 blocks are indirectly lost in loss record 4 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49CFC4F: re_node_set_init_copy (regex_internal.c:1033)
-==59434==    by 0x49CFC4F: create_cd_newstate (regex_internal.c:1681)
-==59434==    by 0x49CFC4F: re_acquire_state_context (regex_internal.c:1553)
-==59434==    by 0x49DA5C4: create_initial_state (regcomp.c:1050)
-==59434==    by 0x49DA5C4: re_compile_internal (regcomp.c:806)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 4 bytes in 1 blocks are indirectly lost in loss record 5 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49C8952: re_node_set_alloc (regex_internal.c:972)
-==59434==    by 0x49C8952: register_state (regex_internal.c:1574)
-==59434==    by 0x49CFDF5: create_cd_newstate (regex_internal.c:1737)
-==59434==    by 0x49CFDF5: re_acquire_state_context (regex_internal.c:1553)
-==59434==    by 0x49DA5C4: create_initial_state (regcomp.c:1050)
-==59434==    by 0x49DA5C4: re_compile_internal (regcomp.c:806)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 12 bytes in 1 blocks are still reachable in loss record 6 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D99BA: analyze (regcomp.c:1169)
-==59434==    by 0x49D99BA: re_compile_internal (regcomp.c:795)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 12 bytes in 1 blocks are still reachable in loss record 7 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E2C: ??? (in /usr/bin/grep)
-==59434==    by 0x11D5FC: ??? (in /usr/bin/grep)
-==59434==    by 0x120CFC: ??? (in /usr/bin/grep)
-==59434==    by 0x10EB18: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 12 bytes in 3 blocks are still reachable in loss record 8 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49CDAE9: re_node_set_alloc (regex_internal.c:972)
-==59434==    by 0x49CDAE9: calc_eclosure_iter (regcomp.c:1700)
-==59434==    by 0x49DA232: calc_eclosure (regcomp.c:1677)
-==59434==    by 0x49DA232: analyze (regcomp.c:1204)
-==59434==    by 0x49DA232: re_compile_internal (regcomp.c:795)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 12 bytes in 1 blocks are indirectly lost in loss record 9 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D99BA: analyze (regcomp.c:1169)
-==59434==    by 0x49D99BA: re_compile_internal (regcomp.c:795)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 12 bytes in 3 blocks are indirectly lost in loss record 10 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49CDAE9: re_node_set_alloc (regex_internal.c:972)
-==59434==    by 0x49CDAE9: calc_eclosure_iter (regcomp.c:1700)
-==59434==    by 0x49DA232: calc_eclosure (regcomp.c:1677)
-==59434==    by 0x49DA232: analyze (regcomp.c:1204)
-==59434==    by 0x49DA232: re_compile_internal (regcomp.c:795)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 16 bytes in 1 blocks are still reachable in loss record 11 of 38
-==59434==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49C8A43: register_state (regex_internal.c:1589)
-==59434==    by 0x49CFDF5: create_cd_newstate (regex_internal.c:1737)
-==59434==    by 0x49CFDF5: re_acquire_state_context (regex_internal.c:1553)
-==59434==    by 0x49DA5C4: create_initial_state (regcomp.c:1050)
-==59434==    by 0x49DA5C4: re_compile_internal (regcomp.c:806)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 16 bytes in 1 blocks are still reachable in loss record 12 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E2C: ??? (in /usr/bin/grep)
-==59434==    by 0x11A5DB: ??? (in /usr/bin/grep)
-==59434==    by 0x11D715: ??? (in /usr/bin/grep)
-==59434==    by 0x120CFC: ??? (in /usr/bin/grep)
-==59434==    by 0x10EB18: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 16 bytes in 1 blocks are indirectly lost in loss record 13 of 38
-==59434==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49C8A43: register_state (regex_internal.c:1589)
-==59434==    by 0x49CFDF5: create_cd_newstate (regex_internal.c:1737)
-==59434==    by 0x49CFDF5: re_acquire_state_context (regex_internal.c:1553)
-==59434==    by 0x49DA5C4: create_initial_state (regcomp.c:1050)
-==59434==    by 0x49DA5C4: re_compile_internal (regcomp.c:806)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 28 bytes in 1 blocks are still reachable in loss record 14 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E2C: ??? (in /usr/bin/grep)
-==59434==    by 0x11D0E5: ??? (in /usr/bin/grep)
-==59434==    by 0x120CFC: ??? (in /usr/bin/grep)
-==59434==    by 0x10EB18: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 48 bytes in 1 blocks are still reachable in loss record 15 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D94C1: init_dfa (regcomp.c:859)
-==59434==    by 0x49D94C1: re_compile_internal (regcomp.c:758)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 48 bytes in 1 blocks are still reachable in loss record 16 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D99DB: analyze (regcomp.c:1171)
-==59434==    by 0x49D99DB: re_compile_internal (regcomp.c:795)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 48 bytes in 1 blocks are still reachable in loss record 17 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D99EB: analyze (regcomp.c:1172)
-==59434==    by 0x49D99EB: re_compile_internal (regcomp.c:795)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 48 bytes in 1 blocks are indirectly lost in loss record 18 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D94C1: init_dfa (regcomp.c:859)
-==59434==    by 0x49D94C1: re_compile_internal (regcomp.c:758)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 48 bytes in 1 blocks are indirectly lost in loss record 19 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D99DB: analyze (regcomp.c:1171)
-==59434==    by 0x49D99DB: re_compile_internal (regcomp.c:795)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 48 bytes in 1 blocks are indirectly lost in loss record 20 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D99EB: analyze (regcomp.c:1172)
-==59434==    by 0x49D99EB: re_compile_internal (regcomp.c:795)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 64 bytes in 1 blocks are still reachable in loss record 21 of 38
-==59434==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D94F8: init_dfa (regcomp.c:866)
-==59434==    by 0x49D94F8: re_compile_internal (regcomp.c:758)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 64 bytes in 1 blocks are indirectly lost in loss record 22 of 38
-==59434==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49D94F8: init_dfa (regcomp.c:866)
-==59434==    by 0x49D94F8: re_compile_internal (regcomp.c:758)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 72 bytes in 1 blocks are still reachable in loss record 23 of 38
-==59434==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129F32: ??? (in /usr/bin/grep)
-==59434==    by 0x10E668: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 80 bytes in 1 blocks are still reachable in loss record 24 of 38
-==59434==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E59: ??? (in /usr/bin/grep)
-==59434==    by 0x11A6B4: ??? (in /usr/bin/grep)
-==59434==    by 0x11D715: ??? (in /usr/bin/grep)
-==59434==    by 0x120CFC: ??? (in /usr/bin/grep)
-==59434==    by 0x10EB18: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 88 bytes in 1 blocks are still reachable in loss record 25 of 38
-==59434==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49CFC13: create_cd_newstate (regex_internal.c:1678)
-==59434==    by 0x49CFC13: re_acquire_state_context (regex_internal.c:1553)
-==59434==    by 0x49DA5C4: create_initial_state (regcomp.c:1050)
-==59434==    by 0x49DA5C4: re_compile_internal (regcomp.c:806)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 88 bytes in 1 blocks are indirectly lost in loss record 26 of 38
-==59434==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49CFC13: create_cd_newstate (regex_internal.c:1678)
-==59434==    by 0x49CFC13: re_acquire_state_context (regex_internal.c:1553)
-==59434==    by 0x49DA5C4: create_initial_state (regcomp.c:1050)
-==59434==    by 0x49DA5C4: re_compile_internal (regcomp.c:806)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 128 bytes in 1 blocks are still reachable in loss record 27 of 38
-==59434==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E59: ??? (in /usr/bin/grep)
-==59434==    by 0x10F719: ??? (in /usr/bin/grep)
-==59434==    by 0x10DE17: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 128 bytes in 1 blocks are still reachable in loss record 28 of 38
-==59434==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E59: ??? (in /usr/bin/grep)
-==59434==    by 0x10E809: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 128 bytes in 1 blocks are still reachable in loss record 29 of 38
-==59434==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E59: ??? (in /usr/bin/grep)
-==59434==    by 0x11C518: ??? (in /usr/bin/grep)
-==59434==    by 0x11C8A4: ??? (in /usr/bin/grep)
-==59434==    by 0x1206C4: ??? (in /usr/bin/grep)
-==59434==    by 0x10EAB0: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 168 bytes in 1 blocks are still reachable in loss record 30 of 38
-==59434==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129F32: ??? (in /usr/bin/grep)
-==59434==    by 0x11CCBE: ??? (in /usr/bin/grep)
-==59434==    by 0x120CFC: ??? (in /usr/bin/grep)
-==59434==    by 0x10EB18: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 224 bytes in 1 blocks are still reachable in loss record 31 of 38
-==59434==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49DA934: re_compile_internal (regcomp.c:750)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10EA5F: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 256 bytes in 1 blocks are still reachable in loss record 32 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E2C: ??? (in /usr/bin/grep)
-==59434==    by 0x10ED01: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 384 bytes in 3 blocks are still reachable in loss record 33 of 38
-==59434==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E59: ??? (in /usr/bin/grep)
-==59434==    by 0x11D996: ??? (in /usr/bin/grep)
-==59434==    by 0x120CFC: ??? (in /usr/bin/grep)
-==59434==    by 0x10EB18: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 568 (224 direct, 344 indirect) bytes in 1 blocks are definitely lost in loss record 34 of 38
-==59434==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x49DA934: re_compile_internal (regcomp.c:750)
-==59434==    by 0x49DAC4E: re_compile_pattern (regcomp.c:230)
-==59434==    by 0x10E877: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 2,336 bytes in 1 blocks are still reachable in loss record 35 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E2C: ??? (in /usr/bin/grep)
-==59434==    by 0x10E670: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 2,472 bytes in 1 blocks are still reachable in loss record 36 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E2C: ??? (in /usr/bin/grep)
-==59434==    by 0x1141B7: ??? (in /usr/bin/grep)
-==59434==    by 0x117BE3: ??? (in /usr/bin/grep)
-==59434==    by 0x10EACD: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 4,064 bytes in 1 blocks are still reachable in loss record 37 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E2C: ??? (in /usr/bin/grep)
-==59434==    by 0x12D464: _obstack_begin (in /usr/bin/grep)
-==59434==    by 0x1141D4: ??? (in /usr/bin/grep)
-==59434==    by 0x11755C: ??? (in /usr/bin/grep)
-==59434==    by 0x10EAFD: ??? (in /usr/bin/grep)
-==59434==    by 0x10D877: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== 102,408 bytes in 1 blocks are still reachable in loss record 38 of 38
-==59434==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59434==    by 0x129E2C: ??? (in /usr/bin/grep)
-==59434==    by 0x10D955: ??? (in /usr/bin/grep)
-==59434==    by 0x4900082: (below main) (libc-start.c:308)
-==59434==
-==59434== LEAK SUMMARY:
-==59434==    definitely lost: 224 bytes in 1 blocks
-==59434==    indirectly lost: 344 bytes in 12 blocks
-==59434==      possibly lost: 3 bytes in 1 blocks
-==59434==    still reachable: 113,248 bytes in 30 blocks
-==59434==         suppressed: 0 bytes in 0 blocks
-==59434==
-==59434== For lists of detected and suppressed errors, rerun with: -s
-==59434== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
-fde-alen:~/Documents/minishell$ exit
-exit
-==59388==
-==59388== FILE DESCRIPTORS: 4 open at exit.
-==59388== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
-==59388==    <inherited from parent>
-==59388==
-==59388== Open file descriptor 39: /usr/share/code/resources/app/node_modules.asar
-==59388==    <inherited from parent>
-==59388==
-==59388== Open file descriptor 38: /dev/ptmx
-==59388==    <inherited from parent>
-==59388==
-==59388== Open file descriptor 37: /nfs/homes/fde-alen/.config/Code/logs/20240501T110246/ptyhost.log
-==59388==    <inherited from parent>
-==59388==
-==59388==
-==59388== HEAP SUMMARY:
-==59388==     in use at exit: 204,686 bytes in 216 blocks
-==59388==   total heap usage: 750 allocs, 534 frees, 247,789 bytes allocated
-==59388==
-==59388== 12 bytes in 1 blocks are definitely lost in loss record 3 of 59
-==59388==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==59388==    by 0x407F3A: init_children_pid (exec_processes.c:18)
-==59388==    by 0x407DB4: exec_processes (exec_processes.c:56)
-==59388==    by 0x4073CC: handle_execution (exec.c:13)
-==59388==    by 0x40699A: handle_prompt (prompt.c:59)
-==59388==    by 0x4062A8: main (main.c:36)
-==59388==
-==59388== LEAK SUMMARY:
-==59388==    definitely lost: 12 bytes in 1 blocks
-==59388==    indirectly lost: 0 bytes in 0 blocks
-==59388==      possibly lost: 0 bytes in 0 blocks
-==59388==    still reachable: 0 bytes in 0 blocks
-==59388==         suppressed: 204,674 bytes in 215 blocks
-==59388==
-==59388== For lists of detected and suppressed errors, rerun with: -s
-==59388== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

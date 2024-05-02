@@ -41,7 +41,6 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	else if (pid == 0)
 	{
 		status = exec_nonbuiltin(args, data);
-		//exit(EXIT_FAILURE);
 	}
 	else
 	{

@@ -75,7 +75,7 @@ void	replace_or_add(char *arg, t_global *data)
 	key = NULL;
 	if (ft_strchr_i(arg, '=') != -1)
 	{
-		key = ft_strndup(arg, ft_strchr_i(arg, '=') + 1);
+		key = ft_strndup(arg, ft_strchr_i(arg, '='));
 		ft_strarr_str_exp_rplc(data->env, key, arg);
 		ft_strarr_str_exp_rplc(data->exported, key, arg);
 	}

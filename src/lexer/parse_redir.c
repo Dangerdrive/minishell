@@ -2,8 +2,8 @@
 
 void	init_redir_args(char *(*args)[TABLE_SIZE]);
 void	check_heredoc(t_tkn **node);
-void	update_redir_files_list(char *(*redir)[TABLE_SIZE], char *sig, char *new_arg);
-
+void	update_redir_files_list(char *(*redir)[TABLE_SIZE],
+			char *sig, char *new_arg);
 
 static void	handle_no_prev_node(t_tkn **node)
 {
@@ -63,17 +63,17 @@ static void	update_node_after_redir(t_tkn **node)
 
 void	parse_redir(t_tkn **node, t_tkn **head)
 {
-    if (is_heredoc((*node)->content))
-        check_heredoc(node);
-    if (!ft_strcmp((*head)->content, (*node)->content)
-        && (*node)->next && (*node)->next->next)
-        *head = (*node)->next->next;
-    if (!(*head)->redir[0])
-        init_redir_args(&(*head)->redir);
-    update_redir_files_list(&(*head)->redir,
-        (*node)->content, (*node)->next->content);
-    if (is_heredoc((*node)->content))
-        update_node_after_redir(node);
-    else
-        update_node_after_redir(node);
+	if (is_heredoc((*node)->content))
+		check_heredoc(node);
+	if (!ft_strcmp((*head)->content, (*node)->content)
+		&& (*node)->next && (*node)->next->next)
+		*head = (*node)->next->next;
+	if (!(*head)->redir[0])
+		init_redir_args(&(*head)->redir);
+	update_redir_files_list(&(*head)->redir,
+		(*node)->content, (*node)->next->content);
+	if (is_heredoc((*node)->content))
+		update_node_after_redir(node);
+	else
+		update_node_after_redir(node);
 }

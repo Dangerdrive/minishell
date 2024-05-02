@@ -2,13 +2,17 @@
 
 void	free_redir_args(char *(*args)[TABLE_SIZE])
 {
+	printf("freeing_redir_args, bitch\n");
 	int		i;
 
 	i = 0;
 	if ((*args)[i])
 	{
+		printf("i=%d\n", i);
+		printf("freeing %s\n", (*args)[i]);
 		while ((*args)[i] != NULL)
 		{
+			//printf("freeing %s\n", (*args)[i]);
 			free((*args)[i]);
 			i++;
 		}
@@ -75,9 +79,6 @@ void	clean_input_and_hashtable(t_global **data)
 
 	ft_memdel((*data)->usr_input);
 	free_hashtable(&(*data)->hashtable);
-	// restore_fds_close(*data);
-	// restore_fds((*data)->original_fds);
-	//restore_original_fds((*data)->original_fds);
 	i = 0;
 	while (i < 100)
 	{

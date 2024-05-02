@@ -9,7 +9,6 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 	tmp_file_fd = 0;
 	filename = tmp_filename(heredoc_number);
 	tmp_file_fd = get_fd(filename);
-	// printf("open_redirs %d\n", data->open_redirs);
 	line = readline("> ");
 	while (line && ft_strncmp(line, eof, (ft_strlen(eof) + 1)))
 	{
@@ -89,7 +88,7 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 int	redirect_input(char *input_redirect, int i)
 {
 	int		fd;
-	char 	*filename;
+	char	*filename;
 
 	if (input_redirect[1] == '<')
 	{

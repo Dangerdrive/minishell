@@ -1,0 +1,66 @@
+fde-alen:~/Documents/minishell$ export test
+fde-alen:~/Documents/minishell$ unset test
+fde-alen:~/Documents/minishell$ env
+==331307== Process terminating with default action of signal 11 (SIGSEGV)
+==331307==  Access not within mapped region at address 0x50
+==331307==    at 0x40A5F4: ft_strchr_i (ft_strchr_i.c:33)
+==331307==    by 0x401BE5: env_print (env.c:45)
+==331307==    by 0x401A65: ft_env (env.c:61)
+==331307==    by 0x402728: exec_builtin (exec_builtins.c:39)
+==331307==    by 0x407BAF: exec_one_process (exec_one_process.c:98)
+==331307==    by 0x4072A0: handle_execution (exec.c:11)
+==331307==    by 0x40689A: handle_prompt (prompt.c:59)
+==331307==    by 0x4061A8: main (main.c:36)
+==331307==  If you believe this happened as a result of a stack
+==331307==  overflow in your program's main thread (unlikely but
+==331307==  possible), you can try to increase the size of the
+==331307==  main thread stack using the --main-stacksize= flag.
+==331307==  The main thread stack size used in this run was 8388608.
+==331307== 
+
+
+cat << eof << eof | echo hello > 456 | < test123 < test234 wc -l | sort > test567
+
+echo hello > 456 | < test123 < test234 wc -l | sort > test567
+
+
+ < test123 < test234 wc -l
+  < test123 > test234 wc -l
+==453636== 10 bytes in 1 blocks are definitely lost in loss record 3 of 59
+==453636==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==453636==    by 0x40A714: ft_strjoin (ft_strjoin.c:37)
+==453636==    by 0x404C62: update_redir_files_list (parse_redir_utils.c:59)
+==453636==    by 0x4047DC: parse_redir (parse_redir.c:73)
+==453636==    by 0x404360: check_redirects (lexer.c:37)
+==453636==    by 0x404480: lexer (lexer.c:71)
+==453636==    by 0x403CD7: parse (parser.c:99)
+==453636==    by 0x406871: handle_prompt (prompt.c:57)
+==453636==    by 0x406198: main (main.c:36)
+
+void	parse_redir(t_tkn **node, t_tkn **head)
+	    update_redir_files_list(&(*head)->redir, (*node)->content, (*node)->next->content);
+
+
+<< eof < test234 wc -l
+==460809== 4 bytes in 1 blocks are definitely lost in loss record 1 of 60
+==460809==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==460809==    by 0x409843: ft_calloc (ft_calloc.c:31)
+==460809==    by 0x40A65A: ft_strdup (ft_strdup.c:30)
+==460809==    by 0x404B8C: check_heredoc (parse_redir_utils.c:31)
+==460809==    by 0x404720: parse_redir (parse_redir.c:67)
+==460809==    by 0x404360: check_redirects (lexer.c:37)
+==460809==    by 0x404480: lexer (lexer.c:71)
+==460809==    by 0x403CD7: parse (parser.c:99)
+==460809==    by 0x406871: handle_prompt (prompt.c:57)
+==460809==    by 0x406198: main (main.c:36)
+==460809== 
+==460809== 6 bytes in 1 blocks are definitely lost in loss record 2 of 60
+==460809==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==460809==    by 0x40A714: ft_strjoin (ft_strjoin.c:37)
+==460809==    by 0x404C62: update_redir_files_list (parse_redir_utils.c:59)
+==460809==    by 0x4047DC: parse_redir (parse_redir.c:73)
+==460809==    by 0x404360: check_redirects (lexer.c:37)
+==460809==    by 0x404480: lexer (lexer.c:71)
+==460809==    by 0x403CD7: parse (parser.c:99)
+==460809==    by 0x406871: handle_prompt (prompt.c:57)
+==460809==    by 0x406198: main (main.c:36)

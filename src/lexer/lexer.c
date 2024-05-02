@@ -73,35 +73,3 @@ int	lexer(t_tkn	*(*hashtable)[TABLE_SIZE])
 	}
 	return (1);
 }
-
-// TESTS
-// ls > 123 | echo --> executa o redir, mas não pula linha no 'echo'
-// cat 007 | wc --> (bug com arquivo q não existe)
-// DÁ MENSAGEM DE ERRO MAS PRINTA '0	0	0' NA LINHA SEGUINTE
-// export myvar=hello | echo $myvar -->
-//era para pular uma linha apenas, mas tem 3 errors no valgrind.
-
-// echo > 1 -n > 2 hahahahaha -- ok -
-//mas no valgrind aparece uma mensagem de "invalid fd"
-// ls | < 123 echo -- ok
-// ls > qwe | < 123 -- ok
-// ls | < 123 wc -- ok
-// < 123 wc -- ok
-// < 123
-
-// ECHO:
-//in a case like echo $USER$USER, the result have a space in between - solved
-//export test test1=123 && echo $test - solved
-//results in 123. Expansion is being ambiguos. - solved
-
-//EXPORT:
-// 	//primeiro e segundo e 4º devem ser adicionados.
-// 	//USER deve modificar o valor de USER
-// mas não deve modificar o valor de USER_ZDOTDIR
-// 	//123test deve ser invalido (começa com numero)
-// 	//PATH não deve ser alterado, pois não tem igual.
-// 	//XMODIFIERS deve ser modificado para valor vazio
-
-
-
-// cat seguido de Ctrl-\
