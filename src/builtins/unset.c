@@ -90,6 +90,11 @@ static void	remove_variable(char *arg, t_global *data)
 		{
 			temp = ft_strarr_strrm_unset(data->exported, arg);
 			data->exported = temp;
+			if (data->exported[0] == NULL)
+			{
+				free(data->exported);
+				data->exported = NULL;
+			}
 		}
 	}
 }
