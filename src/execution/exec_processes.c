@@ -52,9 +52,15 @@ int	exec_processes(t_global *data)
 	int	*children_pid;
 	int	i;
 
-	save_original_fds(data->original_fds);
-	children_pid = init_children_pid(data);
 	i = 0;
+	save_original_fds(data->original_fds);
+	while (data->hashtable[0]->redir[i])
+	{
+		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
+			write_in_heredoc(data, i, &data->hashtable[0]->redir[i][2]);
+		i++;
+	}
+	children_pid = init_children_pid(data);
 	while (data->hashtable[i])
 	{
 		handle_pipe(data->original_fds[OUT], data,
@@ -65,7 +71,7 @@ int	exec_processes(t_global *data)
 			ft_dprintf(2, "minishell: %s: %s\n", "fork", strerror(errno));
 		else if (children_pid[i] == 0)
 		{
-			handle_redirects_for_pipes(&data->hashtable[i]->redir);
+			handle_redirects_for_pipes(&data->hashtable[i]->redir, data);
 			execute_forked_command(data, i);
 		}
 		i++;

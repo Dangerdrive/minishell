@@ -9,6 +9,7 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 	tmp_file_fd = 0;
 	filename = tmp_filename(heredoc_number);
 	tmp_file_fd = get_fd(filename);
+	// printf("open_redirs %d\n", data->open_redirs);
 	line = readline("> ");
 	while (line && ft_strncmp(line, eof, (ft_strlen(eof) + 1)))
 	{
@@ -19,36 +20,35 @@ void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
 		line = readline("> ");
 	}
 	if (!line)
-		ft_dprintf(STDOUT_FILENO,
-			"%sminishell: warning: heredoc delimited by EOF (wanted '%s')%s\n",
-		YELLOW, eof, END);
+		handle_heredoc_ctrl_d(data, eof);
 	close(tmp_file_fd);
 	free(filename);
 	free(line);
-	//redirect_fd(tmp_file_fd, STDIN_FILENO);
-	//exit(EXIT_SUCCESS);
 }
 
-void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
-{
-	int		pid;
+// void	redirect_heredoc(t_global *data, int heredoc_number, char *eof)
+// {
+// 	int		pid;
+// 	int		open_redirs;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	define_heredoc_signals(pid);
-	if (pid == 0)
-		write_in_heredoc(data, heredoc_number, eof);
-	else
-	{
-		data->ret = wait_for_child(pid, TRUE);
-	}
-	define_prompt_signals();
-	external_exit(EXIT_SUCCESS);
-}
+// 	pid = fork();
+// 	if (pid == -1)
+// 	{
+// 		perror("fork");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	data->sig_env = HEREDOC;
+// 	define_heredoc_signals(pid);
+// 	if (pid == 0)
+// 		write_in_heredoc(data, heredoc_number, eof, &(1));
+// 	else
+// 	{
+// 		data->ret = wait_for_child(pid, TRUE);
+// 	}
+// 	data->sig_env = PROMPT;
+// 	define_prompt_signals(&data);
+// 	external_exit(EXIT_SUCCESS);
+// }
 
 // int	redirect_input(char *input_redirect)
 // {

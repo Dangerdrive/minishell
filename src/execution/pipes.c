@@ -20,7 +20,7 @@ static void	quit_child(char *(*args)[TABLE_SIZE])
 	exit(EXIT_FAILURE);
 }
 
-void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE])
+void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE], t_global *data)
 {
 	int	i;
 
@@ -32,6 +32,7 @@ void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE])
 		// 	if (redirect_input((*redirects)[i]) == 0)
 		// 		quit_child(redirects);
 		// }
+		(void)data;
 		if ((*redirects)[i][0] == '<')
 		{
 			if (redirect_input((*redirects)[i], i) == 0)

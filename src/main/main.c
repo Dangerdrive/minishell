@@ -15,9 +15,8 @@ t_global	*init_data(void)
 	data->original_stdin = STDIN_FILENO;
 	data->original_stdout = STDOUT_FILENO;
 	data->env = ft_strarr_dup(__environ);
-	data->is_exec = FALSE;
-	data->is_heredoc = FALSE;
 	data->exported = NULL;
+	data->open_redirs = 0;
 	data->usr = ft_strdup(ft_getenv("USER", &data));
 	init_hashtable(&data->hashtable);
 	return (data);
@@ -32,7 +31,8 @@ int	main(void)
 	data->usr_input = NULL;
 	while (!data->exit)
 	{
-		define_prompt_signals();
+		data->sig_env = PROMPT;
+		define_prompt_signals(&data);
 		if (!data->exit && handle_prompt(&data) == -1)
 			break ;
 		clean_input_and_hashtable(&data);

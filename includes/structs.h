@@ -9,6 +9,13 @@ typedef enum e_bool
 	TRUE = 1
 }	t_bool;
 
+typedef enum e_sig
+{
+	PROMPT,
+	EXEC,
+	HEREDOC
+}	t_sig;
+
 typedef struct s_tkn
 {
 	char			*content;
@@ -32,8 +39,7 @@ typedef struct s_global
 	char			*usr;
 	char			*usr_input;
 	char			*cur_path;
-	t_bool			is_exec;
-	t_bool			is_heredoc;
+	t_sig			sig_env;
 	char			*input;
 	char			*output;
 	int				original_stdin;
@@ -41,6 +47,7 @@ typedef struct s_global
 	int				original_fds[2];
 	int				input_fd;
 	int				output_fd;
+	int				open_redirs;
 	int				pipe[2];
 	pid_t			pid;
 	int				prev_process_status;

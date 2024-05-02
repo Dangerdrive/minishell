@@ -92,7 +92,7 @@ void		parse_redir(t_tkn **node, t_tkn **temp_node);
 void		check_heredoc(t_tkn **node);
 
 /*-------------signals-------------*/
-void		define_prompt_signals(void);
+void		define_prompt_signals(t_global **data);
 void		define_exec_signals(int pid);
 void		define_heredoc_signals(int pid);
 
@@ -117,7 +117,7 @@ void		external_exit(int exit_status);
 int			handle_redirects(t_global *data, int ori_fds[2]);
 // void		handle_redirects_for_pipes(t_global *data,
 // 				char *(*redirects)[TABLE_SIZE]);
-void		handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE]);
+void		handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE], t_global *data);
 void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect, int i);
 int			redirect_output(char *output_redirect);
@@ -137,4 +137,7 @@ char		*tmp_filename(int heredoc_number);
 t_bool		ends_with_linebreak(char *line);
 int			get_fd(char *filename);
 int			get_var_value1(t_global **data, char **line, int i);
+void		write_in_heredoc(t_global *data, int heredoc_number, char *eof);
+void		heredoc_prompt(char **line, int heredoc_number, t_global *data);
+void		handle_heredoc_ctrl_d(t_global *data, char *eof);
 #endif
