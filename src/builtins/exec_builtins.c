@@ -1,5 +1,11 @@
 #include "../../includes/minishell.h"
 
+/**
+ * Determines if a given command string matches any known shell builtin commands.
+ * 
+ * @param[in] command The command string to check.
+ * @return 1 (TRUE) if the command is a builtin, otherwise 0 (FALSE).
+ */
 t_bool	is_builtin(char *command)
 {
 	if (ft_strcmp(command, "echo") == 0)
@@ -19,6 +25,16 @@ t_bool	is_builtin(char *command)
 	return (0);
 }
 
+/**
+ * Executes a shell builtin command based on the parsed arguments.
+ * Manages redirection and restores original file descriptors.
+ * 
+ * @param[in] args Array of arguments including the command.
+ * @param[in] args_len Number of arguments passed.
+ * @param[in, out] data Global data context including file descriptors.
+ * @return 0 on success or 1 on failure to execute the command or manage 
+ * redirections.
+ */
 int	exec_builtin(char **args, int args_len, t_global *data)
 {
 	int		result;

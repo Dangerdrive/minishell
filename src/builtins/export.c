@@ -3,6 +3,12 @@
 void	ft_strarr_str_exp_rplc(char **strarr, char *target, char *replcmt);
 int		ft_strarr_str_exp(char **strarr, const char *target);
 
+/**
+ * Prints each environment variable in the 'sorted_arr' array in a format
+ * suitable for export command output.
+ * 
+ * @param[in] sorted_arr Sorted array of environment variables.
+ */
 void	print_exp(char **sorted_arr)
 {
 	char	*key;
@@ -31,6 +37,12 @@ void	print_exp(char **sorted_arr)
 	}
 }
 
+/**
+ * Handles the 'export' command when no arguments are provided, printing
+ * all environment variables.
+ * 
+ * @param[in] data Pointer to the global data structure.
+ */
 void	export_no_args(t_global *data)
 {
 	char	**sorted_env;
@@ -44,6 +56,12 @@ void	export_no_args(t_global *data)
 	ft_strarr_free(sorted_export, ft_strarr_len(sorted_export));
 }
 
+/**
+ * Validates if the provided identifier is a valid shell variable name.
+ * 
+ * @param[in] str String to validate as a shell variable name.
+ * @return TRUE if the identifier is valid, FALSE otherwise.
+ */
 t_bool	identifier_is_valid(char *str)
 {
 	int		i;
@@ -68,6 +86,12 @@ t_bool	identifier_is_valid(char *str)
 	return (TRUE);
 }
 
+/**
+ * Adds or replaces an environment or exported variable with the given argument.
+ * 
+ * @param[in] arg The variable in the form 'key=value' or 'key'.
+ * @param[in, out] data Pointer to the global data structure.
+ */
 void	replace_or_add(char *arg, t_global *data)
 {
 	char	*key;
@@ -92,6 +116,15 @@ void	replace_or_add(char *arg, t_global *data)
 		free(key);
 }
 
+/**
+ * Executes the 'export' command, adding or updating variables in the environment
+ * and handling validation and sorting.
+ * 
+ * @param[in] args Array of arguments for the command.
+ * @param[in] args_len Number of arguments provided.
+ * @param[in, out] data Pointer to the global data structure.
+ * @return 0 if successful, 1 if an error occurred.
+ */
 int	ft_export(char **args, int args_len, t_global *data)
 {
 	int		i;

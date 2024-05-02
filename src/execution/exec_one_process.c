@@ -1,7 +1,15 @@
 #include "../../includes/minishell.h"
 
-void	write_in_heredoc(t_global *data, int heredoc_number, int hash_number, char *eof);
+void	write_in_heredoc(t_global *data, int heredoc_number,
+			int hash_number, char *eof);
 
+/**
+ * Executes a non-builtin command found in the system's PATH.
+ * 
+ * @param[in] args Array of arguments for the command.
+ * @param[in, out] data Global data structure including the environment.
+ * @return Returns the status set in data->ret, may exit directly on failure.
+ */
 int	exec_nonbuiltin(char **args, t_global *data)
 {
 	char	*cmd;
@@ -29,6 +37,14 @@ int	exec_nonbuiltin(char **args, t_global *data)
 	return (data->ret);
 }
 
+/**
+ * Handles the execution of a non-builtin command by waiting for its completion.
+ * 
+ * @param[in] data Global data structure.
+ * @param[in] args Command arguments.
+ * @param[in] pid Process ID of the forked process executing the command.
+ * @return Exit status of the command or error signals.
+ */
 int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 {
 	int	status;
@@ -55,6 +71,13 @@ int	exec_nonbuiltin_and_wait(t_global *data, char **args, int pid)
 	return (ret);
 }
 
+/**
+ * Executes a non-builtin command, managing redirection and process forking.
+ * 
+ * @param[in, out] data Global data structure with redirection information.
+ * @param[in] args Command arguments.
+ * @return Status code of command execution or fork process.
+ */
 int	exec_nonbuiltin_onfork(t_global *data, char **args)
 {
 	int		pid;
@@ -85,6 +108,12 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 	return (ret);
 }
 
+/**
+ * Manages the execution of a single process, either builtin or non-builtin.
+ * 
+ * @param[in, out] data Global data structure.
+ * @return Status code of the executed process.
+ */
 int	exec_one_process(t_global *data)
 {
 	int		ret;

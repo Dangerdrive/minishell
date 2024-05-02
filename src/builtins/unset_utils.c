@@ -1,5 +1,12 @@
 #include "../../includes/minishell.h"
 
+/**
+ * Validates if the provided string is a valid identifier for unset operations.
+ * 
+ * @param[in] str The string to validate as an identifier.
+ * @return TRUE if the identifier is valid (alphanumeric or underscore, not
+ *         starting with a digit), FALSE otherwise.
+ */
 t_bool	unset_identifier_is_valid(char *str)
 {
 	int		i;
@@ -18,6 +25,13 @@ t_bool	unset_identifier_is_valid(char *str)
 	return (TRUE);
 }
 
+/**
+ * Checks if the key part of a 'key=value' string matches the specified target.
+ * 
+ * @param[in] strarr_elem The string element in 'key=value' format.
+ * @param[in] tgt The target key to match.
+ * @return 1 if the key matches the target, 0 otherwise.
+ */
 int	key_matches_target(const char *strarr_elem, const char *tgt)
 {
 	char	*key;

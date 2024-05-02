@@ -48,7 +48,7 @@ SRC = 	./src/builtins/cd.c \
 		./src/redirections/redir.c \
 		./src/redirections/redir_utils.c \
 		./src/redirections/redir_utils2.c \
-		./src/execution/exec.c \
+		./src/execution/handle_exec.c \
 		./src/execution/exec_utils.c \
 		./src/execution/exec_one_process.c \
 		./src/execution/exec_processes.c \

@@ -1,5 +1,13 @@
 #include "../includes/minishell.h"
 
+/**
+ * Retrieves the value of an environment variable from either the 'env' or
+ * 'exported' arrays in the global data structure.
+ * 
+ * @param[in] name The name of the environment variable to find.
+ * @param[in] data Pointer to the global data structure.
+ * @return The value of the environment variable if found, NULL otherwise.
+ */
 char	*ft_getenv(char *name, t_global **data)
 {
 	int		i;
@@ -28,6 +36,13 @@ char	*ft_getenv(char *name, t_global **data)
 	return (NULL);
 }
 
+/**
+ * Prints all environment variables from the 'env' and 'exported' arrays
+ * in the global data structure.
+ * 
+ * @param[in] data Pointer to the global data structure.
+ * @return 0 on success, 1 if the environment array is empty.
+ */
 static int	env_print(t_global **data)
 {
 	int		i;
@@ -55,6 +70,15 @@ static int	env_print(t_global **data)
 	return (0);
 }
 
+/**
+ * Executes the 'env' command to print environment variables, handling
+ * errors and permissions for additional arguments.
+ * 
+ * @param[in] args The arguments passed to the env command.
+ * @param[in] args_len The number of arguments.
+ * @param[in, out] data Pointer to the global data structure.
+ * @return 0 on success, 1 on error or if arguments are invalid.
+ */
 int	ft_env(char **args, int args_len, t_global **data)
 {
 	if (args_len == 1)

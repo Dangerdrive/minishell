@@ -1,5 +1,12 @@
 #include "../../includes/minishell.h"
 
+/**
+ * Implements the echo command with an option to suppress trailing newline.
+ * 
+ * @param[in] args The arguments passed to the echo command.
+ * @param[in] args_len The number of arguments.
+ * @return Always returns 0 to indicate successful execution.
+ */
 int	ft_echo(char **args, int args_len)
 {
 	int		i;

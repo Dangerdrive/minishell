@@ -1,5 +1,11 @@
 #include "../../includes/minishell.h"
 
+/**
+ * Checks if the given command is a shell builtin command.
+ * 
+ * @param[in] command The command to check.
+ * @return 1 if the command is a builtin, 0 otherwise.
+ */
 static t_bool	argument_is_valid(char *arg)
 {
 	int	i;
@@ -27,6 +33,15 @@ static t_bool	argument_is_valid(char *arg)
 	return (TRUE);
 }
 
+/**
+ * Executes a builtin command, handling redirections and restoring file
+ * descriptors as necessary.
+ * 
+ * @param[in] args The arguments of the command.
+ * @param[in] args_len The number of arguments.
+ * @param[in, out] data Global data structure containing redirection info.
+ * @return Result of the command execution or 1 if redirection fails.
+ */
 int	ft_exit(char **args, int args_len, t_global *data)
 {
 	if (args_len == 1)

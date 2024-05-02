@@ -1,5 +1,12 @@
 #include "../includes/minishell.h"
 
+/**
+ * Replaces an element in a string array matching the target with a replacement.
+ * 
+ * @param[in, out] strarr Array of strings containing key=value pairs.
+ * @param[in] target The key to match for replacement.
+ * @param[in] replcmt The string to replace the matching element.
+ */
 void	ft_strarr_str_exp_rplc(char **strarr, char *target, char *replcmt)
 {
 	int		i;
@@ -28,6 +35,13 @@ void	ft_strarr_str_exp_rplc(char **strarr, char *target, char *replcmt)
 	}
 }
 
+/**
+ * Searches for a string key in a string array and returns its index.
+ * 
+ * @param[in] strarr Array of strings containing key=value pairs.
+ * @param[in] target The key to search for.
+ * @return Index of the matching key, or -1 if not found.
+ */
 int	ft_strarr_str_exp(char **strarr, const char *target)
 {
 	int		i;

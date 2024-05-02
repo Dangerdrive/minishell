@@ -1,5 +1,11 @@
 #include "../../includes/minishell.h"
 
+/**
+ * Calculates the number of tokens in a linked list representing a command hash table.
+ * 
+ * @param[in] hashtable Pointer to the head of the token linked list.
+ * @return The count of tokens or -1 if the hashtable is NULL.
+ */
 int	hashsize(t_tkn *hashtable)
 {
 	int		i;
@@ -17,6 +23,14 @@ int	hashsize(t_tkn *hashtable)
 	return (i);
 }
 
+/**
+ * Checks if the current node should be considered an empty string based on 
+ * specific conditions related to surrounding tokens.
+ * 
+ * @param[in] node Double pointer to the current token node.
+ * @return TRUE if conditions are met to treat as an empty string, 
+ * FALSE otherwise.
+ */
 t_bool	check_empty_str(t_tkn **node)
 {
 	if ((*node)->prev && ((*node)->prev->content
@@ -27,6 +41,13 @@ t_bool	check_empty_str(t_tkn **node)
 	return (FALSE);
 }
 
+/**
+ * Fills an array of arguments by joining tokens based on their spacing.
+ * 
+ * @param[in, out] node Pointer to the current node being processed.
+ * @param[out] args Array to fill with arguments.
+ * @param[in] i Index at which to insert the new argument.
+ */
 void	fill_args(t_tkn	**node, char **args, int i)
 {
 	char	*arg_tmp;
@@ -54,6 +75,12 @@ void	fill_args(t_tkn	**node, char **args, int i)
 	}
 }
 
+/**
+ * Converts a hash table of token nodes into an array of strings.
+ * 
+ * @param[in] node Head of the token linked list.
+ * @return Array of strings constructed from the hash table.
+ */
 char	**hash_to_args(t_tkn *node)
 {
 	char	**args;
@@ -77,6 +104,12 @@ char	**hash_to_args(t_tkn *node)
 	return (args);
 }
 
+/**
+ * Restores the original file descriptors for standard input and output.
+ * 
+ * @param[in] original_fds Array containing the original file descriptors
+ *  to restore.
+ */
 void	restore_fds(int original_fds[2])
 {
 	redirect_fd(original_fds[IN], STDIN_FILENO);

@@ -1,5 +1,12 @@
 #include "../../includes/minishell.h"
 
+/**
+ * Handles the execution of commands stored in the global data's hashtable,
+ * managing single and multiple processes based on pipe presence.
+ *
+ * @param[in, out] data Global structure containing execution details.
+ * @return Execution result stored in data->ret.
+ */
 int	handle_execution(t_global *data)
 {
 	char	**args;

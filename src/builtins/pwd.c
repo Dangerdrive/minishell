@@ -1,16 +1,9 @@
 #include "../../includes/minishell.h"
 
 /**
- * Prints the current working directory.
- *
- * Allocates a 4096-byte buffer for the directory path, using getcwd to retrieve
- * and ft_printf to print it. The buffer size assumes a typical Linux system
- * limit. It returns 1 on success or 0 on failure, ensuring to free the allocated
- * buffer in both cases to prevent memory leaks.
- *
- * Return values:
- * - 1: Success, directory printed.
- * - 0: Failure, getcwd error.
+ * Prints the current working directory to standard output.
+ * 
+ * @return 0 if successful, 1 if an error occurred while retrieving the directory.
  */
 int	ft_pwd(void)
 {
