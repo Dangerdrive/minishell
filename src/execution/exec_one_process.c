@@ -63,6 +63,7 @@ int	exec_nonbuiltin_onfork(t_global *data, char **args)
 
 	i = 0;
 	ret = 1;
+	//printf("redir[%d]: %s\n", i, data->hashtable[0]->redir[i]);
 	while (data->hashtable[0]->redir[i])
 	{
 		if (ft_strncmp(data->hashtable[0]->redir[i], "<<", 2) == 0)
@@ -91,6 +92,7 @@ int	exec_one_process(t_global *data)
 
 	ret = 1;
 	args = NULL;
+	//printf("redir[0]: %s\n", data->hashtable[0]->redir[0]);
 	if (data->hashtable[0]->content)
 		args = hash_to_args(data->hashtable[0]);
 	if (args && args[0] && is_builtin(args[0]))

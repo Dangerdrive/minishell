@@ -151,12 +151,12 @@ cd minishell_tester && ./tester | grep -v ✅ | grep Test && cd ..
 fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo <123 <456 hi | echo 42
 open: 456: No such file or directory
 open: 456: No such file or directory
-fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo hi | echo 42
+fde-alen:~/Documents/Projects/minishell/minishell29Apr$ echo hi | echo 42 ----- NÃO FUNCIONA
 42
 
 
 Test   5: ❌ echo hello""world
-mini output = (hello world)
+mini output = (hello world)	
 bash output = (helloworld)
 
 

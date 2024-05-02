@@ -2,7 +2,7 @@
 
 /**
  * Initializes an array of redirection arguments to NULL.
- * 
+ *
  * @param[out] args Pointer to the array of redirection arguments.
  */
 void	init_redir_args(char *(*args)[TABLE_SIZE])
@@ -20,7 +20,7 @@ void	init_redir_args(char *(*args)[TABLE_SIZE])
 
 /**
  * Checks if the current token is a heredoc delimiter and updates accordingly.
- * 
+ *
  * @param[in, out] node Pointer to the token node to check and update.
  */
 void	check_heredoc(t_tkn **node)
@@ -35,7 +35,7 @@ void	check_heredoc(t_tkn **node)
 /**
  * Updates a list of redirection file paths based on the
  *  given signal and new argument.
- * 
+ *
  * @param[out] redir Array of redirection paths to update.
  * @param[in] sig The redirection signal ('<', '>', '<<', '>>').
  * @param[in] new_arg The new file path or delimiter to add.
@@ -46,11 +46,11 @@ void	update_redir_files_list(char *(*redir)[TABLE_SIZE],
 	int		i;
 	char	*new_sig;
 
-	i = 0;
 	if (is_redir_in(sig) || is_redir_out(sig))
 		new_sig = ft_strjoin(sig, " ");
 	else
 		new_sig = ft_strdup(sig);
+	i = 0;
 	if ((*redir)[i])
 	{
 		while ((*redir)[i])

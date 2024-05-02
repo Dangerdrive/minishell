@@ -25,6 +25,7 @@ void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE])
 	int	i;
 
 	i = 0;
+	//printf("redir[%d]: %s\n", i, (*redirects)[i]);
 	while ((*redirects)[i])
 	{
 		if ((*redirects)[i][0] == '<')
@@ -39,7 +40,6 @@ void	handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE])
 		}
 		i++;
 	}
-	printf("redir[%d] %s\n", i, (*redirects)[i]);
 }
 
 void	handle_pipe(int original_fd_out, t_global *data,

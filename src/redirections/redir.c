@@ -85,7 +85,6 @@ void	write_in_heredoc(t_global *data, int heredoc_number, int hash_number, char 
 // 	return (1);
 // }
 
-
 int	redirect_input(char *input_redirect, int i)
 {
 	int		fd;
@@ -95,18 +94,26 @@ int	redirect_input(char *input_redirect, int i)
 	{
 		filename = tmp_filename(i);
 		fd = open(filename, O_RDONLY, FD_CLOEXEC);
+		if (fd == -1)
+		{
+			ft_dprintf(STDERR_FILENO, "Fail to open heredoc: %s: %s\n",
+				&input_redirect[2], strerror(errno));
+			free(filename);
+			return (0);
+		}
 		free(filename);
 	}
 	else
-		fd = open(&input_redirect[2], O_RDONLY, FD_CLOEXEC);
-	if (fd == -1)
 	{
-		ft_dprintf(STDERR_FILENO, "open: %s: %s\n",
-			&input_redirect[2], strerror(errno));
-		return (0);
+		fd = open(&input_redirect[2], O_RDONLY, FD_CLOEXEC);
+		if (fd == -1)
+		{
+			ft_dprintf(STDERR_FILENO, "open: %s: %s\n",
+				&input_redirect[2], strerror(errno));
+			return (0);
+		}
 	}
-	else
-		redirect_fd(fd, STDIN_FILENO);
+	redirect_fd(fd, STDIN_FILENO);
 	return (1);
 }
 
