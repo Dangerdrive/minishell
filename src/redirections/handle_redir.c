@@ -54,6 +54,7 @@ int	handle_redirects(t_global *data, int ori_fds[2])
 			if (!handle_output_redirect(data->hashtable[0]->redir[i], ori_fds))
 				return (0);
 		}
+		printf("redir[%d]: %s\n", i, data->hashtable[0]->redir[i]);
 		i++;
 	}
 	return (1);

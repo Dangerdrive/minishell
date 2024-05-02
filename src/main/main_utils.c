@@ -8,9 +8,11 @@ void	free_redir_args(char *(*args)[TABLE_SIZE])
 	i = 0;
 	if ((*args)[i])
 	{
+		printf("i=%d\n", i);
+		printf("freeing %s\n", (*args)[i]);
 		while ((*args)[i] != NULL)
 		{
-			printf("freeing %s\n", (*args)[i]);
+			//printf("freeing %s\n", (*args)[i]);
 			free((*args)[i]);
 			i++;
 		}
