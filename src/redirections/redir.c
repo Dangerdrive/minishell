@@ -1,12 +1,13 @@
 #include "../../includes/minishell.h"
 
-void	write_in_heredoc(t_global *data, int heredoc_number, char *eof)
+void	write_in_heredoc(t_global *data, int heredoc_number, int hash_number, char *eof)
 {
 	int		tmp_file_fd;
 	char	*filename;
 	char	*line;
 
 	tmp_file_fd = 0;
+	(void)hash_number;
 	filename = tmp_filename(heredoc_number);
 	tmp_file_fd = get_fd(filename);
 	line = readline("> ");
