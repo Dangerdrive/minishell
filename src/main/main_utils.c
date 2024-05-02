@@ -2,6 +2,7 @@
 
 void	free_redir_args(char *(*args)[TABLE_SIZE])
 {
+	printf("freeing_redir_args, bitch\n");
 	int		i;
 
 	i = 0;
@@ -9,6 +10,7 @@ void	free_redir_args(char *(*args)[TABLE_SIZE])
 	{
 		while ((*args)[i] != NULL)
 		{
+			printf("freeing %s\n", (*args)[i]);
 			free((*args)[i]);
 			i++;
 		}
