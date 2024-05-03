@@ -1,11 +1,20 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/02 22:01:20 by fde-alen          #+#    #+#             */
+/*   Updated: 2024/05/02 22:01:21 by fde-alen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	g_sig = 0;
+#include "minishell.h"
 
 static void	handle_sigint(int sig)
 {
 	(void)sig;
-	g_sig = 1;
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_on_new_line();
 	rl_replace_line("", 0);

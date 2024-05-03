@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/02 21:57:00 by fde-alen          #+#    #+#             */
+/*   Updated: 2024/05/02 21:57:03 by fde-alen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -112,7 +124,7 @@ int			wait_for_child(int child_pid, int is_last_child);
 int			handle_signal_interrupt(int status, int is_last_child);
 int			is_folder(char *command);
 void		external_exit(int exit_status);
-void	save_original_fds(int original_fds[2]);
+void		save_original_fds(int original_fds[2]);
 
 /*------------redirections---------*/
 int			handle_redirects(t_global *data, int ori_fds[2]);

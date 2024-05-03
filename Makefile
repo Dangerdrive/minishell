@@ -3,7 +3,7 @@ NAME = minishell
 NAME_BONUS = minishell_bonus
 
 # Compilation flags
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 INCLUDES = -I ./includes/ -I $(LIBFT_PATH)/ -I $(FTPRINTF_PATH)/
 
 # Libft
@@ -76,10 +76,7 @@ all: $(NAME)
 
 # Target to build the mandatory part
 $(NAME): $(OBJ) $(LIBFT) $(FTPRINTF)
-# 	@cp $(LIBFT) $(NAME)
-# 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME)
 	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline
-#	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
@@ -96,10 +93,7 @@ bonus: $(NAME_BONUS)
 
 # Target to build the bonus part
 $(NAME_BONUS): $(OBJ_BONUS) $(LIBFT) $(FTPRINTF)
-# 	@cp $(LIBFT) $(NAME_BONUS)
-# 	$(CC) $(OBJ) $(LIBFT) -L$(PATH_LIBFT) -o $(NAME_BONUS)
 	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft -L ../../../../usr/include -lreadline
-#	@$(CC) $(CFLAGS) $(OBJ) -o $@ -L$(FTPRINTF_PATH) -lftprintf -L$(LIBFT_PATH) -lft
 	@echo "$(GREEN)--------------------------------------------------$(END)"
 	@echo "$(GREEN)The [$(CYAN)MINI-SHELL$(GREEN)] has been compiled! 🐚🌊$(END)"
 	@echo "$(GREEN)--------------------------------------------------$(END)"
