@@ -112,11 +112,10 @@ int			wait_for_child(int child_pid, int is_last_child);
 int			handle_signal_interrupt(int status, int is_last_child);
 int			is_folder(char *command);
 void		external_exit(int exit_status);
+void	save_original_fds(int original_fds[2]);
 
 /*------------redirections---------*/
 int			handle_redirects(t_global *data, int ori_fds[2]);
-// void		handle_redirects_for_pipes(t_global *data,
-// 				char *(*redirects)[TABLE_SIZE]);
 void		handle_redirects_for_pipes(char *(*redirects)[TABLE_SIZE]);
 void		redirect_heredoc(t_global *data, int heredoc_number, char *eof);
 int			redirect_input(char *input_redirect, int i);
@@ -128,7 +127,6 @@ void		close_all_fds(void);
 void		close_extra_fds(void);
 void		restore_original_fds(int original_fds[2]);
 void		restore_fds(int original_fds[2]);
-//int			handle_redirects(t_global *data, int ori_fds[2]);
 void		save_original_fd_in(int original_fds[2]);
 void		save_original_fd_out(int original_fds[2]);
 int			handle_input_redirect(char *redir,
