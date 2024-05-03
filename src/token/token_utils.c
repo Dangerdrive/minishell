@@ -6,12 +6,17 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 22:01:51 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/05/02 22:01:52 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:27:26 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/**
+ * Initializes a hashtable by setting all entries to NULL.
+ *
+ * @param hashtable The hashtable to initialize.
+ */
 void	init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 {
 	int	i;
@@ -25,6 +30,14 @@ void	init_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 	return ;
 }
 
+/**
+ * Extracts a token from a string based on the specified start index and length.
+ *
+ * @param input The input string from which to extract the token.
+ * @param i The start index for extraction.
+ * @param len The length of the token to extract.
+ * @return A newly allocated string containing the token, or NULL on failure.
+ */
 char	*get_token(char *input, int i, int len)
 {
 	char	*token;
@@ -37,6 +50,13 @@ char	*get_token(char *input, int i, int len)
 	return (token);
 }
 
+/**
+ * Adds a new token node to a linked list of tokens.
+ *
+ * @param tkn_node Pointer to the first token node of the list.
+ * @param content The content to store in the new token node.
+ * @return Pointer to the newly added token node, or NULL on failure.
+ */
 t_tkn	*add_node(t_tkn **tkn_node, char **content)
 {
 	t_tkn	*new_node;
@@ -63,6 +83,13 @@ t_tkn	*add_node(t_tkn **tkn_node, char **content)
 	return (new_node);
 }
 
+/**
+ * Marks the space_after attribute of the last node based on input characters.
+ *
+ * @param input The full input string.
+ * @param i Index of the character after the token in the input string.
+ * @param node Pointer to the first node of the token list.
+ */
 void	check_non_spaced_var(char *input, int i, t_tkn **node)
 {
 	t_tkn	*temp;
@@ -77,6 +104,13 @@ void	check_non_spaced_var(char *input, int i, t_tkn **node)
 	}
 }
 
+/**
+ * Populates the hashtable with tokens extracted from user input.
+ *
+ * @param data Pointer to the global data structure.
+ * @param idx Start index of the token in the user input.
+ * @param len Length of the token.
+ */
 void	populate_hashtable(t_global **data, int idx, int len)
 {
 	char	*token;

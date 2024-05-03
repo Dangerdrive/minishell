@@ -6,12 +6,15 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 22:01:35 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/05/02 22:01:36 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:21:01 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/**
+ * Closes all file descriptors above the standard error output to free resources.
+ */
 void	close_extra_fds(void)
 {
 	int	last_open_fd;
@@ -27,6 +30,10 @@ void	close_extra_fds(void)
 	}
 }
 
+/**
+ * Closes all standard file descriptors (stdin, stdout, stderr) and any extra
+ * open file descriptors to prevent leaks.
+ */
 void	close_all_fds(void)
 {
 	close_extra_fds();
@@ -35,12 +42,26 @@ void	close_all_fds(void)
 	close(STDERR_FILENO);
 }
 
+/**
+ * Redirects a file descriptor to another file descriptor and closes
+ *  the original.
+ *
+ * @param fd_to_redirect The file descriptor to redirect.
+ * @param fd_location The target file descriptor number.
+ */
 void	redirect_fd(int fd_to_redirect, int fd_location)
 {
 	dup2(fd_to_redirect, fd_location);
 	close(fd_to_redirect);
 }
 
+/**
+ * Restores the original standard input and output file descriptors
+ *  from backups.
+ *
+ * @param original_fds Array containing the original file descriptors for stdin
+ * and stdout.
+ */
 void	redirect_fds(int fd_in, int fd_out)
 {
 	if (fd_in != STDIN_FILENO)
@@ -49,6 +70,12 @@ void	redirect_fds(int fd_in, int fd_out)
 		redirect_fd(fd_out, STDOUT_FILENO);
 }
 
+/**
+ * Restores the original standard input and output file descriptors from backups.
+ *
+ * @param original_fds Array containing the original file descriptors for stdin
+ * and stdout.
+ */
 void	restore_original_fds(int original_fds[2])
 {
 	if (original_fds[IN] != -1)

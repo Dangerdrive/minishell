@@ -6,12 +6,17 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 22:00:25 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/05/02 22:00:26 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:05:58 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/**
+ * Generates an error message for when getcwd fails.
+ *
+ * @return A pointer to a string with the error message.
+ */
 char	*cwd_error(void)
 {
 	static char	prompt[PATH_MAX];
@@ -22,6 +27,12 @@ char	*cwd_error(void)
 	return (prompt);
 }
 
+/**
+ * Generates the shell prompt, displaying the current working directory.
+ *
+ * @param data Pointer to the global data structure.
+ * @return A pointer to a string containing the formatted prompt.
+ */
 char	*print_cwd(t_global **data)
 {
 	static char	prompt[PATH_MAX];
@@ -48,6 +59,12 @@ char	*print_cwd(t_global **data)
 	return (prompt);
 }
 
+/**
+ * Handles the prompt input from the user, executing commands as needed.
+ *
+ * @param data Pointer to the global data structure.
+ * @return -1 if an error occurs or the user exits, 1 otherwise.
+ */
 int	handle_prompt(t_global **data)
 {
 	int	input;

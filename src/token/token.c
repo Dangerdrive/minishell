@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 22:01:54 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/05/02 22:01:55 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:29:20 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,11 @@ int	get_token_len(char *input, int i)
 	return (len);
 }
 
+/**
+ * Handles and reports an error when an opening quote is not closed.
+ *
+ * @return Always returns 0 to indicate the error situation.
+ */
 int	error_open_quote(void)
 {
 	printf("Error: open quote.\n");

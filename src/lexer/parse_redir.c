@@ -6,7 +6,7 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 22:00:06 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/05/02 22:00:07 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/05/02 22:12:49 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ void	check_heredoc(t_tkn **node);
 void	update_redir_files_list(char *(*redir)[TABLE_SIZE],
 			char *sig, char *new_arg);
 
+/**
+ * Frees the content and delimiter of a token node.
+ *
+ * @param node Pointer to the token node.
+ */
 static void	free_1st_content_and_delimiter(t_tkn **node)
 {
 	free((*node)->content);
@@ -25,6 +30,11 @@ static void	free_1st_content_and_delimiter(t_tkn **node)
 		free((*node)->delimiter);
 }
 
+/**
+ * Handles the node adjustments when the current node has no previous node.
+ *
+ * @param node Pointer to the current node.
+ */
 static void	handle_no_prev_node(t_tkn **node)
 {
 	t_tkn	*temp;
@@ -52,6 +62,11 @@ static void	handle_no_prev_node(t_tkn **node)
 	*node = temp;
 }
 
+/**
+ * Handles the node adjustments when the current node has a previous node.
+ *
+ * @param node Pointer to the current node.
+ */
 static void	handle_prev_node(t_tkn **node)
 {
 	t_tkn	*temp;
@@ -72,6 +87,12 @@ static void	handle_prev_node(t_tkn **node)
 	*node = temp;
 }
 
+/**
+ * Updates the node configuration based on its position and presence
+ * of previous nodes.
+ *
+ * @param node Pointer to the current node.
+ */
 static void	update_node_after_redir(t_tkn **node)
 {
 	if ((*node)->prev)
@@ -80,6 +101,12 @@ static void	update_node_after_redir(t_tkn **node)
 		handle_no_prev_node(node);
 }
 
+/**
+ * Parses redirection tokens within the command line, updating linked list.
+ *
+ * @param node Pointer to the node to start parsing from.
+ * @param head Pointer to the head node of the token list.
+ */
 void	parse_redir(t_tkn **node, t_tkn **head)
 {
 	t_tkn	*temp;

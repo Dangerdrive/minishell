@@ -6,12 +6,21 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 22:01:42 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/05/02 22:01:43 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:29:55 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/**
+ * Handles the writing into a heredoc file by reading lines until the end-of-file
+ * (EOF) delimiter is encountered.
+ *
+ * @param data Pointer to the global data structure.
+ * @param heredoc_number Unique identifier for the heredoc.
+ * @param hash_number Unused parameter, reserved for future use.
+ * @param eof The end-of-file delimiter to stop reading.
+ */
 void	write_in_heredoc(t_global *data, int heredoc_number,
 			int hash_number, char *eof)
 {
@@ -39,6 +48,13 @@ void	write_in_heredoc(t_global *data, int heredoc_number,
 	free(line);
 }
 
+/**
+ * Prints an error message when opening a file descriptor fails during
+ *  redirection.
+ *
+ * @param input_redirect The redirection string causing the error.
+ * @return 0, indicating a failure to open the file descriptor.
+ */
 static int	error_open_fd(char *input_redirect)
 {
 	ft_dprintf(STDERR_FILENO, "Fail to open heredoc: %s: %s\n",
@@ -46,6 +62,13 @@ static int	error_open_fd(char *input_redirect)
 	return (0);
 }
 
+/**
+ * Handles input redirection by opening the specified file or heredoc.
+ *
+ * @param input_redirect The redirection command string.
+ * @param i The index or identifier for temporary filenames in heredocs.
+ * @return 1 if successful, 0 otherwise.
+ */
 int	redirect_input(char *input_redirect, int i)
 {
 	int		fd;
@@ -72,6 +95,14 @@ int	redirect_input(char *input_redirect, int i)
 	return (1);
 }
 
+/**
+ * Handles output redirection by opening or creating a file with appropriate
+ *  flags.
+ *
+ * @param output_redirect The redirection command string.
+ * @return 1 if the file is successfully opened/created and redirected,
+ *  0 if not.
+ */
 int	redirect_output(char *output_redirect)
 {
 	int	fd;

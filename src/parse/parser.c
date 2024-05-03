@@ -6,12 +6,19 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 22:00:40 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/05/02 22:00:41 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:10:08 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/**
+ * Determines the type of a token based on its content and position 
+ * in the token list.
+ *
+ * @param node Pointer to the token whose type is to be determined.
+ * @return The type of the token as a string constant.
+ */
 char	*get_tkn_type(t_tkn *node)
 {
 	if (!node->type)
@@ -37,6 +44,11 @@ char	*get_tkn_type(t_tkn *node)
 	return (node->type);
 }
 
+/**
+ * Removes single or double quotes from the content of a token.
+ *
+ * @param content Pointer to the string to modify.
+ */
 void	remove_quotes(char **content)
 {
 	char	*new_content;
@@ -59,6 +71,11 @@ void	remove_quotes(char **content)
 	}
 }
 
+/**
+ * Handles the concatenation of export variable tokens.
+ *
+ * @param node Pointer to the current token node in the token list.
+ */
 void	handle_export(t_tkn **node)
 {
 	char	*new_content;
@@ -85,6 +102,14 @@ void	handle_export(t_tkn **node)
 	*node = head;
 }
 
+/**
+ * Parses a hashtable of tokens, determining types, removing quotes, and handling
+ * exports.
+ *
+ * @param hashtable Pointer to the hashtable of tokens.
+ * @param data Pointer to global data structure.
+ * @return Syntax correctness indicator (0 for correct, 1 for error).
+ */
 int	parse(t_tkn *(*hashtable)[TABLE_SIZE], t_global **data)
 {
 	int		i;

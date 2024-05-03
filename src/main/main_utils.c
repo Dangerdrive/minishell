@@ -6,12 +6,17 @@
 /*   By: fde-alen <fde-alen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 22:00:16 by fde-alen          #+#    #+#             */
-/*   Updated: 2024/05/02 22:00:17 by fde-alen         ###   ########.fr       */
+/*   Updated: 2024/05/02 22:14:34 by fde-alen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/**
+ * Frees the redirection arguments stored in an array.
+ *
+ * @param args Pointer to an array of redirection arguments.
+ */
 void	free_redir_args(char *(*args)[TABLE_SIZE])
 {
 	int		i;
@@ -27,6 +32,11 @@ void	free_redir_args(char *(*args)[TABLE_SIZE])
 	}
 }
 
+/**
+ * Frees all nodes within a hashtable structure.
+ *
+ * @param hashtable Pointer to the array of token nodes.
+ */
 void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 {
 	int		i;
@@ -51,6 +61,11 @@ void	free_hashtable(t_tkn *(*hashtable)[TABLE_SIZE])
 	}
 }
 
+/**
+ * Cleans up all dynamically allocated memory and system resources.
+ *
+ * @param data Double pointer to the global data structure.
+ */
 void	clean_stuff(t_global **data)
 {
 	if (data == NULL || *data == NULL)
@@ -71,6 +86,11 @@ void	clean_stuff(t_global **data)
 	*data = NULL;
 }
 
+/**
+ * Restores the original file descriptors and closes the temporary ones.
+ *
+ * @param data Pointer to the global data structure containing FDs.
+ */
 void	restore_fds_close(t_global *data)
 {
 	dup2(data->original_stdin, STDIN_FILENO);
@@ -79,6 +99,11 @@ void	restore_fds_close(t_global *data)
 	close(data->original_stdout);
 }
 
+/**
+ * Cleans up user input and associated temporary files created for heredocs.
+ *
+ * @param data Double pointer to the global data structure.
+ */
 void	clean_input_and_hashtable(t_global **data)
 {
 	int		i;
