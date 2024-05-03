@@ -70,10 +70,8 @@ static void	update_node_after_redir(t_tkn **node)
 
 void	parse_redir(t_tkn **node, t_tkn **head)
 {
-	int		i;
 	t_tkn	*temp;
 
-	i = 0;
 	temp = *node;
 	if (is_heredoc((*node)->content))
 		check_heredoc(node);
