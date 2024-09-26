@@ -1,3 +1,7 @@
+<p align="center">
+      <img src="https://raw.githubusercontent.com/Dangerdrive/Dangerdrive/main/images/42projects/minishelln.png" alt="minishell" title="minishell" width="150" height="150"/>
+</p>
+
 # Minishell
 
 The **Minishell** project is part of the 42 curriculum and challenges students to build a simple Unix-like shell. The goal is to replicate basic shell functionality, allowing users to interact with the operating system through command-line inputs.
